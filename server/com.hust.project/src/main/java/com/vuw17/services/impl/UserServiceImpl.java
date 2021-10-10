@@ -23,7 +23,8 @@ public class UserServiceImpl implements UserService {
     //Hàm tìm thông tin user bằng token
     @Override
     public UserDTOResponse findInfoUser(String token){
-        jwtProvider.validateJwtToken(token);
+//        jwtProvider.validateJwtToken(token);
+        System.out.println("token: " +token);
         String[] splits = token.split(" ");
         String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
         User user = userRepository.findUserByUsername(username);

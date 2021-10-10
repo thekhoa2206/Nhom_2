@@ -5,11 +5,9 @@ import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +28,6 @@ public class UserController {
 
     @GetMapping("/info")
     public ResponseEntity<UserDTOResponse> getUser(final HttpServletRequest request){
-        System.out.println("Authorization: " +request.getHeader("Authorization"));
         UserDTOResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
         return ResponseEntity.ok(userDTOResponse);
     }

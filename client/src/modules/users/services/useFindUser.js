@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getCookie } from "../../../config";
 
 export default function useFindUser() {
     const [user, setUser] = useState(null);
@@ -7,9 +8,12 @@ export default function useFindUser() {
 
     useEffect(() => {
         async function findUser() {
-            await axios.get('/user')
+            let token = getCookie("jwt");
+            let i = axios.create();
+            i.defaults.headers.common["Authorization"] = token;
+            await  i.get('http://localhost:8080/api/users/info')
                 .then(res => {
-                    setUser(res.data.currentUser);
+                    setUser(res.data);
                     setLoading(false);
                 }).catch(err => {
                     //console.log(err);

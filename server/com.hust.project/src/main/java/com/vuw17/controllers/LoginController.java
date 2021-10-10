@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,11 +28,17 @@ public class LoginController {
 
 
     @PostMapping
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest, final HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateJwtToken(authentication);
+
+        Cookie cookie = new Cookie("jwt", jwt);
+        cookie.setMaxAge(100);
+        response.addCookie(cookie);
+        System.out.println("cookie" + cookie);
+
         return ResponseEntity.ok(new JwtResponse(jwt));
-    }
+}
 }
