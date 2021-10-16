@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -11,9 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import useLogout from '../modules/auth/services/useLogout'
+import { UserContext } from '../context/userContext';
+import { Typography } from '@mui/material';
 const drawerWidth = 240;
 
 function Header(props) {
+    const { user } = useContext(UserContext)
     const { open } = props
     const [anchorEl, setAnchorEl] = React.useState(null);
     const { logoutUser } = useLogout();
@@ -89,7 +92,7 @@ function Header(props) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem>
-                    <Avatar /> My account
+                    <Avatar /> {user.name}
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>

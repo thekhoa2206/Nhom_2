@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -11,7 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import CustomListItem from "./customListItem"
+import CustomNestedList from "./customNestedList"
 import Avatar from '@mui/material/Avatar';
+import { UserContext } from '../context/userContext';
 
 function Sidebar(props) {
     const theme = useTheme();
@@ -33,11 +35,29 @@ function Sidebar(props) {
                     to={"/home"}
                     primary={"Home"}
                     icon={<MailIcon />}
+                    roles={["admin", "a"]}
                 />
                 <CustomListItem
-                    to={"/statistics"}
-                    primary={"Statistics"}
-                    icon={<InboxIcon />}
+                    to={"/register"}
+                    primary={"Register"}
+                    icon={<MailIcon />}
+                    roles={["admin"]}
+                />
+                <CustomNestedList
+                    primaryFather={"Statistics"}
+                    iconFather={<InboxIcon />}
+                    roles={["admin"]}
+                    kids={[
+                        { to: "/statistics", primary: "statistics 1", icon: <InboxIcon /> },
+                        { to: "/statistics2", primary: "statistics 2", icon: <InboxIcon /> }
+                    ]}
+
+                />
+                <CustomListItem
+                    to={"/rooms"}
+                    primary={"Rooms"}
+                    icon={<MailIcon />}
+                    roles={["admin", "a"]}
                 />
 
             </List>
