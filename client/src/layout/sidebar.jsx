@@ -35,18 +35,18 @@ function Sidebar(props) {
                     to={"/home"}
                     primary={"Home"}
                     icon={<MailIcon />}
-                    roles={["admin", "a"]}
+                    roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
                 <CustomListItem
                     to={"/register"}
                     primary={"Register"}
                     icon={<MailIcon />}
-                    roles={["admin"]}
+                    roles={["ROLE_ADMIN"]}
                 />
                 <CustomNestedList
                     primaryFather={"Statistics"}
                     iconFather={<InboxIcon />}
-                    roles={["admin"]}
+                    roles={["ROLE_ADMIN"]}
                     kids={[
                         { to: "/statistics", primary: "statistics 1", icon: <InboxIcon /> },
                         { to: "/statistics2", primary: "statistics 2", icon: <InboxIcon /> }
@@ -57,7 +57,7 @@ function Sidebar(props) {
                     to={"/rooms"}
                     primary={"Rooms"}
                     icon={<MailIcon />}
-                    roles={["admin", "a"]}
+                    roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
 
             </List>

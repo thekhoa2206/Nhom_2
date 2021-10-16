@@ -12,6 +12,7 @@ import { UserContext } from "../context/userContext";
 
 function CustomNestedList(props) {
     const { user } = useContext(UserContext)
+    const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()
     const [open, setOpen] = React.useState(false);
@@ -23,7 +24,7 @@ function CustomNestedList(props) {
     // const handleSelected = () => {
     //     setSelected(true);
     // };
-    if (!user?.roles?.some(r => roles.includes(r))) {
+    if (!userRole.some(r => roles?.includes(r))) {
         return <div></div>
     } else {
         return (

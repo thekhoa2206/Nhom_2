@@ -30,30 +30,31 @@ function Routes(props) {
                     path="/register"
                     exact
                     component={Register}
-                    roles={['admin']}
+                    roles={['ROLE_ADMIN']}
                 />
                 <ProtectedRoute
                     path="/home"
                     exact
                     component={Home}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
                 />
                 <ProtectedRoute
                     path="/statistics"
                     exact
                     component={Statistics}
-                    roles={['admin']}
+                    roles={['ROLE_ADMIN']}
                 />
                 <ProtectedRoute
                     path="/statistics2"
                     exact
                     component={Statistics2}
-                    roles={['admin', 'a']}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
                 />
                 <ProtectedRoute
                     path="/rooms"
                     exact
                     component={RoomManagement}
-                    roles={['admin', 'a']}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
                 />
                 <Route
                     path="/logout"

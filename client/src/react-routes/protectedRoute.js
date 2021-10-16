@@ -9,7 +9,7 @@ import { clearCookie } from '../config';
 export default function ProtectedRoute(props) {
     const { user, isLoading } = useContext(UserContext);
     console.log(user, isLoading);
-
+    const userRole = user?.role?.map(r => r.nameRole)
     const { roles, component: Component, ...rest } = props;
     if (!user) {
         console.log("cllear")
@@ -20,7 +20,8 @@ export default function ProtectedRoute(props) {
         console.log("d")
         return <Loading />
     }
-    if (!user?.roles?.some(r => roles.includes(r))) {
+    console.log("props.path", props.path)
+    if (!userRole?.some(r => roles?.includes(r))) {
         console.log("a")
         // role not authorised so redirect to home page
         return <Redirect to='/home' />

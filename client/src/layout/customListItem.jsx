@@ -8,10 +8,11 @@ import { UserContext } from "../context/userContext";
 
 function CustomListItem(props) {
     const { user } = useContext(UserContext)
+    const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()
     console.log("props", props)
-    if (!user?.roles?.some(r => roles.includes(r))) {
+    if (!userRole?.some(r => roles?.includes(r))) {
         return <div></div>
     }
     else {
