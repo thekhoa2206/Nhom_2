@@ -5,7 +5,7 @@ import java.util.List;
 public class UserDTOResponse {
     private String username;
     private String name;
-    private List<RoleByUserResponseDTO> role;
+    private List<RoleByUserResponseDTO> roles;
 
     public String getUsername() {
         return username;
@@ -24,10 +24,10 @@ public class UserDTOResponse {
     }
 
     public List<RoleByUserResponseDTO> getRole() {
-        return role;
+        return roles;
     }
 
     public void setRole(List<RoleByUserResponseDTO> role) {
-        this.role = role;
+        this.roles = role;
     }
 }
