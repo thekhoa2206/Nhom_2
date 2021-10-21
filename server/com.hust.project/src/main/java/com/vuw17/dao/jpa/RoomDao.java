@@ -6,6 +6,5 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional(rollbackOn = Exception.class)
-public interface UserDao {
-
+public interface RoomDao {
 }

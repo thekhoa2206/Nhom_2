@@ -1,6 +1,7 @@
 package com.vuw17.services.impl;
 
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
+
 import com.vuw17.dao.jpa.UserDao;
 import com.vuw17.dto.user.RoleByUserResponseDTO;
 import com.vuw17.dto.user.UserDTOResponse;
@@ -14,14 +15,14 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
+    private final UserDao userDao;
 
-    public UserServiceImpl(UserDao userDao, JwtProvider jwtProvider, UserRepository userRepository) {
-        this.userDao = userDao;
+    public UserServiceImpl(JwtProvider jwtProvider, UserRepository userRepository, UserDao userDao) {
         this.jwtProvider = jwtProvider;
         this.userRepository = userRepository;
+        this.userDao = userDao;
     }
 
     //Hàm tìm thông tin user bằng token
