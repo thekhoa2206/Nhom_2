@@ -39,6 +39,18 @@
       <artifactId>mysql-connector-java</artifactId>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.spring4all/spring-boot-starter-swagger -->
+    <dependency>
+      <groupId>com.spring4all</groupId>
+      <artifactId>spring-boot-starter-swagger</artifactId>
+      <version>1.5.0.RELEASE</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.20</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
