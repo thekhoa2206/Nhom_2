@@ -17,9 +17,6 @@ public class RoomPrice extends BaseEntity {
     @Column(name = "type_price_id", nullable = false)
     private int typePriceId;
 
-    @Column(name = "price_id", nullable = false)
-    private int priceId;
-
     @Column(name = "type_room_id", nullable = false)
     private int typeRoomId;
 

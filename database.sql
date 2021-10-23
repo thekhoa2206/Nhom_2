@@ -47,34 +47,6 @@ LOCK TABLES `diary` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `floor`
---
-
-DROP TABLE IF EXISTS `floor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `floor` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `hotel_id` int NOT NULL,
-  `name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_floor_hotel_id` (`hotel_id`),
-  CONSTRAINT `fk_floor_hotel_id` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `floor`
---
-
-LOCK TABLES `floor` WRITE;
-/*!40000 ALTER TABLE `floor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `floor` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `guest`
 --
 
@@ -130,30 +102,6 @@ CREATE TABLE `hotel` (
 LOCK TABLES `hotel` WRITE;
 /*!40000 ALTER TABLE `hotel` DISABLE KEYS */;
 /*!40000 ALTER TABLE `hotel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `price`
---
-
-DROP TABLE IF EXISTS `price`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `price` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `price`
---
-
-LOCK TABLES `price` WRITE;
-/*!40000 ALTER TABLE `price` DISABLE KEYS */;
-/*!40000 ALTER TABLE `price` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -314,16 +262,16 @@ DROP TABLE IF EXISTS `room`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `room` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `floor_id` int NOT NULL,
+  `hotel_id` int NOT NULL,
   `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `type_room_id` int NOT NULL,
+  `type_room_id` int DEFAULT NULL,
   `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_room_floor_id` (`floor_id`),
-  KEY `fk_room_type_room_id` (`type_room_id`),
-  CONSTRAINT `fk_room_floor_id` FOREIGN KEY (`floor_id`) REFERENCES `floor` (`id`),
-  CONSTRAINT `fk_room_type_room_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`)
+  KEY `fk_room_type_id_idx` (`type_room_id`),
+  KEY `fk_room_hotel_id_idx` (`hotel_id`),
+  CONSTRAINT `fk_room_hotel_id` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`),
+  CONSTRAINT `fk_room_type_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -346,14 +294,11 @@ DROP TABLE IF EXISTS `room_price`;
 CREATE TABLE `room_price` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type_price_id` int NOT NULL,
-  `price_id` int NOT NULL,
   `type_room_id` int NOT NULL,
   `price` decimal(13,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_room_price_type_price_id` (`type_price_id`),
-  KEY `fk_room_price_price_id` (`price_id`),
   KEY `fk_room_price_type_room_id` (`type_room_id`),
-  CONSTRAINT `fk_room_price_price_id` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`),
   CONSTRAINT `fk_room_price_type_price_id` FOREIGN KEY (`type_price_id`) REFERENCES `type_price` (`id`),
   CONSTRAINT `fk_room_price_type_room_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -641,4 +586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-21 22:21:45
+-- Dump completed on 2021-10-23 10:32:46

@@ -13,8 +13,8 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class Room extends BaseEntity {
-    @Column(name = "floor_id", nullable = false)
-    private int floorId;
+    @Column(name = "hotel_id", nullable = false)
+    private int hotelId;
 
     @Column(name = "name", nullable = true)
     private String name;
