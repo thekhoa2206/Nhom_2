@@ -105,6 +105,31 @@ LOCK TABLES `hotel` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `price`
+--
+
+DROP TABLE IF EXISTS `price`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `price` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `price` decimal(13,2) DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `price`
+--
+
+LOCK TABLES `price` WRITE;
+/*!40000 ALTER TABLE `price` DISABLE KEYS */;
+/*!40000 ALTER TABLE `price` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `product`
 --
 
@@ -295,11 +320,10 @@ CREATE TABLE `room_price` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type_price_id` int NOT NULL,
   `type_room_id` int NOT NULL,
-  `price` decimal(13,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_room_price_type_price_id` (`type_price_id`),
   KEY `fk_room_price_type_room_id` (`type_room_id`),
-  CONSTRAINT `fk_room_price_type_price_id` FOREIGN KEY (`type_price_id`) REFERENCES `type_price` (`id`),
+  CONSTRAINT `fk_room_price_type_price_id` FOREIGN KEY (`type_price_id`) REFERENCES `price` (`id`),
   CONSTRAINT `fk_room_price_type_room_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -414,30 +438,6 @@ CREATE TABLE `type_action` (
 LOCK TABLES `type_action` WRITE;
 /*!40000 ALTER TABLE `type_action` DISABLE KEYS */;
 /*!40000 ALTER TABLE `type_action` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `type_price`
---
-
-DROP TABLE IF EXISTS `type_price`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `type_price` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `type_price`
---
-
-LOCK TABLES `type_price` WRITE;
-/*!40000 ALTER TABLE `type_price` DISABLE KEYS */;
-/*!40000 ALTER TABLE `type_price` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -586,4 +586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-23 10:32:46
+-- Dump completed on 2021-10-23 13:15:07

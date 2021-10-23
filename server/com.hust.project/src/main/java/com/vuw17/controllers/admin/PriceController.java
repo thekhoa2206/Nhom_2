@@ -1,9 +1,11 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.price.PriceDTOResponse;
 import com.vuw17.services.PriceService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -16,5 +18,11 @@ public class PriceController {
     }
 
     // Hàm lấy danh sách price
+    @GetMapping("/list")
+    public ResponseEntity<List<PriceDTOResponse>> listPrice(@RequestParam String keyword, @RequestParam int status){
+        List<PriceDTOResponse> priceDTOResponses = priceService.findAllPrice(keyword,status);
+        return ResponseEntity.ok(priceDTOResponses);
+    }
+
 
 }
