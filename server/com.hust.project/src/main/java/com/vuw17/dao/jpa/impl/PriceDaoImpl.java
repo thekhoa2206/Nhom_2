@@ -40,4 +40,19 @@ public class PriceDaoImpl implements PriceDao {
         List<Price> prices = query.getResultList();
         return prices;
     }
+
+    //Hàm tìm price theo id
+    @Override
+    public Price findPriceById(int id){
+        String sql = "SELECT * FROM price WHERE 1 = 1 ";
+        if(id > 0){
+            sql = sql + " AND price.id = :id";
+        }
+        Query query = entityManager.createNativeQuery(sql, Price.class);
+        if(id > 0){
+            query.setParameter("id", id);
+        }
+        Price price = (Price) query.getSingleResult();
+        return price;
+    }
 }

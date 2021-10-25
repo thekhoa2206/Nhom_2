@@ -1,6 +1,8 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.price.PriceDTORequest;
 import com.vuw17.dto.price.PriceDTOResponse;
+import com.vuw17.entities.Price;
 import com.vuw17.services.PriceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,27 @@ public class PriceController {
     public ResponseEntity<List<PriceDTOResponse>> listPrice(@RequestParam String keyword, @RequestParam int status){
         List<PriceDTOResponse> priceDTOResponses = priceService.findAllPrice(keyword,status);
         return ResponseEntity.ok(priceDTOResponses);
+    }
+
+    //Hàm tạo price
+    @PostMapping
+    public ResponseEntity<Void> createPrice(@RequestBody PriceDTORequest priceDTORequest){
+        priceService.createPrice(priceDTORequest);
+        return ResponseEntity.ok().build();
+    }
+
+    //Hàm sửa price
+    @GetMapping("/{id}")
+    public ResponseEntity<PriceDTOResponse> getPrice(@PathVariable("id") int id){
+        PriceDTOResponse priceDTOResponse = priceService.findPriceById(id);
+        return ResponseEntity.ok(priceDTOResponse);
+    }
+
+    //Hàm sửa price
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updatePrice(@PathVariable("id") int id ,@RequestBody PriceDTORequest priceDTORequest){
+        priceService.updatePrice(id,priceDTORequest);
+        return ResponseEntity.ok().build();
     }
 
 

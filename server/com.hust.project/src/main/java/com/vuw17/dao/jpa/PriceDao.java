@@ -11,4 +11,7 @@ import java.util.List;
 public interface PriceDao {
     //Hàm tìm type price theo keyword và status
     List<Price> findAllPriceByKeywordAndStatus(String keyword, int status);
+
+    //Hàm tìm price bằng id
+    Price findPriceById(int id);
 }
