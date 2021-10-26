@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import Header from './header';
 import Sidebar from './sidebar';
+import Footer from './footer';
 
 function Layout(props) {
 
@@ -28,7 +29,9 @@ function Layout(props) {
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 {props.children}
+                {/* <Footer /> */}
             </Box>
+
         </Box>
     );
 }

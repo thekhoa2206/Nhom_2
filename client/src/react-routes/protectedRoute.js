@@ -4,25 +4,22 @@ import { Route, Redirect } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
 import Loading from '../common-components/Loading';
 import Layout from '../layout/layout';
-import { clearCookie } from '../config';
+import { clearCookie, getCookie } from '../config';
+import _ from "lodash"
 
 export default function ProtectedRoute(props) {
     const { user, isLoading } = useContext(UserContext);
-    console.log(user, isLoading);
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles, component: Component, ...rest } = props;
-    if (!user) {
-        console.log("cllear")
+    let jwt = getCookie("jwt")
+    if (!user || _.isEmpty(jwt)) {
         clearCookie("jwt")
         return <Redirect to='/' />
     }
     if (isLoading) {
-        console.log("d")
         return <Loading />
     }
-    console.log("props.path", props.path)
     if (!userRole?.some(r => roles?.includes(r))) {
-        console.log("a")
         // role not authorised so redirect to home page
         return <Redirect to='/home' />
     }
