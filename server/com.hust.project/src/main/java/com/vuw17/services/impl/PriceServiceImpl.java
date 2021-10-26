@@ -54,6 +54,8 @@ public class PriceServiceImpl implements PriceService {
         price.setName(priceDTORequest.getName());
         price.setPrice(priceDTORequest.getPrice());
         price.setStatus(ConstantVariableCommon.STATUS_PRICE_1);
+
+
         savePrice(price);
     }
 
@@ -84,6 +86,21 @@ public class PriceServiceImpl implements PriceService {
         priceDTOResponse.setName(price.getName());
         priceDTOResponse.setPrice(price.getPrice());
         return priceDTOResponse;
+    }
+
+    //Hàm thay đổi trạng thái giá thành không áp dụng
+    @Override
+    public void  changeStatusPrice(int id){
+        Price price = priceDao.findPriceById(id);
+        price.setStatus(ConstantVariableCommon.STATUS_PRICE_2);
+        savePrice(price);
+    }
+
+    @Override
+    public void deletePrice(int id){
+        Price price = priceDao.findPriceById(id);
+        price.setStatus(ConstantVariableCommon.STATUS_PRICE_3);
+        savePrice(price);
     }
 
 

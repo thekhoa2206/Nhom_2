@@ -20,4 +20,12 @@ public interface PriceService {
 
     //hàm tìm giá theo id
     PriceDTOResponse findPriceById(int id);
+
+    //hàm thay đổi trạng thái giá phòng không áp dụng
+    void changeStatusPrice(int id);
+
+    //Hàm xóa giá phòng
+    void deletePrice(int id);
+
+
 }
