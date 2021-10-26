@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Error from './error';
+import Alert from '@mui/material/Alert';
 import useAuth from './services/useAuth';
 const theme = createTheme();
 
@@ -42,9 +42,7 @@ function Login(props) {
                     <Typography component="h1" variant="h5">
                         Đăng nhập
                     </Typography>
-                    <div className="inlineForm__notif">
-                        {error && <Error error={error.messages} />}
-                    </div>
+                    {error && <Alert severity="error">{error}</Alert>}
                     <Box onSubmit={handleLogin} component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"

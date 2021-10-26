@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -8,12 +9,15 @@ import Divider from '@mui/material/Divider';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import HomeIcon from '@mui/icons-material/Home';
+import HotelIcon from '@mui/icons-material/Hotel';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
+
 import CustomListItem from "./customListItem"
 import CustomNestedList from "./customNestedList"
-import Avatar from '@mui/material/Avatar';
-import { UserContext } from '../context/userContext';
+
 
 function Sidebar(props) {
     const theme = useTheme();
@@ -34,29 +38,29 @@ function Sidebar(props) {
                 <CustomListItem
                     to={"/home"}
                     primary={"Home"}
-                    icon={<MailIcon />}
+                    icon={<HomeIcon />}
                     roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
                 <CustomListItem
                     to={"/register"}
                     primary={"Register"}
-                    icon={<MailIcon />}
+                    icon={<VpnKeyIcon />}
                     roles={["ROLE_ADMIN"]}
                 />
                 <CustomNestedList
                     primaryFather={"Statistics"}
-                    iconFather={<InboxIcon />}
+                    iconFather={<QueryStatsIcon />}
                     roles={["ROLE_ADMIN"]}
                     kids={[
-                        { to: "/statistics", primary: "statistics 1", icon: <InboxIcon /> },
-                        { to: "/statistics2", primary: "statistics 2", icon: <InboxIcon /> }
+                        { to: "/statistics", primary: "statistics 1", icon: <EqualizerIcon /> },
+                        { to: "/statistics2", primary: "statistics 2", icon: <EqualizerIcon /> }
                     ]}
 
                 />
                 <CustomListItem
                     to={"/rooms"}
                     primary={"Rooms"}
-                    icon={<MailIcon />}
+                    icon={<HotelIcon />}
                     roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
 

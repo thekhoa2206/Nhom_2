@@ -25,7 +25,7 @@ export default function useAuth() {
 			})
 			.catch((err) => {
 				console.log("err", err.response);
-				//setError(err.response.data);
+				setError(err.response.data.message);
 			});
 	};
 
@@ -48,7 +48,7 @@ export default function useAuth() {
 			})
 			.catch((err) => {
 				console.log("error", err.response);
-				//setError(err.response.data);
+				setError(err.response.data.message);
 			});
 	};
 

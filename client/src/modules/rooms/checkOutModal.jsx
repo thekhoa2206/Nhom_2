@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 
-function CheckInModal(props) {
+function CheckOutModal(props) {
     const { open, id } = props;
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
@@ -104,6 +104,7 @@ function CheckInModal(props) {
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg' >
             <DialogTitle>Phòng {id}</DialogTitle>
+            <DialogTitle>Check out modal</DialogTitle>
             <DialogContent>
                 <Button variant="contained" color="success" onClick={openModalAddGuestInfo}>
                     Thêm thông tin khách
@@ -149,11 +150,11 @@ function CheckInModal(props) {
 
     // );
 }
-React.memo(CheckInModal, (props, nextProps) => {
+React.memo(CheckOutModal, (props, nextProps) => {
     if (props === nextProps) {
         // don't re-render/update
         return true
     }
 })
 
-export default CheckInModal;
+export default CheckOutModal;
