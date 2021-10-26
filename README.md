@@ -8,8 +8,8 @@ Cách chạy project:
 
   Cách 2: cài đặt maven (xem hướng dẫn trên mạng), 
           sau đó vào terminal
-          1.cd vào project 
-          2.cd server/com.hust.project
+          1. cd vào project 
+          2. cd server/com.hust.project
           3. chạy mvn spring-boot:run
         
 -Client: 
