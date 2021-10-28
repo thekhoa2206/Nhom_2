@@ -34,7 +34,7 @@ CREATE TABLE `diary` (
   KEY `fk_diary_table_diary_id` (`table_diary_id`),
   CONSTRAINT `fk_diary_table_diary_id` FOREIGN KEY (`table_diary_id`) REFERENCES `table_diary` (`id`),
   CONSTRAINT `fk_diary_type_action_id` FOREIGN KEY (`type_action_id`) REFERENCES `type_action` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,6 +43,7 @@ CREATE TABLE `diary` (
 
 LOCK TABLES `diary` WRITE;
 /*!40000 ALTER TABLE `diary` DISABLE KEYS */;
+INSERT INTO `diary` VALUES (1,1,1,'Thêm mới giá phòng',NULL,1),(2,1,2,'Thêm mới giá phòng',NULL,1),(3,1,3,'Thêm mới giá phòng',NULL,1);
 /*!40000 ALTER TABLE `diary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +118,7 @@ CREATE TABLE `price` (
   `price` decimal(13,2) DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,6 +127,7 @@ CREATE TABLE `price` (
 
 LOCK TABLES `price` WRITE;
 /*!40000 ALTER TABLE `price` DISABLE KEYS */;
+INSERT INTO `price` VALUES (1,'VIP1',1000000.00,1),(2,'NORMAL',300000.00,1),(3,'King',10000000.00,1),(4,'VIP2',1000000.00,1);
 /*!40000 ALTER TABLE `price` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,7 +405,7 @@ CREATE TABLE `table_diary` (
   `row_id` int DEFAULT NULL,
   `table_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,6 +414,7 @@ CREATE TABLE `table_diary` (
 
 LOCK TABLES `table_diary` WRITE;
 /*!40000 ALTER TABLE `table_diary` DISABLE KEYS */;
+INSERT INTO `table_diary` VALUES (1,1,'price'),(2,2,'price'),(3,3,'price');
 /*!40000 ALTER TABLE `table_diary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,7 +431,7 @@ CREATE TABLE `type_action` (
   `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -437,6 +440,7 @@ CREATE TABLE `type_action` (
 
 LOCK TABLES `type_action` WRITE;
 /*!40000 ALTER TABLE `type_action` DISABLE KEYS */;
+INSERT INTO `type_action` VALUES (1,'Thêm mới',NULL,1),(2,'Cập nhật',NULL,1),(3,'Xóa',NULL,1),(4,'Đăng nhập',NULL,NULL);
 /*!40000 ALTER TABLE `type_action` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -586,4 +590,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-23 13:15:07
+-- Dump completed on 2021-10-26 21:57:16
