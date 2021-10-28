@@ -24,4 +24,7 @@ public class TypeRoom extends BaseEntity {
 
     @Column(name = "number_adult", nullable = true)
     private int numberAdult;
+
+    @Column(name = "status", nullable = true)
+    private int status;
 }

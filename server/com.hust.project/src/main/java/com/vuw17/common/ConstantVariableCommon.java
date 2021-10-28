@@ -1,6 +1,8 @@
 package com.vuw17.common;
 
 public class ConstantVariableCommon {
+    public static final String AUTHORIZATION = "Authorization";
+
     // biến cố định của Reservation
     public static final int STATUS__RESERVATION_1 = 1; // trạng thái chờ xử lý
     public static final int STATUS__RESERVATION_2 = 2; // trạng thái đã xác nhận
@@ -53,5 +55,25 @@ public class ConstantVariableCommon {
     public static final int STATUS_UNIT_3 = 3; // trạng thái của đơn vị: đã xóa
 
     //Biến cố định guest
+
+
+    //Static final message response
+
+    public static final String INPUT_ID = "Input the id";
+
+    public static final String INVALID_PHONE = "Invalid phone number!";
+    public static final String INVALID_ID = "Id must be greater than 1";
+
+
+    public static final String NOT_EXIST_ID = "Id does not exist";
+    public static final String DELETED_ID = "Id was deleted";
+
+    public static final String DUPLICATED_NAME = "Duplicated the name!";
+    public static final String DUPLICATED_ADDRESS = "Duplicated the address!";
+    public static final String DUPLICATED_PHONE = "Duplicated the phone number!";
+
+    public static final String CREATE_SUCCESSFUL = "Create Successful!";
+    public static final String UPDATE_SUCCESSFUL = "Update Successful!";
+    public static final String DELETE_SUCCESSFUL = "Delete Successful!";
 
 }
