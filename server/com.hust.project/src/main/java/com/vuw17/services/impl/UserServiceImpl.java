@@ -28,21 +28,26 @@ public class UserServiceImpl implements UserService {
     //Hàm tìm thông tin user bằng token
     @Override
     public UserDTOResponse findInfoUser(String token){
-//        jwtProvider.validateJwtToken(token);
-        System.out.println("token: " +token);
-        String[] splits = token.split(" ");
-        String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
-        User user = userRepository.findUserByUsername(username);
-        UserDTOResponse userDTO = new UserDTOResponse();
-        userDTO.setName(user.getName());
-        userDTO.setUsername(user.getUsername());
-        List<RoleByUserResponseDTO> roleName = new ArrayList<>();
-        for(int i = 0; i< user.getRoles().size(); i++){
-            RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
-            roleByUserResponseDTO.setNameRole(user.getRoles().get(i).getName());
-            roleName.add(roleByUserResponseDTO);
+        try{
+            //        jwtProvider.validateJwtToken(token);
+            System.out.println("token: " +token);
+            String[] splits = token.split(" ");
+            String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
+            User user = userRepository.findUserByUsername(username);
+            UserDTOResponse userDTO = new UserDTOResponse();
+            userDTO.setName(user.getName());
+            userDTO.setUsername(user.getUsername());
+            List<RoleByUserResponseDTO> roleName = new ArrayList<>();
+            for(int i = 0; i< user.getRoles().size(); i++){
+                RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
+                roleByUserResponseDTO.setNameRole(user.getRoles().get(i).getName());
+                roleName.add(roleByUserResponseDTO);
+            }
+            userDTO.setRole(roleName);
+            return userDTO;
+        }catch (NullPointerException e){
+            System.out.println("findInfoUser : "+e.getMessage());
+            return null;
         }
-        userDTO.setRole(roleName);
-        return userDTO;
     }
 }
