@@ -1,20 +1,12 @@
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { clearCookie } from '../../../config';
 
 export default function useLogout() {
     let history = useHistory();
 
     const logoutUser = async () => {
-        try {
-            await axios({
-                method: 'GET',
-                url: `auth/logout`,
-            }).then(res => {
-                history.push('/');
-            })
-        } catch (err) {
-            console.log(err);
-        }
+        clearCookie("jwt")
+        history.push("/")
     }
 
     return {

@@ -8,21 +8,62 @@ import { UserContext } from '../context/userContext';
 import useFindUser from '../modules/users/services/useFindUser'
 import AuthRoute from './authRoute';
 import Statistics from '../modules/statistics/statistics';
+import Register from '../modules/auth/register';
+import RoomManagement from '../modules/rooms/roomsManagement';
+import Statistics2 from '../modules/statistics/statistics2';
 function Routes(props) {
-    const {
-        user,
-        setUser,
-        isLoading } = useFindUser();
-    console.log("user", user)
+    const { user, setUser, isLoading } = useFindUser()
     return (
         <UserContext.Provider value={{ user, setUser, isLoading }}>
             <Switch>
-                <Route path="/" exact component={LandingPage} />
-                <ProtectedRoute path="/home" exact component={Home} />
-                <ProtectedRoute path="/statistics" exact component={Statistics} />
-                <AuthRoute path="/login" exact component={Login} />
-                <Route path="/logout" exact />
-                <Route path="*" component={() => "404 NOT FOUND"} />
+                <Route
+                    path="/"
+                    exact
+                    component={LandingPage}
+                />
+                <AuthRoute
+                    path="/login"
+                    exact
+                    component={Login}
+                />
+                <ProtectedRoute
+                    path="/register"
+                    exact
+                    component={Register}
+                    roles={['ROLE_ADMIN']}
+                />
+                <ProtectedRoute
+                    path="/home"
+                    exact
+                    component={Home}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+                />
+                <ProtectedRoute
+                    path="/statistics"
+                    exact
+                    component={Statistics}
+                    roles={['ROLE_ADMIN']}
+                />
+                <ProtectedRoute
+                    path="/statistics2"
+                    exact
+                    component={Statistics2}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+                />
+                <ProtectedRoute
+                    path="/rooms"
+                    exact
+                    component={RoomManagement}
+                    roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+                />
+                <Route
+                    path="/logout"
+                    exact
+                />
+                <Route
+                    path="*"
+                    component={() => "404 NOT FOUND"}
+                />
             </Switch>
         </UserContext.Provider>
     )

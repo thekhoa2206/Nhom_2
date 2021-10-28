@@ -24,6 +24,7 @@ function Room(props) {
         else setColor("red");
         setOpen(false);
     };
+    console.log("yyy")
     return (
         <React.Fragment>
             <CheckInModal open={open} id={id} handleSubmit={handleSubmit} handleClose={handleClose} />

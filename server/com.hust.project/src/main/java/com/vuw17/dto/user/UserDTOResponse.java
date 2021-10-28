@@ -1,8 +1,11 @@
 package com.vuw17.dto.user;
 
+import java.util.List;
+
 public class UserDTOResponse {
     private String username;
     private String name;
+    private List<RoleByUserResponseDTO> roles;
 
     public String getUsername() {
         return username;
@@ -18,5 +21,13 @@ public class UserDTOResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<RoleByUserResponseDTO> getRole() {
+        return roles;
+    }
+
+    public void setRole(List<RoleByUserResponseDTO> role) {
+        this.roles = role;
     }
 }
