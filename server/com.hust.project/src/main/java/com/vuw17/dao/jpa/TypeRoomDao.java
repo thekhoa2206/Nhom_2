@@ -11,7 +11,7 @@ import java.util.List;
 @Transactional(rollbackOn = Exception.class)
 public interface TypeRoomDao {
     //Them moi 1 TypeRoom
-    void insertOne(TypeRoom typeRoom);
+//    void insertOne(TypeRoom typeRoom);
     //Lay tat ca cac TypeRooms
     List<TypeRoom> findAll();
     //Sua thong tin cua TypeRoom

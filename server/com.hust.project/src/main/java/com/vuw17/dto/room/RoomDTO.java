@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class RoomDTO extends BaseDTO {
 
     @Min(value = 1,message = "Ma loai phong phai lon hon 0")
     private int typeRoomId;
-
+    @Size(min = 0, max = 255, message = "Note không dài quá 255 ký tự")
     private String note;
 
     private int status;

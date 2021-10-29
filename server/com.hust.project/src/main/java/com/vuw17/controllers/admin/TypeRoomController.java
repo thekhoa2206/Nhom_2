@@ -1,5 +1,6 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.InsertResponse;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.services.TypeRoomService;
 import com.vuw17.services.UserService;
@@ -22,8 +23,8 @@ public class TypeRoomController {
         this.userService = userService;
     }
     @PostMapping()
-    public ResponseEntity<String> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO) {
-        return ResponseEntity.ok(typeRoomService.insertOne(typeRoomDTO));
+    public ResponseEntity<InsertResponse> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO) {
+        return ResponseEntity.ok(new InsertResponse(typeRoomService.insertOne(typeRoomDTO)));
     }
 
     @GetMapping()

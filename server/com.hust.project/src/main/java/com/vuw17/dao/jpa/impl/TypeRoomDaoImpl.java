@@ -23,13 +23,13 @@ public class TypeRoomDaoImpl implements TypeRoomDao, GenericDAO<TypeRoom> {
     private EntityManager entityManager;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class.toString());
 
-    @Override
-    public void insertOne(TypeRoom typeRoom) {
-        String sql = "INSERT INTO type_room(name,note,number_children,number_adult,status) VALUES (?,?,?,?,?)";
-        entityManager.createNativeQuery(sql).setParameter(1,typeRoom.getName()).setParameter(2,typeRoom.getNote())
-                .setParameter(3,typeRoom.getNumberChildren()).setParameter(4,typeRoom.getNumberAdult())
-                .setParameter(5, ConstantVariableCommon.STATUS_TYPE_ROOM_1).executeUpdate();
-    }
+//    @Override
+//    public void insertOne(TypeRoom typeRoom) {
+//        String sql = "INSERT INTO type_room(name,note,number_children,number_adult,status) VALUES (?,?,?,?,?)";
+//        entityManager.createNativeQuery(sql).setParameter(1,typeRoom.getName()).setParameter(2,typeRoom.getNote())
+//                .setParameter(3,typeRoom.getNumberChildren()).setParameter(4,typeRoom.getNumberAdult())
+//                .setParameter(5, ConstantVariableCommon.STATUS_TYPE_ROOM_1).executeUpdate();
+//    }
 
     @Override
     public List<TypeRoom> findAll() {

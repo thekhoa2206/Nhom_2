@@ -1,8 +1,14 @@
 package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
+import com.vuw17.dao.jdbc.PriceDAO;
+import com.vuw17.dao.jdbc.RoomPriceDAO;
+import com.vuw17.dao.jdbc.TypeRoomDAO;
+import com.vuw17.dao.jpa.PriceDao;
 import com.vuw17.dao.jpa.TypeRoomDao;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
+import com.vuw17.entities.Price;
+import com.vuw17.entities.RoomPrice;
 import com.vuw17.entities.TypeRoom;
 import com.vuw17.services.TypeRoomService;
 import org.springframework.stereotype.Service;
@@ -14,19 +20,37 @@ import java.util.List;
 @Service
 public class TypeRoomServiceImpl implements TypeRoomService {
     private final TypeRoomDao typeRoomDao;
+    private final PriceDAO priceDAO;
+    private final PriceDao priceDao;
+    private final TypeRoomDAO typeRoomDAO;
+    private final RoomPriceDAO roomPriceDAO;
 
-    public TypeRoomServiceImpl(TypeRoomDao typeRoomDao) {
+    public TypeRoomServiceImpl(TypeRoomDao typeRoomDao, PriceDAO priceDAO, PriceDao priceDao, TypeRoomDAO typeRoomDAO, RoomPriceDAO roomPriceDAO) {
         this.typeRoomDao = typeRoomDao;
+        this.priceDAO = priceDAO;
+        this.priceDao = priceDao;
+        this.typeRoomDAO = typeRoomDAO;
+        this.roomPriceDAO = roomPriceDAO;
     }
 
     @Override
-    public String insertOne(TypeRoomDTO typeRoom) {
+    public int insertOne(TypeRoomDTO typeRoom) {
         String message = checkInput(typeRoom);
         if (message == null) {
-            typeRoomDao.insertOne(toEntity(typeRoom));
-            return ConstantVariableCommon.CREATE_SUCCESSFUL;
+//            typeRoomDao.insertOne(toEntity(typeRoom));
+//            return ConstantVariableCommon.CREATE_SUCCESSFUL;
+            Price price = priceDao.findByPrice(typeRoom.getPrice());
+            int priceId = 0;
+            if(price != null){
+                priceId = price.getId();
+            }else{
+                priceId = priceDAO.insertOne(new Price(typeRoom.getPrice().toString(),typeRoom.getPrice()));
+            }
+            int typeRoomId = typeRoomDAO.insertOne(toEntity(typeRoom));
+            roomPriceDAO.insertOne(new RoomPrice(priceId,typeRoomId));
+            return typeRoomId;
         }
-        return message;
+        return 0;
     }
 
     @Override

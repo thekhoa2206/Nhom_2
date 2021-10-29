@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface TypeRoomService {
     //Them moi 1 TypeRoom
-    String insertOne(TypeRoomDTO typeRoom);
+    int insertOne(TypeRoomDTO typeRoom);
     //Lay tat ca cac TypeRooms
     List<TypeRoomDTO> findAll();
     //Sua thong tin cua TypeRoom

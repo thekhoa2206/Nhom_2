@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -45,14 +46,25 @@ public class PriceDaoImpl implements PriceDao {
     @Override
     public Price findPriceById(int id){
         String sql = "SELECT * FROM price WHERE 1 = 1 ";
-        if(id > 0){
+        if (id > 0) {
             sql = sql + " AND price.id = :id";
         }
         Query query = entityManager.createNativeQuery(sql, Price.class);
-        if(id > 0){
+        if (id > 0) {
             query.setParameter("id", id);
         }
         Price price = (Price) query.getSingleResult();
         return price;
+    }
+
+    @Override
+    public Price findByPrice(BigDecimal price) {
+        String sql = "SELECT * FROM price WHERE price = ?";
+        try {
+            return (Price) entityManager.createNativeQuery(sql, Price.class).setParameter(1, price).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 }

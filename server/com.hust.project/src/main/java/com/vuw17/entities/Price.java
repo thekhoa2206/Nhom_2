@@ -14,6 +14,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Price extends BaseEntity {
+    public Price() {
+
+    }
+    public Price(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
 
     @Column(name = "name", nullable = true, length = 50)
     private String name;

@@ -1,5 +1,6 @@
 package com.vuw17.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,11 @@ import java.math.BigDecimal;
 @Table(name = "room_price")
 @Getter
 @Setter
+@AllArgsConstructor
 public class RoomPrice extends BaseEntity {
+    public RoomPrice() {
+    }
+
     @Column(name = "type_price_id", nullable = false)
     private int typePriceId;
 
