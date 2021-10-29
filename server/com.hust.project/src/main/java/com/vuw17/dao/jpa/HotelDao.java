@@ -1,6 +1,5 @@
 package com.vuw17.dao.jpa;
 
-import com.vuw17.dto.hotel.HotelDTORequest;
 import com.vuw17.entities.Hotel;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +25,6 @@ public interface HotelDao {
     Hotel findByName(String name);
     //Lay hotel theo phone number
     Hotel findByPhoneNumber(String phoneNumber);
+    //Lay hotel theo status
+    List<Hotel> findByStatus(int status);
 }

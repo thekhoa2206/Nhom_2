@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class HotelDTORequest extends BaseDTO {
+public class HotelDTO extends BaseDTO {
     @NotBlank(message = "Ten khong duoc de trong")
     private String name;
     @NotBlank(message = "Dia chi khong duoc de trong")

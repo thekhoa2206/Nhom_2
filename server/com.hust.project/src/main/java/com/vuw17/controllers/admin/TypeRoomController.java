@@ -1,10 +1,9 @@
 package com.vuw17.controllers.admin;
 
-import com.vuw17.common.ConstantVariableCommon;
-import com.vuw17.dto.typeroom.TypeRoomDTORequest;
-import com.vuw17.entities.TypeRoom;
+import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.services.TypeRoomService;
 import com.vuw17.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,43 +22,27 @@ public class TypeRoomController {
         this.userService = userService;
     }
     @PostMapping()
-    public String insertOne(@Valid  @RequestBody TypeRoomDTORequest typeRoomDTORequest, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return typeRoomService.insertOne(typeRoomDTORequest);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO) {
+        return ResponseEntity.ok(typeRoomService.insertOne(typeRoomDTO));
     }
 
     @GetMapping()
-    public List<TypeRoomDTORequest> getAll(HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return typeRoomService.findAll();
-        }
-        return null;
+    public ResponseEntity<List<TypeRoomDTO>> getAllTypeRooms() {
+        return ResponseEntity.ok(typeRoomService.findAll());
     }
 
     @GetMapping("/{id}")
-    public TypeRoomDTORequest getOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-
-            return typeRoomService.findById(id);
-        }
-        return null;
+    public ResponseEntity<TypeRoomDTO> getTypeRoom(@PathVariable int id) {
+        return ResponseEntity.ok(typeRoomService.findById(id));
     }
 
     @PutMapping()
-    public String updateOne(@Valid @RequestBody TypeRoomDTORequest typeRoomDTORequest, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return typeRoomService.updateOne(typeRoomDTORequest);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> updateRoom(@Valid @RequestBody TypeRoomDTO typeRoomDTO) {
+        return ResponseEntity.ok(typeRoomService.updateOne(typeRoomDTO));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return typeRoomService.deleteOne(id);
-        }
-        return null;
+    public ResponseEntity<String> deleteRoom(@PathVariable int id) {
+        return ResponseEntity.ok(typeRoomService.deleteOne(id));
     }
 }
