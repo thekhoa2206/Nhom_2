@@ -3,7 +3,6 @@ package com.vuw17.dao.jpa.impl;
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.GenericDAO;
 import com.vuw17.dao.jpa.HotelDao;
-import com.vuw17.dto.hotel.HotelDTORequest;
 import com.vuw17.entities.Hotel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -32,10 +30,8 @@ public class HotelDaoImpl implements HotelDao, GenericDAO<Hotel> {
 
     @Override
     public List<Hotel> findAll() {
-        List<Hotel> hotels = new ArrayList<>();
         String sql = "SELECT * FROM hotel";
-        hotels = entityManager.createNativeQuery(sql,Hotel.class).getResultList();
-        return hotels;
+        return entityManager.createNativeQuery(sql,Hotel.class).getResultList();
     }
 
     @Override
@@ -75,6 +71,12 @@ public class HotelDaoImpl implements HotelDao, GenericDAO<Hotel> {
     public Hotel findByPhoneNumber(String phoneNumber) {
         String sql = "SELECT * FROM hotel WHERE phone_number = ?";
         return getFirstRowData(entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,phoneNumber).getResultList());
+    }
+
+    @Override
+    public List<Hotel> findByStatus(int status) {
+        String sql = "SELECT * FROM hotel WHERE status = ?";
+        return entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,status).getResultList();
     }
 
     @Override

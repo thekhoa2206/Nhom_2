@@ -22,8 +22,8 @@ public interface RoomDao {
     Room findById(int id);
     //Lay room theo name
     Room findByName(String name);
-    //Lay room theo hotel_id
-    Room findByHotelId(int hotelId);
-    //Lay room theo type_room id
-    Room findByTypeRoomId(int typeRoomId);
+    //Lay list room theo hotel_id
+    List<Room> findByHotelId(int hotelId);
+    //Lay list room theo type_room id
+    List<Room> findByTypeRoomId(int typeRoomId);
 }

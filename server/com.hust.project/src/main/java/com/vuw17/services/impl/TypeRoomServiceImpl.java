@@ -2,7 +2,7 @@ package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.TypeRoomDao;
-import com.vuw17.dto.typeroom.TypeRoomDTORequest;
+import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.entities.TypeRoom;
 import com.vuw17.services.TypeRoomService;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     }
 
     @Override
-    public String insertOne(TypeRoomDTORequest typeRoom) {
+    public String insertOne(TypeRoomDTO typeRoom) {
         String message = checkInput(typeRoom);
         if (message == null) {
             typeRoomDao.insertOne(toEntity(typeRoom));
@@ -30,17 +30,17 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     }
 
     @Override
-    public List<TypeRoomDTORequest> findAll() {
-        List<TypeRoomDTORequest> typeRoomDTORequests = new ArrayList<>();
+    public List<TypeRoomDTO> findAll() {
+        List<TypeRoomDTO> typeRoomDTOs = new ArrayList<>();
         List<TypeRoom> typeRooms = typeRoomDao.findAll();
         for (TypeRoom typeRoom : typeRooms) {
-            typeRoomDTORequests.add(toDTO(typeRoom));
+            typeRoomDTOs.add(toDTO(typeRoom));
         }
-        return typeRoomDTORequests;
+        return typeRoomDTOs;
     }
 
     @Override
-    public String updateOne(TypeRoomDTORequest typeRoom) {
+    public String updateOne(TypeRoomDTO typeRoom) {
         if (typeRoom.getId() <= 0) {
             return ConstantVariableCommon.INVALID_ID;
         } else if (findById(typeRoom.getId()) == null) {
@@ -60,7 +60,7 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     @Override
     public String deleteOne(int id) {
         if (findById(id) != null) {
-            TypeRoomDTORequest typeRoom = findById(id);
+            TypeRoomDTO typeRoom = findById(id);
             if (typeRoom.getStatus() == ConstantVariableCommon.STATUS_TYPE_ROOM_3) {
                 return ConstantVariableCommon.DELETED_ID;
             } else {
@@ -72,7 +72,7 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     }
 
     @Override
-    public TypeRoomDTORequest findById(int id) {
+    public TypeRoomDTO findById(int id) {
         TypeRoom typeRoom = typeRoomDao.findById(id);
         if (typeRoom != null) {
             return toDTO(typeRoom);
@@ -82,7 +82,7 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     
 
     @Override
-    public TypeRoomDTORequest findByName(String name) {
+    public TypeRoomDTO findByName(String name) {
         TypeRoom typeRoom = typeRoomDao.findByName(name);
         if (typeRoom != null) {
             return toDTO(typeRoom);
@@ -91,7 +91,7 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     }
     
 
-    public TypeRoomDTORequest updateData(TypeRoomDTORequest oldData, TypeRoomDTORequest newData) {
+    public TypeRoomDTO updateData(TypeRoomDTO oldData, TypeRoomDTO newData) {
 
         if (StringUtils.hasText(newData.getName())) {
             oldData.setName(newData.getName());
@@ -108,40 +108,40 @@ public class TypeRoomServiceImpl implements TypeRoomService {
         return oldData;
     }
 
-    public TypeRoom toEntity(TypeRoomDTORequest typeRoomDTORequest) {
+    public TypeRoom toEntity(TypeRoomDTO typeRoomDTO) {
         TypeRoom typeRoom = new TypeRoom();
-        typeRoom.setId(typeRoomDTORequest.getId());
-        typeRoom.setName(typeRoomDTORequest.getName());
-        typeRoom.setNote(typeRoomDTORequest.getNote());
-        typeRoom.setNumberAdult(typeRoomDTORequest.getNumberAdult());
-        typeRoom.setNumberChildren(typeRoomDTORequest.getNumberChildren());
-        typeRoom.setStatus(typeRoomDTORequest.getStatus());
+        typeRoom.setId(typeRoomDTO.getId());
+        typeRoom.setName(typeRoomDTO.getName());
+        typeRoom.setNote(typeRoomDTO.getNote());
+        typeRoom.setNumberAdult(typeRoomDTO.getNumberAdult());
+        typeRoom.setNumberChildren(typeRoomDTO.getNumberChildren());
+        typeRoom.setStatus(typeRoomDTO.getStatus());
 
         return typeRoom;
     }
     //Vi luc insert id = null nen se ko set truong Id
 
-    public TypeRoomDTORequest toDTO(TypeRoom typeRoom) {
-        TypeRoomDTORequest typeRoomDTORequest = commonTransferData(typeRoom);
-        typeRoomDTORequest.setId(typeRoom.getId());
-        return typeRoomDTORequest;
+    public TypeRoomDTO toDTO(TypeRoom typeRoom) {
+        TypeRoomDTO typeRoomDTO = commonTransferData(typeRoom);
+        typeRoomDTO.setId(typeRoom.getId());
+        return typeRoomDTO;
     }
 
-    public TypeRoomDTORequest toDTOWhenInsert(TypeRoom typeRoom) {
-        return commonTransferData(typeRoom);
+//    public TypeRoomDTO toDTOWhenInsert(TypeRoom typeRoom) {
+//        return commonTransferData(typeRoom);
+//    }
+
+    public TypeRoomDTO commonTransferData(TypeRoom typeRoom) {
+        TypeRoomDTO typeRoomDTO = new TypeRoomDTO();
+        typeRoomDTO.setName(typeRoom.getName());
+        typeRoomDTO.setNote(typeRoom.getNote());
+        typeRoomDTO.setNumberAdult(typeRoom.getNumberAdult());
+        typeRoomDTO.setNumberChildren(typeRoom.getNumberChildren());
+        typeRoomDTO.setStatus(typeRoom.getStatus());
+        return typeRoomDTO;
     }
 
-    public TypeRoomDTORequest commonTransferData(TypeRoom typeRoom) {
-        TypeRoomDTORequest typeRoomDTORequest = new TypeRoomDTORequest();
-        typeRoomDTORequest.setName(typeRoom.getName());
-        typeRoomDTORequest.setNote(typeRoom.getNote());
-        typeRoomDTORequest.setNumberAdult(typeRoom.getNumberAdult());
-        typeRoomDTORequest.setNumberChildren(typeRoom.getNumberChildren());
-        typeRoomDTORequest.setStatus(typeRoom.getStatus());
-        return typeRoomDTORequest;
-    }
-
-    public String checkInput(TypeRoomDTORequest typeRoom) {
+    public String checkInput(TypeRoomDTO typeRoom) {
         String message = null;
         if (findByName(typeRoom.getName()) != null) {
             message = ConstantVariableCommon.DUPLICATED_NAME;

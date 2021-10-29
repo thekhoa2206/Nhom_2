@@ -33,10 +33,8 @@ public class TypeRoomDaoImpl implements TypeRoomDao, GenericDAO<TypeRoom> {
 
     @Override
     public List<TypeRoom> findAll() {
-        List<TypeRoom> typeRooms = new ArrayList<>();
         String sql = "SELECT * FROM type_room";
-        typeRooms = entityManager.createNativeQuery(sql,TypeRoom.class).getResultList();
-        return typeRooms;
+        return entityManager.createNativeQuery(sql,TypeRoom.class).getResultList();
     }
 
     @Override

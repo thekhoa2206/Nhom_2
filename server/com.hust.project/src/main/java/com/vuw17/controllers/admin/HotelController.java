@@ -1,10 +1,9 @@
 package com.vuw17.controllers.admin;
 
-import com.vuw17.common.ConstantVariableCommon;
-import com.vuw17.dto.hotel.HotelDTORequest;
-import com.vuw17.entities.Hotel;
+import com.vuw17.dto.hotel.HotelDTO;
 import com.vuw17.services.HotelService;
 import com.vuw17.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,43 +23,31 @@ public class HotelController {
     }
 
     @PostMapping()
-    public String insertOne(@Valid @RequestBody HotelDTORequest hotel, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return hotelService.insertOne(hotel);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> insertHotel(@Valid @RequestBody HotelDTO hotel, HttpServletRequest request) {
+        return ResponseEntity.ok().body(hotelService.insertOne(hotel));
     }
 
-    @GetMapping()
-    public List<HotelDTORequest> getAll(HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return hotelService.findAll();
-        }
-        return null;
+    @GetMapping("")
+    public ResponseEntity<List<HotelDTO>> getAllHotels(HttpServletRequest request) {
+        return ResponseEntity.ok(hotelService.findAll());
+    }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<HotelDTO>> getHotelsByStatus(@PathVariable int status){
+        return ResponseEntity.ok(hotelService.findByStatus(status));
     }
 
     @GetMapping("/{id}")
-    public HotelDTORequest getOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-
-            return hotelService.findById(id);
-        }
-        return null;
+    public ResponseEntity<HotelDTO> getHotel(@PathVariable int id, HttpServletRequest request) {
+        return ResponseEntity.ok(hotelService.findById(id));
     }
 
     @PutMapping()
-    public String updateOne(@Valid @RequestBody HotelDTORequest hotel, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return hotelService.updateOne(hotel);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> updateHotel(@Valid @RequestBody HotelDTO hotel, HttpServletRequest request) {
+        return ResponseEntity.ok(hotelService.updateOne(hotel));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return hotelService.deleteOne(id);
-        }
-        return null;
+    public ResponseEntity<String> deleteHotel(@PathVariable int id, HttpServletRequest request) {
+        return ResponseEntity.ok(hotelService.deleteOne(id));
     }
 }

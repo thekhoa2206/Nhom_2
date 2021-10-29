@@ -33,10 +33,8 @@ public class RoomDaoImpl implements RoomDao, GenericDAO<Room> {
 
     @Override
     public List<Room> findAll() {
-        List<Room> rooms = new ArrayList<>();
         String sql = "SELECT * FROM room";
-        rooms = entityManager.createNativeQuery(sql,Room.class).getResultList();
-        return rooms;
+        return entityManager.createNativeQuery(sql, Room.class).getResultList();
     }
 
     @Override
@@ -67,15 +65,15 @@ public class RoomDaoImpl implements RoomDao, GenericDAO<Room> {
     }
 
     @Override
-    public Room findByHotelId(int hotelId) {
+    public List<Room> findByHotelId(int hotelId) {
         String sql = "SELECT * FROM room WHERE hotel_id = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Room.class).setParameter(1,hotelId).getResultList());
+        return entityManager.createNativeQuery(sql,Room.class).setParameter(1,hotelId).getResultList();
     }
 
     @Override
-    public Room findByTypeRoomId(int typeRoomId) {
+    public List<Room> findByTypeRoomId(int typeRoomId) {
         String sql = "SELECT * FROM room WHERE type_room_id = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Room.class).setParameter(1,typeRoomId).getResultList());
+        return entityManager.createNativeQuery(sql,Room.class).setParameter(1,typeRoomId).getResultList();
     }
     @Override
     public Room getFirstRowData(List<Room> list) {
