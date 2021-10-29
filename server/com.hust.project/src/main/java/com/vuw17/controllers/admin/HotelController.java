@@ -37,7 +37,7 @@ public class HotelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HotelDTO> getHotel(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<HotelDTO> getHotel(@PathVariable("id") int id, HttpServletRequest request) {
         return ResponseEntity.ok(hotelService.findById(id));
     }
 
@@ -47,7 +47,7 @@ public class HotelController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteHotel(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<String> deleteHotel(@PathVariable("id") int id, HttpServletRequest request) {
         return ResponseEntity.ok(hotelService.deleteOne(id));
     }
 }

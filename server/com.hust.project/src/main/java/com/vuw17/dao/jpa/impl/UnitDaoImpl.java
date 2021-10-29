@@ -43,4 +43,13 @@ public class UnitDaoImpl implements UnitDao {
         List<Unit> units = query.getResultList();
         return units;
     }
+
+    @Override
+    public Unit findUnitByName(String name){
+        String sql = "SELECT * FROM unit WHERE unit.name = ?1";
+        Query query = entityManager.createNativeQuery(sql, Unit.class);
+        query.setParameter(1, name);
+        Unit unit = (Unit) query.getSingleResult();
+        return unit;
+    }
 }

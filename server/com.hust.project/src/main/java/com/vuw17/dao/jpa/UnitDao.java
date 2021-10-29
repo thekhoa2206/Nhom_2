@@ -1,5 +1,6 @@
 package com.vuw17.dao.jpa;
 
+import com.vuw17.dto.unit.UnitRequestDTO;
 import com.vuw17.entities.Unit;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,7 @@ public interface UnitDao {
 
     //hàm tìm list Unit
     List<Unit> findAllUnitByStatus();
+
+    //hàm tìm unit theo tên
+    Unit findUnitByName(String name);
 }

@@ -1,10 +1,12 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.product.ProductRequestDTO;
 import com.vuw17.dto.product.ProductResponseDTO;
 import com.vuw17.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,5 +28,9 @@ public class ProductController {
     }
 
     //API Tạo product
-
+    @PostMapping
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO){
+        productService.createProduct(productRequestDTO);
+        return ResponseEntity.ok().build();
+    }
 }
