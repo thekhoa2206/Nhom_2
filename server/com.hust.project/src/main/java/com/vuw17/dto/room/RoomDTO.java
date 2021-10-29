@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class RoomDTORequest extends BaseDTO {
+public class RoomDTO extends BaseDTO {
     @Min(value = 1,message = "Ma khach san phai lon hon 0")
     private int hotelId;
 

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class TypeRoomDTORequest extends BaseDTO {
+public class TypeRoomDTO extends BaseDTO {
     @NotBlank(message = "Ten khong duoc de trong")
     private String name;
 

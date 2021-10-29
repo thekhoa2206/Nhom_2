@@ -4,7 +4,9 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.HotelDao;
 import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dao.jpa.TypeRoomDao;
-import com.vuw17.dto.room.RoomDTORequest;
+import com.vuw17.dto.hotel.HotelDTO;
+import com.vuw17.dto.room.RoomDTO;
+import com.vuw17.entities.Hotel;
 import com.vuw17.entities.Room;
 import com.vuw17.services.GenericService;
 import com.vuw17.services.RoomService;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RoomServiceImpl implements RoomService, GenericService<RoomDTORequest> {
+public class RoomServiceImpl implements RoomService, GenericService<RoomDTO> {
     private final RoomDao roomDao;
     private final TypeRoomDao typeRoomDao;
     private final HotelDao hotelDao;
@@ -29,36 +31,31 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
     }
 
     @Override
-    public String insertOne(RoomDTORequest roomDTORequest) {
-        String message = checkInput(roomDTORequest);
+    public String insertOne(RoomDTO roomDTO) {
+        String message = checkInput(roomDTO);
         if (message == null) {
-            roomDao.insertOne(toEntity(roomDTORequest));
+            roomDao.insertOne(toEntity(roomDTO));
             return ConstantVariableCommon.CREATE_SUCCESSFUL;
         }
         return message;
     }
 
     @Override
-    public List<RoomDTORequest> findAll() {
-        List<RoomDTORequest> roomDTORequests = new ArrayList<>();
-        List<Room> rooms = roomDao.findAll();
-        for(Room room : rooms){
-            roomDTORequests.add(toDTO(room));
-        }
-        return roomDTORequests;
+    public List<RoomDTO> findAll() {
+        return convertList(roomDao.findAll());
     }
 
     @Override
-    public String updateOne(RoomDTORequest roomDTORequest) {
-        int id = roomDTORequest.getId();
+    public String updateOne(RoomDTO roomDTO) {
+        int id = roomDTO.getId();
         if (id <= 0) {
             return ConstantVariableCommon.INVALID_ID;
         } else if (findById(id) == null) {
             return ConstantVariableCommon.NOT_EXIST_ID;
         } else {
-            String message = checkInput(roomDTORequest);
+            String message = checkInput(roomDTO);
             if (message == null) {
-                roomDao.updateOne(toEntity(updateData(findById(id), roomDTORequest)));
+                roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
                 return ConstantVariableCommon.UPDATE_SUCCESSFUL;
             }
             return message;
@@ -68,7 +65,7 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
     @Override
     public String deleteOne(int id) {
         if (findById(id) != null) {
-            RoomDTORequest room = findById(id);
+            RoomDTO room = findById(id);
             if (room.getStatus() == ConstantVariableCommon.STATUS_ROOM_4) {
                 return ConstantVariableCommon.DELETED_ID;
             } else {
@@ -80,7 +77,7 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
     }
 
     @Override
-    public RoomDTORequest findById(int id) {
+    public RoomDTO findById(int id) {
         Room room = roomDao.findById(id);
         if (room != null) {
             return toDTO(room);
@@ -89,7 +86,7 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
     }
 
     @Override
-    public RoomDTORequest findByName(String name) {
+    public RoomDTO findByName(String name) {
         Room room = roomDao.findByName(name);
         if (room != null) {
             return toDTO(room);
@@ -98,23 +95,15 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
     }
 
     @Override
-    public RoomDTORequest findByHotelId(int hotelId) {
-        Room room = roomDao.findByHotelId(hotelId);
-        if (room != null) {
-            return toDTO(room);
-        }
-        return null;
+    public List<RoomDTO> findByHotelId(int hotelId) {
+        return convertList(roomDao.findByHotelId(hotelId));
     }
 
     @Override
-    public RoomDTORequest findByTypeRoomId(int typeRoomId) {
-        Room room = roomDao.findByTypeRoomId(typeRoomId);
-        if (room != null) {
-            return toDTO(room);
-        }
-        return null;
+    public List<RoomDTO> findByTypeRoomId(int typeRoomId) {
+        return convertList(roomDao.findByTypeRoomId(typeRoomId));
     }
-    public RoomDTORequest updateData(RoomDTORequest oldData, RoomDTORequest newData) {
+    public RoomDTO updateData(RoomDTO oldData, RoomDTO newData) {
 
         if (StringUtils.hasText(newData.getName())) {
             oldData.setName(newData.getName());
@@ -122,56 +111,64 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTOReque
         if (StringUtils.hasText(newData.getNote())) {
             oldData.setNote(newData.getNote());
         }
-        if(findByTypeRoomId(newData.getTypeRoomId()) != null && newData.getTypeRoomId() != oldData.getTypeRoomId()){
+        if(typeRoomDao.findById(newData.getTypeRoomId()) != null && newData.getTypeRoomId() != oldData.getTypeRoomId()){
             oldData.setTypeRoomId(newData.getTypeRoomId());
         }
-        if(findByHotelId(newData.getHotelId()) != null && newData.getHotelId() != oldData.getHotelId()){
+        if(hotelDao.findById(newData.getHotelId()) != null && newData.getHotelId() != oldData.getHotelId()){
             oldData.setHotelId(newData.getHotelId());
         }
         return oldData;
     }
-    public Room toEntity(RoomDTORequest roomDTORequest) {
+    public Room toEntity(RoomDTO roomDTO) {
         Room room = new Room();
-        room.setId(roomDTORequest.getId());
-        room.setName(roomDTORequest.getName());
-        room.setNote(roomDTORequest.getNote());
-        room.setStatus(roomDTORequest.getStatus());
-        room.setHotelId(roomDTORequest.getHotelId());
-        room.setTypeRoomId(roomDTORequest.getTypeRoomId());
+        room.setId(roomDTO.getId());
+        room.setName(roomDTO.getName());
+        room.setNote(roomDTO.getNote());
+        room.setStatus(roomDTO.getStatus());
+        room.setHotelId(roomDTO.getHotelId());
+        room.setTypeRoomId(roomDTO.getTypeRoomId());
         return room;
     }
     //Vi luc insert id = null nen se ko set truong Id
 
-    public RoomDTORequest toDTO(Room room) {
-        RoomDTORequest roomDTORequest = commonTransferData(room);
-        roomDTORequest.setId(room.getId());
-        return roomDTORequest;
+    public RoomDTO toDTO(Room room) {
+        RoomDTO roomDTO = commonTransferData(room);
+        roomDTO.setId(room.getId());
+        return roomDTO;
     }
 
-    public RoomDTORequest toDTOWhenInsert(Room room) {
-        return commonTransferData(room);
-    }
+//    public RoomDTO toDTOWhenInsert(Room room) {
+//        return commonTransferData(room);
+//    }
 
-    public RoomDTORequest commonTransferData(Room room) {
-        RoomDTORequest roomDTORequest = new RoomDTORequest();
-        roomDTORequest.setName(room.getName());
-        roomDTORequest.setNote(room.getNote());
-        roomDTORequest.setHotelId(room.getHotelId());
-        roomDTORequest.setTypeRoomId(room.getTypeRoomId());
-        roomDTORequest.setStatus(room.getStatus());
-        return roomDTORequest;
+    public RoomDTO commonTransferData(Room room) {
+        RoomDTO roomDTO = new RoomDTO();
+        roomDTO.setName(room.getName());
+        roomDTO.setNote(room.getNote());
+        roomDTO.setHotelId(room.getHotelId());
+        roomDTO.setTypeRoomId(room.getTypeRoomId());
+        roomDTO.setStatus(room.getStatus());
+        return roomDTO;
     }
 
     @Override
-    public String checkInput(RoomDTORequest roomDTORequest) {
+    public String checkInput(RoomDTO roomDTO) {
         String message = null;
-        if (findByName(roomDTORequest.getName()) != null) {
-            message = ConstantVariableCommon.DUPLICATED_NAME;
-        }else if(hotelDao.findById(roomDTORequest.getHotelId()) == null){
+        RoomDTO dto = findByName(roomDTO.getName());
+        if(hotelDao.findById(roomDTO.getHotelId()) == null){
             message = NOT_EXIST_HOTEL_ID;
-        }else if(typeRoomDao.findById(roomDTORequest.getTypeRoomId()) == null){
+        }else if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
             message = NOT_EXIST_TYPE_ROOM_ID;
+        }else if (dto != null && dto.getHotelId() == roomDTO.getHotelId()) {
+            message = ConstantVariableCommon.DUPLICATED_NAME;
         }
         return message;
+    }
+    public List<RoomDTO> convertList(List<Room> rooms){
+        List<RoomDTO> roomDTOs = new ArrayList<>();
+        for (Room room : rooms) {
+            roomDTOs.add(toDTO(room));
+        }
+        return roomDTOs;
     }
 }

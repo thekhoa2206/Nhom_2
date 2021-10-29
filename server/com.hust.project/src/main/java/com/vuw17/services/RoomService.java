@@ -1,7 +1,6 @@
 package com.vuw17.services;
 
-import com.vuw17.dto.room.RoomDTORequest;
-import com.vuw17.entities.Room;
+import com.vuw17.dto.room.RoomDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,19 +8,19 @@ import java.util.List;
 @Service
 public interface RoomService {
     //Them moi 1 room
-    String insertOne(RoomDTORequest roomDTORequest);
+    String insertOne(RoomDTO roomDTO);
     //Lay tat ca cac rooms
-    List<RoomDTORequest> findAll();
+    List<RoomDTO> findAll();
     //Sua thong tin cua room
-    String updateOne(RoomDTORequest roomDTORequest);
+    String updateOne(RoomDTO roomDTO);
     //Xoa room
     String deleteOne(int id);
     //Lay room theo id
-    RoomDTORequest findById(int id);
+    RoomDTO findById(int id);
     //Lay room theo name
-    RoomDTORequest findByName(String name);
+    RoomDTO findByName(String name);
     //Lay room theo hotel_id
-    RoomDTORequest findByHotelId(int hotelId);
+    List<RoomDTO> findByHotelId(int hotelId);
     //Lay room theo type_room id
-    RoomDTORequest findByTypeRoomId(int typeRoomId);
+    List<RoomDTO> findByTypeRoomId(int typeRoomId);
 }

@@ -1,12 +1,10 @@
 package com.vuw17.controllers.admin;
 
-import com.vuw17.common.ConstantVariableCommon;
-import com.vuw17.dto.room.RoomDTORequest;
+import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.services.RoomService;
 import com.vuw17.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,43 +21,36 @@ public class RoomController {
     }
 
     @PostMapping()
-    public String insertOne(@Valid @RequestBody RoomDTORequest roomDTORequest, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return roomService.insertOne(roomDTORequest);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> insertRoom(@Valid @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.insertOne(roomDTO));
     }
 
     @GetMapping()
-    public List<RoomDTORequest> getAll(HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return roomService.findAll();
-        }
-        return null;
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.findAll());
     }
 
     @GetMapping("/{id}")
-    public RoomDTORequest getOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-
-            return roomService.findById(id);
-        }
-        return null;
+    public ResponseEntity<RoomDTO> getRoom(@PathVariable int id) {
+        return ResponseEntity.ok(roomService.findById(id));
     }
 
     @PutMapping()
-    public String updateOne(@Valid @RequestBody RoomDTORequest roomDTORequest, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return roomService.updateOne(roomDTORequest);
-        }
-        return "Can not authorize you";
+    public ResponseEntity<String> updateRoom(@Valid @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.updateOne(roomDTO));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteOne(@PathVariable int id, HttpServletRequest request) {
-        if (userService.findInfoUser(request.getHeader(ConstantVariableCommon.AUTHORIZATION)) != null) {
-            return roomService.deleteOne(id);
-        }
-        return null;
+    public ResponseEntity<String> deleteRoom(@PathVariable int id) {
+        return ResponseEntity.ok(roomService.deleteOne(id));
+    }
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable int hotelId){
+        return ResponseEntity.ok(roomService.findByHotelId(hotelId));
+    }
+    @GetMapping("/type-room/{typeRoomId}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
+        return ResponseEntity.ok(roomService.findByTypeRoomId(typeRoomId));
     }
 }
+
