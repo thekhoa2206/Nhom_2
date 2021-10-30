@@ -1,5 +1,7 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.InsertResponse;
+import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.services.RoomService;
 import com.vuw17.services.UserService;
@@ -21,8 +23,8 @@ public class RoomController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> insertRoom(@Valid @RequestBody RoomDTO roomDTO) {
-        return ResponseEntity.ok(roomService.insertOne(roomDTO));
+    public ResponseEntity<InsertResponse> insertRoom(@Valid @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(new InsertResponse(roomService.insertOne(roomDTO)));
     }
 
     @GetMapping()
@@ -36,13 +38,13 @@ public class RoomController {
     }
 
     @PutMapping()
-    public ResponseEntity<String> updateRoom(@Valid @RequestBody RoomDTO roomDTO) {
-        return ResponseEntity.ok(roomService.updateOne(roomDTO));
+    public ResponseEntity<UpdateResponse> updateRoom(@Valid @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(new UpdateResponse(roomService.updateOne(roomDTO)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRoom(@PathVariable int id) {
-        return ResponseEntity.ok(roomService.deleteOne(id));
+    public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id) {
+        return ResponseEntity.ok(new UpdateResponse(roomService.deleteOne(id)));
     }
     @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable int hotelId){

@@ -10,13 +10,13 @@ import java.util.List;
 @Transactional(rollbackOn = Exception.class)
 public interface HotelDao {
     //Them moi 1 Hotel
-    void insertOne(Hotel hotel);
+//    void insertOne(Hotel hotel);
     //Lay tat ca cac hotels
     List<Hotel> findAll();
     //Sua thong tin cua hotel
-    void updateOne(Hotel hotel);
+    boolean updateOne(Hotel hotel);
     //Xoa hotel
-    void deleteOne(int id);
+    boolean deleteOne(int id);
     //Lay hotel theo id
     Hotel findById(int id);
     //Lay hotel theo address

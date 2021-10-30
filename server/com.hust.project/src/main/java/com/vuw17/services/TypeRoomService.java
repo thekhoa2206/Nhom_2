@@ -12,9 +12,9 @@ public interface TypeRoomService {
     //Lay tat ca cac TypeRooms
     List<TypeRoomDTO> findAll();
     //Sua thong tin cua TypeRoom
-    String updateOne(TypeRoomDTO typeRoom);
+    boolean updateOne(TypeRoomDTO typeRoom);
     //Xoa TypeRoom
-    String deleteOne(int id);
+    boolean deleteOne(int id);
     //Lay TypeRoom theo id
     TypeRoomDTO findById(int id);
     //Lay TypeRoom theo id

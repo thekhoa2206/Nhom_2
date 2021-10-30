@@ -15,9 +15,9 @@ public interface TypeRoomDao {
     //Lay tat ca cac TypeRooms
     List<TypeRoom> findAll();
     //Sua thong tin cua TypeRoom
-    void updateOne(TypeRoom typeRoom);
+    boolean updateOne(TypeRoom typeRoom);
     //Xoa TypeRoom
-    void deleteOne(int id);
+    boolean deleteOne(int id);
     //Lay TypeRoom theo id
     TypeRoom findById(int id);
     //Lay TypeRoom theo name

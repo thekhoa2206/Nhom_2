@@ -8,13 +8,13 @@ import java.util.List;
 @Service
 public interface HotelService {
     //Them moi 1 Hotel
-    String insertOne(HotelDTO hotel);
+    int insertOne(HotelDTO hotel);
     //Lay tat ca cac hotels
     List<HotelDTO> findAll();
     //Sua thong tin cua hotel
-    String updateOne(HotelDTO hotel);
+    boolean updateOne(HotelDTO hotel);
     //Xoa hotel
-    String deleteOne(int id);
+    boolean deleteOne(int id);
     //Lay hotel theo id
     HotelDTO findById(int id);
     //Lay hotel theo address

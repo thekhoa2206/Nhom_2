@@ -15,6 +15,7 @@ public class RoomDTO extends BaseDTO {
     private int hotelId;
 
     @NotBlank(message = "Ten phong khong duoc de trong")
+    @Size(min = 1, max = 20, message = "Tên không dài quá 20 ký tự")
     private String name;
 
     @Min(value = 1,message = "Ma loai phong phai lon hon 0")

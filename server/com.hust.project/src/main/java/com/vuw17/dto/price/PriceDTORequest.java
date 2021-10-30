@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class PriceDTORequest {
     @NotNull(message = "Tên giá không để trống")
     @NotBlank(message = "Tên giá không để trống")
-    @Size(min = 1, max = 20, message = "Tên không dài quá 50 ký tự")
+    @Size(min = 1, max = 20, message = "Tên không dài quá 20 ký tự")
     private String name;
 
     @NotNull(message = "Giá không để trống")

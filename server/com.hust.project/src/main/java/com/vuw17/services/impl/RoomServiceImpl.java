@@ -1,12 +1,12 @@
 package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
+import com.vuw17.dao.jdbc.RoomDAO;
 import com.vuw17.dao.jpa.HotelDao;
 import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dao.jpa.TypeRoomDao;
 import com.vuw17.dto.hotel.HotelDTO;
 import com.vuw17.dto.room.RoomDTO;
-import com.vuw17.entities.Hotel;
 import com.vuw17.entities.Room;
 import com.vuw17.services.GenericService;
 import com.vuw17.services.RoomService;
@@ -19,25 +19,26 @@ import java.util.List;
 @Service
 public class RoomServiceImpl implements RoomService, GenericService<RoomDTO> {
     private final RoomDao roomDao;
+    private final RoomDAO roomDAO;
     private final TypeRoomDao typeRoomDao;
     private final HotelDao hotelDao;
     private static final String NOT_EXIST_HOTEL_ID = "Hotel ID does not exist";
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
-    public RoomServiceImpl(RoomDao roomDao, TypeRoomDao typeRoomDao, HotelDao hotelDao) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, HotelDao hotelDao) {
         this.roomDao = roomDao;
+        this.roomDAO = roomDAO;
         this.typeRoomDao = typeRoomDao;
         this.hotelDao = hotelDao;
     }
 
     @Override
-    public String insertOne(RoomDTO roomDTO) {
+    public int insertOne(RoomDTO roomDTO) {
         String message = checkInput(roomDTO);
         if (message == null) {
-            roomDao.insertOne(toEntity(roomDTO));
-            return ConstantVariableCommon.CREATE_SUCCESSFUL;
+            return roomDAO.insertOne(toEntity(roomDTO));
         }
-        return message;
+        return 0;
     }
 
     @Override
@@ -46,34 +47,25 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTO> {
     }
 
     @Override
-    public String updateOne(RoomDTO roomDTO) {
+    public boolean updateOne(RoomDTO roomDTO) {
         int id = roomDTO.getId();
-        if (id <= 0) {
-            return ConstantVariableCommon.INVALID_ID;
-        } else if (findById(id) == null) {
-            return ConstantVariableCommon.NOT_EXIST_ID;
-        } else {
-            String message = checkInput(roomDTO);
-            if (message == null) {
-                roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
-                return ConstantVariableCommon.UPDATE_SUCCESSFUL;
-            }
-            return message;
+        String message = checkInput(roomDTO);
+        if(id > 0 && findById(id) != null && message == null){
+            return roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
         }
+        return false;
+
     }
 
     @Override
-    public String deleteOne(int id) {
+    public boolean deleteOne(int id) {
         if (findById(id) != null) {
-            RoomDTO room = findById(id);
-            if (room.getStatus() == ConstantVariableCommon.STATUS_ROOM_4) {
-                return ConstantVariableCommon.DELETED_ID;
-            } else {
-                roomDao.deleteOne(id);
-                return ConstantVariableCommon.DELETE_SUCCESSFUL;
+            RoomDTO roomDTO = findById(id);
+            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
+                return roomDao.deleteOne(id);
             }
         }
-        return ConstantVariableCommon.NOT_EXIST_ID;
+        return false;
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 public class TypeRoomDTO extends BaseDTO {
     @NotBlank(message = "Ten khong duoc de trong")
+    @Size(min = 1, max = 20, message = "Tên không dài quá 20 ký tự")
     private String name;
     @Size(min = 0, max = 255, message = "Note không dài quá 255 ký tự")
     private String note;

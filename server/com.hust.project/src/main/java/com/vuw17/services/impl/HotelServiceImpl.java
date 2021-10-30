@@ -1,6 +1,7 @@
 package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
+import com.vuw17.dao.jdbc.HotelDAO;
 import com.vuw17.dao.jpa.HotelDao;
 import com.vuw17.dto.hotel.HotelDTO;
 import com.vuw17.entities.Hotel;
@@ -15,20 +16,21 @@ import java.util.List;
 @Service
 public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> {
     private final HotelDao hotelDao;
+    private final HotelDAO hotelDAO;
 
 
-    public HotelServiceImpl(HotelDao hotelDao) {
+    public HotelServiceImpl(HotelDao hotelDao, HotelDAO hotelDAO) {
         this.hotelDao = hotelDao;
+        this.hotelDAO = hotelDAO;
     }
 
     @Override
-    public String insertOne(HotelDTO hotel) {
+    public int insertOne(HotelDTO hotel) {
         String message = checkInput(hotel);
         if (message == null) {
-            hotelDao.insertOne(toEntity(hotel));
-            return ConstantVariableCommon.CREATE_SUCCESSFUL;
+            return hotelDAO.insertOne(toEntity(hotel));
         }
-        return message;
+        return 0;
     }
 
     @Override
@@ -37,36 +39,26 @@ public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> 
     }
 
     @Override
-    public String updateOne(HotelDTO hotel) {
+    public boolean updateOne(HotelDTO hotel) {
         int id = hotel.getId();
-        if (id <= 0) {
-            return ConstantVariableCommon.INVALID_ID;
-        } else if (findById(id) == null) {
-            return ConstantVariableCommon.NOT_EXIST_ID;
-        } else {
-            String message = checkInput(hotel);
-            if (message == null) {
-                hotelDao.updateOne(toEntity(updateData(findById(hotel.getId()), hotel)));
-                return ConstantVariableCommon.UPDATE_SUCCESSFUL;
-            }
-            return message;
+        String message = checkInput(hotel);
+        if(id > 0 && findById(id) != null && message == null){
+            return hotelDao.updateOne(toEntity(updateData(findById(id), hotel)));
         }
+        return false;
 
     }
 
 
     @Override
-    public String deleteOne(int id) {
+    public boolean deleteOne(int id) {
         if (findById(id) != null) {
             HotelDTO hotel = findById(id);
-            if (hotel.getStatus() == ConstantVariableCommon.STATUS_HOTEL_3) {
-                return ConstantVariableCommon.DELETED_ID;
-            } else {
-                hotelDao.deleteOne(id);
-                return ConstantVariableCommon.DELETE_SUCCESSFUL;
+            if (hotel.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
+                return hotelDao.deleteOne(id);
             }
         }
-        return ConstantVariableCommon.NOT_EXIST_ID;
+        return false;
     }
 
     @Override

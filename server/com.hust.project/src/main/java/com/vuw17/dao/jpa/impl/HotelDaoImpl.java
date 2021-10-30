@@ -1,7 +1,6 @@
 package com.vuw17.dao.jpa.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
-import com.vuw17.dao.jpa.GenericDAO;
 import com.vuw17.dao.jpa.HotelDao;
 import com.vuw17.entities.Hotel;
 import org.slf4j.Logger;
@@ -15,18 +14,10 @@ import java.util.List;
 
 @Repository
 @Transactional(rollbackOn = Exception.class)
-public class HotelDaoImpl implements HotelDao, GenericDAO<Hotel> {
+public class HotelDaoImpl implements HotelDao {
     @PersistenceContext
     private EntityManager entityManager;
     private static final Logger LOGGER = LoggerFactory.getLogger(HotelDaoImpl.class.toString());
-
-    @Override
-    public void insertOne(Hotel hotel) {
-        String sql = "INSERT INTO hotel(name,address,note,phone_number,status) VALUES (?,?,?,?,?)";
-        entityManager.createNativeQuery(sql).setParameter(1,hotel.getName()).setParameter(2,hotel.getAddress())
-                .setParameter(3,hotel.getNote()).setParameter(4,hotel.getPhoneNumber())
-                .setParameter(5, ConstantVariableCommon.STATUS_HOTEL_1).executeUpdate();
-    }
 
     @Override
     public List<Hotel> findAll() {
@@ -35,55 +26,73 @@ public class HotelDaoImpl implements HotelDao, GenericDAO<Hotel> {
     }
 
     @Override
-    public void updateOne(Hotel hotel) {
+    public boolean updateOne(Hotel hotel) {
         String sql = "UPDATE hotel SET name = ?,address = ?,note = ?,phone_number = ?,status = ? WHERE id = ?";
-        entityManager.createNativeQuery(sql).setParameter(1,hotel.getName()).setParameter(2,hotel.getAddress())
-                .setParameter(3,hotel.getNote()).setParameter(4,hotel.getPhoneNumber())
-                .setParameter(5,hotel.getStatus()).setParameter(6,hotel.getId()).executeUpdate();
+        try {
+            entityManager.createNativeQuery(sql).setParameter(1,hotel.getName()).setParameter(2,hotel.getAddress())
+                    .setParameter(3,hotel.getNote()).setParameter(4,hotel.getPhoneNumber())
+                    .setParameter(5,hotel.getStatus()).setParameter(6,hotel.getId()).executeUpdate();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
 
     }
 
     @Override
-    public void deleteOne(int id) {
+    public boolean deleteOne(int id) {
         String sql = "UPDATE hotel SET status = ? WHERE id = ?";
-        entityManager.createNativeQuery(sql).setParameter(1,ConstantVariableCommon.STATUS_HOTEL_3).setParameter(2,id).executeUpdate();
+        try {
+            entityManager.createNativeQuery(sql).setParameter(1,ConstantVariableCommon.STATUS_HOTEL_3).setParameter(2,id).executeUpdate();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     @Override
     public Hotel findById(int id) {
         String sql = "SELECT * FROM hotel WHERE id = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,id).getResultList());
+        try {
+            return (Hotel) entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,id).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override
     public Hotel findByAddress(String address) {
         String sql = "SELECT * FROM hotel WHERE address = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,address).getResultList());
+        try {
+            return (Hotel) entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,address).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override
     public Hotel findByName(String name) {
         String sql = "SELECT * FROM hotel WHERE name = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,name).getResultList());
+        try {
+            return (Hotel) entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,name).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override
     public Hotel findByPhoneNumber(String phoneNumber) {
         String sql = "SELECT * FROM hotel WHERE phone_number = ?";
-        return getFirstRowData(entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,phoneNumber).getResultList());
+        try {
+            return (Hotel) entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,phoneNumber).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override
     public List<Hotel> findByStatus(int status) {
         String sql = "SELECT * FROM hotel WHERE status = ?";
         return entityManager.createNativeQuery(sql,Hotel.class).setParameter(1,status).getResultList();
-    }
-
-    @Override
-    public Hotel getFirstRowData(List<Hotel> list) {
-        if(list != null && list.size() > 0){
-            return list.get(0);
-        }
-        return null;
     }
 }

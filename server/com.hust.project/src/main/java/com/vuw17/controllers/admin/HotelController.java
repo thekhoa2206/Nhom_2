@@ -1,12 +1,13 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.dto.InsertResponse;
+import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.hotel.HotelDTO;
 import com.vuw17.services.HotelService;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,12 +24,12 @@ public class HotelController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> insertHotel(@Valid @RequestBody HotelDTO hotel, HttpServletRequest request) {
-        return ResponseEntity.ok().body(hotelService.insertOne(hotel));
+    public ResponseEntity<InsertResponse> insertHotel(@Valid @RequestBody HotelDTO hotel) {
+        return ResponseEntity.ok().body(new InsertResponse(hotelService.insertOne(hotel)));
     }
 
     @GetMapping("")
-    public ResponseEntity<List<HotelDTO>> getAllHotels(HttpServletRequest request) {
+    public ResponseEntity<List<HotelDTO>> getAllHotels() {
         return ResponseEntity.ok(hotelService.findAll());
     }
     @GetMapping("/status/{status}")
@@ -37,17 +38,17 @@ public class HotelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HotelDTO> getHotel(@PathVariable("id") int id, HttpServletRequest request) {
+    public ResponseEntity<HotelDTO> getHotel(@PathVariable("id") int id) {
         return ResponseEntity.ok(hotelService.findById(id));
     }
 
     @PutMapping()
-    public ResponseEntity<String> updateHotel(@Valid @RequestBody HotelDTO hotel, HttpServletRequest request) {
-        return ResponseEntity.ok(hotelService.updateOne(hotel));
+    public ResponseEntity<UpdateResponse> updateHotel(@Valid @RequestBody HotelDTO hotel) {
+        return ResponseEntity.ok(new UpdateResponse(hotelService.updateOne(hotel)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteHotel(@PathVariable("id") int id, HttpServletRequest request) {
-        return ResponseEntity.ok(hotelService.deleteOne(id));
+    public ResponseEntity<UpdateResponse> deleteHotel(@PathVariable("id") int id) {
+        return ResponseEntity.ok(new UpdateResponse(hotelService.deleteOne(id)));
     }
 }

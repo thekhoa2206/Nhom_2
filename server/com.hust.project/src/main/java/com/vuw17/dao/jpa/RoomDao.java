@@ -11,13 +11,13 @@ import java.util.List;
 @Transactional(rollbackOn = Exception.class)
 public interface RoomDao {
     //Them moi 1 room
-    void insertOne(Room room);
+//    void insertOne(Room room);
     //Lay tat ca cac rooms
     List<Room> findAll();
     //Sua thong tin cua room
-    void updateOne(Room room);
+    boolean updateOne(Room room);
     //Xoa room
-    void deleteOne(int id);
+    boolean deleteOne(int id);
     //Lay room theo id
     Room findById(int id);
     //Lay room theo name

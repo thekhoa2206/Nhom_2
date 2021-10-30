@@ -6,6 +6,7 @@ import com.vuw17.dao.jdbc.RoomPriceDAO;
 import com.vuw17.dao.jdbc.TypeRoomDAO;
 import com.vuw17.dao.jpa.PriceDao;
 import com.vuw17.dao.jpa.TypeRoomDao;
+import com.vuw17.dto.hotel.HotelDTO;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.entities.Price;
 import com.vuw17.entities.RoomPrice;
@@ -64,35 +65,26 @@ public class TypeRoomServiceImpl implements TypeRoomService {
     }
 
     @Override
-    public String updateOne(TypeRoomDTO typeRoom) {
-        if (typeRoom.getId() <= 0) {
-            return ConstantVariableCommon.INVALID_ID;
-        } else if (findById(typeRoom.getId()) == null) {
-            return ConstantVariableCommon.NOT_EXIST_ID;
-        } else {
-            String message = checkInput(typeRoom);
-            if (message == null) {
-                typeRoomDao.updateOne(toEntity(updateData(findById(typeRoom.getId()), typeRoom)));
-                return ConstantVariableCommon.UPDATE_SUCCESSFUL;
-            }
-            return message;
+    public boolean updateOne(TypeRoomDTO typeRoom) {
+        int id = typeRoom.getId();
+        String message = checkInput(typeRoom);
+        if(id > 0 && findById(id) != null && message == null){
+            return typeRoomDao.updateOne(toEntity(updateData(findById(id), typeRoom)));
         }
+        return false;
 
     }
 
 
     @Override
-    public String deleteOne(int id) {
+    public boolean deleteOne(int id) {
         if (findById(id) != null) {
-            TypeRoomDTO typeRoom = findById(id);
-            if (typeRoom.getStatus() == ConstantVariableCommon.STATUS_TYPE_ROOM_3) {
-                return ConstantVariableCommon.DELETED_ID;
-            } else {
-                typeRoomDao.deleteOne(id);
-                return ConstantVariableCommon.DELETE_SUCCESSFUL;
+            TypeRoomDTO typeRoomDTO = findById(id);
+            if (typeRoomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
+                return typeRoomDao.deleteOne(id);
             }
         }
-        return ConstantVariableCommon.NOT_EXIST_ID;
+        return false;
     }
 
     @Override
