@@ -5,14 +5,17 @@ import OccupiedRoom from './occupiedRoom';
 import DirtyRoom from './dirtyRoom';
 import { Slider, Box } from '@mui/material';
 import OutOfServiceRoom from './outOfServiceRoom';
+import { useGetLyric2 } from '../../utils/apiCalls';
+import Loading from '../../common-components/Loading';
 
 function RoomManagement(props) {
     const [zoom, setZoom] = useState({
         width: 230, height: 170
     })
+    const { lyrics, isLoading } = useGetLyric2()
     let arr = [{ id: 1, status: 'occupied' }, { id: 2, status: 'ready' }, { id: 3, status: 'dirty' }, { id: 4, status: 'out-of-service' }, { id: 5, status: 'ready' }]
     function valuetext(value) {
-        return `${value}°C`;
+        return `${value}%`;
     }
     const sliderStyle = {
         background: "white",
@@ -47,36 +50,45 @@ function RoomManagement(props) {
                 break;
         }
     };
-    console.log("xxx")
     return (
         <React.Fragment>
-            <Grid container rowSpacing={4} spacing={2}>
-                {
-                    arr.map((data) =>
-                        <React.Fragment key={data.id} >
-                            <Grid item xl={2} lg={3} md={4} sm={6} xs={12}>
-                                {data.status === "ready" && <ReadyRoom id={data.id} styleZoom={zoom} />}
-                                {data.status === "occupied" && <OccupiedRoom id={data.id} styleZoom={zoom} />}
-                                {data.status === "dirty" && <DirtyRoom id={data.id} styleZoom={zoom} />}
-                                {data.status === "out-of-service" && <OutOfServiceRoom id={data.id} styleZoom={zoom} />}
-                            </Grid>
-                        </React.Fragment>
-                    )
-                }
-            </Grid>
-            {/* <div style={sliderStyle}>
-                <Slider
-                    aria-label="Zoom"
-                    defaultValue={0}
-                    getAriaValueText={valuetext}
-                    valueLabelDisplay="auto"
-                    onChange={handleChange}
-                    step={20}
-                    marks
-                    min={0}
-                    max={100}
-                />
-            </div> */}
+            {isLoading ?
+                <Loading />
+                :
+                <React.Fragment>
+                    <Grid container rowSpacing={4} spacing={2}>
+                        {
+                            arr.map((data) =>
+                                <React.Fragment key={data.id} >
+                                    <Grid item xl={2} lg={3} md={4} sm={6} xs={12}>
+                                        {data.status === "ready" && <ReadyRoom id={data.id} styleZoom={zoom} />}
+                                        {data.status === "occupied" && <OccupiedRoom id={data.id} styleZoom={zoom} />}
+                                        {data.status === "dirty" && <DirtyRoom id={data.id} styleZoom={zoom} />}
+                                        {data.status === "out-of-service" && <OutOfServiceRoom id={data.id} styleZoom={zoom} />}
+                                    </Grid>
+                                </React.Fragment>
+                            )
+                        }
+                    </Grid>
+                    <Box>
+                        {lyrics}
+                    </Box>
+                </React.Fragment>
+                // {/* <div style={sliderStyle}>
+                //     <Slider
+                //         aria-label="Zoom"
+                //         defaultValue={0}
+                //         getAriaValueText={valuetext}
+                //         valueLabelDisplay="auto"
+                //         onChange={handleChange}
+                //         step={20}
+                //         marks
+                //         min={0}
+                //         max={100}
+                //     />
+                // </div> */}
+            }
+
 
         </React.Fragment>
 

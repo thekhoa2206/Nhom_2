@@ -12,8 +12,7 @@ export default function ProtectedRoute(props) {
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles, component: Component, ...rest } = props;
     let jwt = getCookie("jwt")
-    if (!user || _.isEmpty(jwt)) {
-        clearCookie("jwt")
+    if (_.isEmpty(jwt)) {
         return <Redirect to='/' />
     }
     if (isLoading) {

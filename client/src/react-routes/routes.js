@@ -16,7 +16,7 @@ function Routes(props) {
     return (
         <UserContext.Provider value={{ user, setUser, isLoading }}>
             <Switch>
-                <Route
+                <AuthRoute
                     path="/"
                     exact
                     component={LandingPage}
