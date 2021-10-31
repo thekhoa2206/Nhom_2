@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,5 +32,12 @@ public class UserController {
     public ResponseEntity<UserDTOResponse> getUser(final HttpServletRequest request){
         UserDTOResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
         return ResponseEntity.ok(userDTOResponse);
+    }
+
+    //API lấy list user
+    @GetMapping("/list")
+    public ResponseEntity<List<UserDTOResponse>> listUser(){
+        List<UserDTOResponse> userDTOResponses = userService.findAllUser();
+        return ResponseEntity.ok(userDTOResponses);
     }
 }

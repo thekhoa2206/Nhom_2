@@ -14,4 +14,7 @@ public interface ProductService {
 
     //Hàm tạo product
     void createProduct(ProductRequestDTO productRequestDTO);
+
+    //hàm tìm product bằng id
+    ProductResponseDTO findProductDTOById(int id);
 }

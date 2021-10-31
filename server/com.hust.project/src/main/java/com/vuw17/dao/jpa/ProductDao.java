@@ -12,4 +12,7 @@ public interface ProductDao {
 
     //hàm lấy list product theo param
     List<Product> findProductByParam(String keyword, int idTypeProduct, int status);
+
+    //Hàm tìm product theo id;
+    Product findProductById(int id);
 }

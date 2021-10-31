@@ -2,6 +2,7 @@ package com.vuw17.controllers.admin;
 
 import com.vuw17.dto.product.ProductRequestDTO;
 import com.vuw17.dto.product.ProductResponseDTO;
+import com.vuw17.entities.Product;
 import com.vuw17.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,12 @@ public class ProductController {
     public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO){
         productService.createProduct(productRequestDTO);
         return ResponseEntity.ok().build();
+    }
+
+    //API Tìm product bằng id
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable("id") int id){
+        ProductResponseDTO productResponseDTO = productService.findProductDTOById(id);
+        return ResponseEntity.ok(productResponseDTO);
     }
 }

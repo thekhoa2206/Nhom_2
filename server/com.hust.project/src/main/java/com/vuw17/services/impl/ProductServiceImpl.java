@@ -43,32 +43,39 @@ public class ProductServiceImpl implements ProductService {
 
 
     //Hàm lấy list của product theo param
+    @Override
     public List<ProductResponseDTO> findAllProductByParam(String keyword, int idTypeProduct, int status) {
         List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
         List<Product> products = productDao.findProductByParam(keyword, idTypeProduct, status);
         for (Product product : products) {
-            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-            productResponseDTO.setName(product.getName());
-            productResponseDTO.setNote(product.getNote());
-            productResponseDTO.setImportPrice(product.getImportPrice());
-            productResponseDTO.setQuantity(product.getQuantity());
-            productResponseDTO.setSellingPrice(product.getSellingPrice());
-
-            TypeProduct typeProduct = typeProductDao.findTypeProductById(product.getTypeProductId());
-            TypeProductResponseDTO typeProductResponseDTO = new TypeProductResponseDTO();
-            typeProductResponseDTO.setId(typeProduct.getId());
-            typeProductResponseDTO.setName(typeProduct.getName());
-            productResponseDTO.setTypeProductResponseDTO(typeProductResponseDTO);
-
-            Unit unit = unitDao.findUnitById(product.getUnitId());
-            UnitResponseDTO unitResponseDTO = new UnitResponseDTO();
-            unitResponseDTO.setId(unit.getId());
-            unitResponseDTO.setName(unit.getName());
-            productResponseDTO.setUnitResponseDTO(unitResponseDTO);
-
+            ProductResponseDTO productResponseDTO = transferProductDTO(product);
             productResponseDTOS.add(productResponseDTO);
         }
         return productResponseDTOS;
+    }
+
+    //Hàm chuyển từ product sang productDTO
+    private ProductResponseDTO transferProductDTO(Product product){
+        ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+        productResponseDTO.setName(product.getName());
+        productResponseDTO.setNote(product.getNote());
+        productResponseDTO.setImportPrice(product.getImportPrice());
+        productResponseDTO.setQuantity(product.getQuantity());
+        productResponseDTO.setSellingPrice(product.getSellingPrice());
+
+        TypeProduct typeProduct = typeProductDao.findTypeProductById(product.getTypeProductId());
+        TypeProductResponseDTO typeProductResponseDTO = new TypeProductResponseDTO();
+        typeProductResponseDTO.setId(typeProduct.getId());
+        typeProductResponseDTO.setName(typeProduct.getName());
+        productResponseDTO.setTypeProductResponseDTO(typeProductResponseDTO);
+
+        Unit unit = unitDao.findUnitById(product.getUnitId());
+        UnitResponseDTO unitResponseDTO = new UnitResponseDTO();
+        unitResponseDTO.setId(unit.getId());
+        unitResponseDTO.setName(unit.getName());
+        productResponseDTO.setUnitResponseDTO(unitResponseDTO);
+
+        return productResponseDTO;
     }
 
     //Hàm tạo product
@@ -116,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             unitRepository.save(unit);
         }catch (Exception e){
-            LOGGER.error("ERROR || Lỗi lưu đơn vị => service product=> ", e.getMessage());
+            LOGGER.error("ERROR || Lỗi lưu đơn vị => service product => ", e.getMessage());
         }
     }
 
@@ -127,6 +134,14 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception e){
             LOGGER.error("ERROR || Lỗi lưu sản phẩm => service product => ", e.getMessage());
         }
+    }
+
+    //Hàm tìm product bằng id
+    @Override
+    public ProductResponseDTO findProductDTOById(int id){
+        Product product = productDao.findProductById(id);
+        ProductResponseDTO productResponseDTO = transferProductDTO(product);
+        return productResponseDTO;
     }
 
 }

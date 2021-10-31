@@ -5,6 +5,7 @@ import com.vuw17.configuration.sercurity.jwt.JwtProvider;
 import com.vuw17.dao.jpa.UserDao;
 import com.vuw17.dto.user.RoleByUserResponseDTO;
 import com.vuw17.dto.user.UserDTOResponse;
+import com.vuw17.entities.Role;
 import com.vuw17.entities.User;
 import com.vuw17.repositories.UserRepository;
 import com.vuw17.services.UserService;
@@ -49,5 +50,26 @@ public class UserServiceImpl implements UserService {
             System.out.println("findInfoUser : "+e.getMessage());
             return null;
         }
+    }
+
+    //Hàm lấy list userDTO
+    @Override
+    public List<UserDTOResponse> findAllUser(){
+        List<User> users = userDao.findAllUser();
+        List<UserDTOResponse> userDTOResponses = new ArrayList<>();
+        for (User user : users){
+            UserDTOResponse userDTOResponse = new UserDTOResponse();
+            userDTOResponse.setUsername(user.getUsername());
+            userDTOResponse.setName(user.getName());
+            List<RoleByUserResponseDTO> roleByUserResponseDTOs = new ArrayList<>();
+            for (Role role : user.getRoles()){
+                RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
+                roleDTO.setNameRole(role.getName());
+                roleByUserResponseDTOs.add(roleDTO);
+            }
+            userDTOResponse.setRole(roleByUserResponseDTOs);
+            userDTOResponses.add(userDTOResponse);
+        }
+        return userDTOResponses;
     }
 }

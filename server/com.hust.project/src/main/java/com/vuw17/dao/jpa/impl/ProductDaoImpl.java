@@ -1,5 +1,6 @@
 package com.vuw17.dao.jpa.impl;
 
+import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.ProductDao;
 import com.vuw17.dao.jpa.UserDao;
 import com.vuw17.entities.Price;
@@ -47,5 +48,16 @@ public class ProductDaoImpl implements ProductDao {
         }
         List<Product> products = query.getResultList();
         return products;
+    }
+
+    //hàm tìm product bằng id
+    @Override
+    public Product findProductById(int id){
+        String sql = "SELECT * FROM product WHERE id = ?";
+        try{
+            return (Product) entityManager.createNativeQuery(sql, Product.class).setParameter(1, id).getSingleResult();
+        }catch (Exception e){
+            return new Product();
+        }
     }
 }

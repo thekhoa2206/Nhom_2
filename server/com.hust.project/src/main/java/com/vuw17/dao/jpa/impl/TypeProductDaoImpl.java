@@ -29,6 +29,7 @@ public class TypeProductDaoImpl implements TypeProductDao {
         if(id > 0){
             query.setParameter("id", id);
         }
+        System.out.println(sql);
         TypeProduct typeProduct = (TypeProduct) query.getSingleResult();
         return typeProduct;
     }
