@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
             String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
             User user = userRepository.findUserByUsername(username);
             UserDTOResponse userDTO = new UserDTOResponse();
+            userDTO.setId(user.getId());
             userDTO.setName(user.getName());
             userDTO.setUsername(user.getUsername());
             List<RoleByUserResponseDTO> roleName = new ArrayList<>();

@@ -1,6 +1,5 @@
 package com.vuw17.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

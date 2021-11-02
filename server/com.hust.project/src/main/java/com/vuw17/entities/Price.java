@@ -1,13 +1,12 @@
 package com.vuw17.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "price")
@@ -30,5 +29,8 @@ public class Price extends BaseEntity {
 
     @Column(name = "price", nullable = true)
     private BigDecimal price;
+
+//    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "prices")
+//    private List<TypeRoom> typeRooms = new ArrayList<TypeRoom>();
 
 }

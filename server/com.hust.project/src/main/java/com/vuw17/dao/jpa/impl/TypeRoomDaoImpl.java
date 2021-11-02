@@ -22,7 +22,7 @@ public class TypeRoomDaoImpl implements TypeRoomDao {
 
     @Override
     public List<TypeRoom> findAll() {
-        String sql = "SELECT * FROM type_room";
+        String sql = "SELECT * FROM type_room INNER JOIN room_price ON room_price.type_room_id = type_room.id INNER JOIN price ON price.id = room_price.type_price_id";
         return entityManager.createNativeQuery(sql,TypeRoom.class).getResultList();
     }
 

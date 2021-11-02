@@ -30,8 +30,8 @@ public class BaseServiceImpl implements BaseService {
         diary.setActionBy(diaryDTO.getUserId());
         Date date = new Date();
         diary.setActionDate(date.getTime());
-        diary.setTypeActionId(diaryDTO.getActionId());
-        diary.setTableDiaryId(diaryDTO.getTableId());
+        diary.setTypeActionId(diaryDTO.getTypeActionId());
+        diary.setTableDiaryId(diaryDTO.getTableDiaryId());
         diary.setNote(diaryDTO.getNote());
         saveDiary(diary);
     }

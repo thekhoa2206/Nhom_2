@@ -1,9 +1,6 @@
 package com.vuw17.dao.jdbc.impl;
 
-import com.vuw17.common.ConstantVariableCommon;
-import com.vuw17.dao.jdbc.PriceDAO;
 import com.vuw17.dao.jdbc.RoomPriceDAO;
-import com.vuw17.entities.Price;
 import com.vuw17.entities.RoomPrice;
 import org.springframework.stereotype.Component;
 

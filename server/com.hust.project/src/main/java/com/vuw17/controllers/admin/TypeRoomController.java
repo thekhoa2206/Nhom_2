@@ -1,5 +1,6 @@
 package com.vuw17.controllers.admin;
 
+import com.vuw17.controllers.BaseController;
 import com.vuw17.dto.InsertResponse;
 import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
@@ -8,23 +9,25 @@ import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/admin/type_rooms")
-public class TypeRoomController {
+public class TypeRoomController extends BaseController {
     private final TypeRoomService typeRoomService;
     private final UserService userService;
 
     public TypeRoomController(TypeRoomService typeRoomService, UserService userService) {
+        super(userService);
         this.typeRoomService = typeRoomService;
         this.userService = userService;
     }
     @PostMapping()
-    public ResponseEntity<InsertResponse> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO) {
-        return ResponseEntity.ok(new InsertResponse(typeRoomService.insertOne(typeRoomDTO)));
+    public ResponseEntity<InsertResponse> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO, HttpServletRequest request) {
+        return ResponseEntity.ok(new InsertResponse(typeRoomService.insertOne(typeRoomDTO,getUserDTOResponse(request))));
     }
 
     @GetMapping()
@@ -38,12 +41,12 @@ public class TypeRoomController {
     }
 
     @PutMapping()
-    public ResponseEntity<UpdateResponse> updateRoom(@Valid @RequestBody TypeRoomDTO typeRoomDTO) {
-        return ResponseEntity.ok(new UpdateResponse(typeRoomService.updateOne(typeRoomDTO)));
+    public ResponseEntity<UpdateResponse> updateRoom(@Valid @RequestBody TypeRoomDTO typeRoomDTO, HttpServletRequest request) {
+        return ResponseEntity.ok(new UpdateResponse(typeRoomService.updateOne(typeRoomDTO,getUserDTOResponse(request))));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id) {
-        return ResponseEntity.ok(new UpdateResponse(typeRoomService.deleteOne(id)));
+    public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id, HttpServletRequest request) {
+        return ResponseEntity.ok(new UpdateResponse(typeRoomService.deleteOne(id,getUserDTOResponse(request))));
     }
 }

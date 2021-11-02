@@ -1,5 +1,6 @@
 package com.vuw17.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,11 @@ import javax.persistence.Table;
 @Table(name = "table_diary")
 @Getter
 @Setter
+@AllArgsConstructor
 public class TableDiary extends BaseEntity {
+    public TableDiary() {
+    }
+
     @Column(name = "row_id", nullable = true)
     private int rowId;
 
