@@ -1,8 +1,6 @@
 package com.vuw17.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +10,10 @@ import javax.persistence.Table;
 @Table(name = "type_action")
 @Getter
 @Setter
+@ToString
 public class TypeAction extends BaseEntity {
+
+
     @Column(name = "name", nullable = true, length = 20)
     private String name;
 

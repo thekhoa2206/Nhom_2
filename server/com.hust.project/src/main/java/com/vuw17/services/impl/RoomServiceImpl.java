@@ -2,12 +2,14 @@ package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jdbc.RoomDAO;
-import com.vuw17.dao.jpa.HotelDao;
-import com.vuw17.dao.jpa.RoomDao;
-import com.vuw17.dao.jpa.TypeRoomDao;
-import com.vuw17.dto.hotel.HotelDTO;
+import com.vuw17.dao.jdbc.TableDiaryDAO;
+import com.vuw17.dao.jdbc.TypeActionDAO;
+import com.vuw17.dao.jpa.*;
+import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.room.RoomDTO;
+import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Room;
+import com.vuw17.services.CommonService;
 import com.vuw17.services.GenericService;
 import com.vuw17.services.RoomService;
 import org.springframework.stereotype.Service;
@@ -17,26 +19,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RoomServiceImpl implements RoomService, GenericService<RoomDTO> {
+public class RoomServiceImpl extends CommonService implements RoomService, GenericService<RoomDTO> {
     private final RoomDao roomDao;
     private final RoomDAO roomDAO;
     private final TypeRoomDao typeRoomDao;
     private final HotelDao hotelDao;
+    private final TableDiaryDAO tableDiaryDAO;
+    private final TypeActionDAO typeActionDAO;
+    private final TypeActionDao typeActionDao;
+    private final TableDiaryDao tableDiaryDao;
+    private final BaseServiceImpl baseService;
     private static final String NOT_EXIST_HOTEL_ID = "Hotel ID does not exist";
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
-    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, HotelDao hotelDao) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, HotelDao hotelDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseServiceImpl baseService) {
+        super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
         this.typeRoomDao = typeRoomDao;
         this.hotelDao = hotelDao;
+        this.tableDiaryDAO = tableDiaryDAO;
+        this.typeActionDAO = typeActionDAO;
+        this.typeActionDao = typeActionDao;
+        this.tableDiaryDao = tableDiaryDao;
+        this.baseService = baseService;
     }
 
     @Override
-    public int insertOne(RoomDTO roomDTO) {
+    public int insertOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse) {
         String message = checkInput(roomDTO);
         if (message == null) {
-            return roomDAO.insertOne(toEntity(roomDTO));
+            int id = roomDAO.insertOne(toEntity(roomDTO));
+            if(id > 0){
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,id,ConstantVariableCommon.table_room);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return id;
+            }
         }
         return 0;
     }
@@ -47,18 +66,24 @@ public class RoomServiceImpl implements RoomService, GenericService<RoomDTO> {
     }
 
     @Override
-    public boolean updateOne(RoomDTO roomDTO) {
+    public boolean updateOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse) {
         int id = roomDTO.getId();
         String message = checkInput(roomDTO);
         if(id > 0 && findById(id) != null && message == null){
-            return roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
+            boolean checkUpdated = roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
+            if(checkUpdated){
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE,id,ConstantVariableCommon.table_room);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return true;
+            }
         }
         return false;
 
     }
 
     @Override
-    public boolean deleteOne(int id) {
+    public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
         if (findById(id) != null) {
             RoomDTO roomDTO = findById(id);
             if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {

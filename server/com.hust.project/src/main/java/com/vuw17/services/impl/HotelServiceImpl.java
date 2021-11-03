@@ -2,9 +2,16 @@ package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jdbc.HotelDAO;
+import com.vuw17.dao.jdbc.TableDiaryDAO;
+import com.vuw17.dao.jdbc.TypeActionDAO;
 import com.vuw17.dao.jpa.HotelDao;
+import com.vuw17.dao.jpa.TableDiaryDao;
+import com.vuw17.dao.jpa.TypeActionDao;
+import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.hotel.HotelDTO;
+import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Hotel;
+import com.vuw17.services.CommonService;
 import com.vuw17.services.GenericService;
 import com.vuw17.services.HotelService;
 import org.springframework.stereotype.Service;
@@ -14,21 +21,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> {
+public class HotelServiceImpl extends CommonService implements HotelService, GenericService<HotelDTO> {
     private final HotelDao hotelDao;
     private final HotelDAO hotelDAO;
+    private final BaseServiceImpl baseService;
+    private final TableDiaryDAO tableDiaryDAO;
+    private final TypeActionDAO typeActionDAO;
+    private final TypeActionDao typeActionDao;
+    private final TableDiaryDao tableDiaryDao;
 
 
-    public HotelServiceImpl(HotelDao hotelDao, HotelDAO hotelDAO) {
+    public HotelServiceImpl(HotelDao hotelDao, HotelDAO hotelDAO, BaseServiceImpl baseService, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao) {
+        super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao);
         this.hotelDao = hotelDao;
         this.hotelDAO = hotelDAO;
+        this.baseService = baseService;
+        this.tableDiaryDAO = tableDiaryDAO;
+        this.typeActionDAO = typeActionDAO;
+        this.typeActionDao = typeActionDao;
+        this.tableDiaryDao = tableDiaryDao;
     }
 
     @Override
-    public int insertOne(HotelDTO hotel) {
+    public int insertOne(HotelDTO hotel, UserDTOResponse userDTOResponse) {
         String message = checkInput(hotel);
         if (message == null) {
-            return hotelDAO.insertOne(toEntity(hotel));
+            int id = hotelDAO.insertOne(toEntity(hotel));
+            if (id > 0) {
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, id, ConstantVariableCommon.table_hotel);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return id;
+            }
         }
         return 0;
     }
@@ -39,24 +63,32 @@ public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> 
     }
 
     @Override
-    public boolean updateOne(HotelDTO hotel) {
+    public boolean updateOne(HotelDTO hotel, UserDTOResponse userDTOResponse) {
         int id = hotel.getId();
         String message = checkInput(hotel);
-        if(id > 0 && findById(id) != null && message == null){
-            return hotelDao.updateOne(toEntity(updateData(findById(id), hotel)));
+        HotelDTO hotelDTO = findById(id);
+        if (id > 0 && hotelDTO != null && message == null && !checkDataNotChanges(hotelDTO, hotel)) {
+            HotelDTO hotelUpdate = updateData(hotelDTO, hotel);
+            boolean checkUpdated = hotelDao.updateOne(toEntity(hotelUpdate));
+            if (checkUpdated) {
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, id, ConstantVariableCommon.table_hotel);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return true;
+            }
         }
         return false;
-
     }
 
 
     @Override
-    public boolean deleteOne(int id) {
-        if (findById(id) != null) {
-            HotelDTO hotel = findById(id);
-            if (hotel.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
-                return hotelDao.deleteOne(id);
-            }
+    public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
+        HotelDTO hotel = findById(id);
+        if (hotel != null && hotel.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && hotelDao.deleteOne(id)) {
+            DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_hotel);
+            diaryDTO.setUserId(userDTOResponse.getId());
+            baseService.saveDiary(diaryDTO);
+            return true;
         }
         return false;
     }
@@ -116,7 +148,19 @@ public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> 
         if (StringUtils.hasText(newData.getAddress())) {
             oldData.setAddress(newData.getAddress());
         }
+        if (newData.getStatus() > 0 && newData.getStatus() <= ConstantVariableCommon.STATUS_HOTEL_3 && newData.getStatus() != oldData.getStatus()) {
+            oldData.setStatus(newData.getStatus());
+        }
         return oldData;
+    }
+
+    //Chi can 1 data bi thay doi la cho update,neu khong thay doi cai gi thi khong cho
+    public boolean checkDataNotChanges(HotelDTO hotelDTOBefore, HotelDTO hotelDTOAfter) {
+        boolean checkName = hotelDTOBefore.getName().equalsIgnoreCase(hotelDTOAfter.getName());
+        boolean checkAddress = hotelDTOBefore.getAddress().equalsIgnoreCase(hotelDTOAfter.getAddress());
+        boolean checkPhoneNumber = hotelDTOBefore.getPhoneNumber().equals(hotelDTOAfter.getPhoneNumber());
+        boolean checkNote = hotelDTOBefore.getNote().equalsIgnoreCase(hotelDTOAfter.getNote());
+        return checkName && checkAddress && checkPhoneNumber && checkNote;
     }
 
     public Hotel toEntity(HotelDTO hotelDTO) {
@@ -156,11 +200,11 @@ public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> 
         String message = null;
         if (hotel.getPhoneNumber().length() != 10 || !hotel.getPhoneNumber().startsWith("0")) {
             message = ConstantVariableCommon.INVALID_PHONE;
-        } else if (findByName(hotel.getName()) != null) {
+        } else if (findByName(hotel.getName()) != null && findByName(hotel.getName()).getId() != hotel.getId()) {
             message = ConstantVariableCommon.DUPLICATED_NAME;
-        } else if (findByAddress(hotel.getAddress()) != null) {
+        } else if (findByAddress(hotel.getAddress()) != null && findByAddress(hotel.getAddress()).getId() != hotel.getId()) {
             message = ConstantVariableCommon.DUPLICATED_ADDRESS;
-        } else if (findByPhoneNumber(hotel.getPhoneNumber()) != null) {
+        } else if (findByPhoneNumber(hotel.getPhoneNumber()) != null && findByPhoneNumber(hotel.getPhoneNumber()).getId() != hotel.getId()) {
             message = ConstantVariableCommon.DUPLICATED_PHONE;
         }
         return message;
@@ -172,5 +216,6 @@ public class HotelServiceImpl implements HotelService, GenericService<HotelDTO> 
         }
         return hotelDTOs;
     }
+
 
 }
