@@ -4,10 +4,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { useLocation } from "react-router-dom"
+import { useAppState } from "../AppState";
 import { UserContext } from "../context/userContext";
 
 function CustomListItem(props) {
-    const { user } = useContext(UserContext)
+    const [state] = useAppState()
+    const user = state.user
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()

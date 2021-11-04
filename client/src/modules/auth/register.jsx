@@ -6,31 +6,42 @@ import ModalAddNewUser from './modalAddNewUser'
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import { useGetAllUsers } from '../../utils/apiCalls';
+import { useGetAllUsers, useGetAllPrice } from '../../utils/apiCalls';
 import Loading from '../../common-components/Loading';
+import { useAppState } from '../../AppState';
+import { uniqueId } from 'lodash';
 
 function Register(props) {
-    const [state, setState] = useState(() => initState())
-    const { isOpenModal, users } = state
-
-    const { data, isLoading } = useGetAllUsers()
+    const [state1, setState] = useState(() => initState())
+    const [state] = useAppState()
+    const { price1, isOpenModal } = state1
+    const { getAllPrice, isLoading } = useGetAllPrice()
     function initState() {
-
         return {
             users: [],
+            price1: [],
             isOpenModal: false
         }
     }
     useEffect(() => {
-        if (data) {
-            let data1 = data.map(obj => ({ id: "1" + obj.name, name: obj.name }))
+        let params = {
+            keyword: "vip",
+            status: 1
+        }
+        getAllPrice(params)
+    }, [])
+
+
+    useEffect(() => {
+        if (state.price) {
+            console.log("state.price", state.price)
             setState({
-                ...state,
-                users: data1
+                ...state1,
+                price1: state.price.map(x => ({ ...x, id: uniqueId() }))
             })
         }
 
-    }, [JSON.stringify(data)])
+    }, [JSON.stringify(state.price)])
 
     console.log("isLoading", isLoading)
     const columns = [
@@ -56,21 +67,27 @@ function Register(props) {
                 );
             }
         },
-        { field: 'name', headerName: 'Họ Và Tên', width: 150 },
-        // {
-        //     field: 'dob',
-        //     headerName: 'Ngày sinh',
-        //     headerAlign: 'center',
-        //     type: 'date',
-        //     width: 150,
-        // },
+        { field: 'name', headerName: 'Tên Giá', width: 150 },
+        {
+            field: 'price',
+            headerName: 'Giá',
+            headerAlign: 'center',
+            type: 'text',
+            width: 150,
+        },
     ];
     const handleClick = (event, cellValues) => {
         alert(cellValues.row.name);
     };
+    const handleAddPrice = (data) => {
+        setState({
+            ...state1,
+            isOpenModal: !isOpenModal
+        })
+    }
     const openModalAddNewUser = () => {
         setState({
-            ...state,
+            ...state1,
             isOpenModal: !isOpenModal
         })
     }
@@ -82,7 +99,7 @@ function Register(props) {
     const handleRowClick = (param, event) => {
         event.stopPropagation();
     };
-    console.log("users", users)
+    console.log("users", price1)
     return (
         <React.Fragment>
 
@@ -94,11 +111,11 @@ function Register(props) {
                         Thêm mới người dùng
                     </Button>
                     <span></span>
-                    <ModalAddNewUser open={isOpenModal} handleClose={openModalAddNewUser} />
+                    <ModalAddNewUser open={isOpenModal} handleClose={openModalAddNewUser} handleAddPrice={handleAddPrice} />
 
                     <DataGrid
                         autoHeight
-                        rows={users}
+                        rows={price1}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
@@ -107,7 +124,7 @@ function Register(props) {
 
                     />
                     <Box>
-                        {JSON.stringify(data)}
+                        {JSON.stringify(price1)}
                     </Box>
                 </React.Fragment>
             }

@@ -1,15 +1,25 @@
 
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
 import Loading from '../common-components/Loading';
 import Layout from '../layout/layout';
 import { clearCookie, getCookie } from '../config';
 import _ from "lodash"
+import { useAppState } from '../AppState';
+import useFindUser from '../modules/users/services/useFindUser';
+
 
 export default function ProtectedRoute(props) {
-    const { user, isLoading } = useContext(UserContext);
+    const { findUser } = useFindUser()
+    useEffect(() => {
+        findUser()
+    }, [])
+    const [state, dispatch] = useAppState()
+    const { user, isLoading } = state
     const userRole = user?.role?.map(r => r.nameRole)
+
+    console.log("user", user)
     const { roles, component: Component, ...rest } = props;
     let jwt = getCookie("jwt")
     if (_.isEmpty(jwt)) {

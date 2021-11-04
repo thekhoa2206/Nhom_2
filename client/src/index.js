@@ -5,17 +5,29 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { SnackbarProvider } from 'notistack'
 import { SnackbarUtilsConfigurator } from "./utils/snackbarUtils";
+import { initialState, combineReducers } from './context/reducers'
+import { AppStateProvider } from './AppState'
+import priceReducer from './modules/rooms/price.reducer';
+import userReducer from './modules/users/services/user.reducer';
+
+const appReducers = combineReducers({
+  price: priceReducer,
+  user: userReducer
+})
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={2} anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    >
-      <SnackbarUtilsConfigurator />
-      <App />
-    </SnackbarProvider>
+    <AppStateProvider reducer={appReducers} initialState={initialState}>
+      <SnackbarProvider maxSnack={2} anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      >
+        <SnackbarUtilsConfigurator />
+        <App />
+      </SnackbarProvider>
+    </AppStateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -9,9 +9,10 @@ import List from '@mui/material/List';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { UserContext } from "../context/userContext";
-
+import { useAppState } from "../AppState";
 function CustomNestedList(props) {
-    const { user } = useContext(UserContext)
+    const [state] = useAppState()
+    const user = state.user
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()

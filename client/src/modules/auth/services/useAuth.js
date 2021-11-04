@@ -3,13 +3,13 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../../context/userContext";
 import { setCookie, getCookie } from "../../../config";
+import { useAppState } from "../../../AppState"
 
 export default function useAuth() {
 	let history = useHistory();
-	const { setUser } = useContext(UserContext);
 	const [error, setError] = useState(null);
 	console.log("useAuth", useAuth);
-
+	const [state, dispatch] = useAppState()
 	//set user
 	const setUserContext = async () => {
 		console.log("setUserContext")
@@ -20,12 +20,12 @@ export default function useAuth() {
 			.get("http://localhost:8080/api/users/info")
 			.then((res) => {
 				console.log("res.data", res.data)
-				setUser(res.data);
+				dispatch({ type: 'GET_USER', payload: { data: res.data } })
 				history.push("/home");
 			})
 			.catch((err) => {
-				console.log("err", err.response);
-				setError(err.response.data.message);
+				console.log("err", err);
+				// setError(err.response.data.message);
 			});
 	};
 
@@ -47,8 +47,8 @@ export default function useAuth() {
 				await setUserContext();
 			})
 			.catch((err) => {
-				console.log("error", err.response);
-				setError(err.response.data.message);
+				console.log("error", err);
+				// setError(err.response.data.message);
 			});
 	};
 

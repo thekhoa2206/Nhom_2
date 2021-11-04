@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
+import { useCreatePrice } from '../../utils/apiCalls';
+import { useHistory } from 'react-router'
+import { v4 as uuidv4 } from 'uuid';
 
 function ModalAddNewUser(props) {
+    const history = useHistory()
     const { open } = props;
-    const [state, setState] = useState({})
-    const { name, dob } = state
+    const [state, setState] = useState({ postApiCall: false })
+    const { name, dob, postApiCall } = state
+
+    const { createPrice } = useCreatePrice()
+    useEffect(() => {
+        if (postApiCall) {
+        }
+
+    }, [postApiCall])
     const handleAddUser = (event) => {
         let data = {
-            id: name + "-id",
-            name: name,
-            dob: dob
+            name: "vipp pro 1234",
+            price: 1000,
         }
-        props.handleAddGuest(data)
+        setState({
+            ...state,
+            postApiCall: true
+        })
+        createPrice(data)
+        props.handleAddPrice(data)
     }
     const handleNameChange = (e) => {
         setState({

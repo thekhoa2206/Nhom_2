@@ -13,10 +13,12 @@ import Logout from '@mui/icons-material/Logout';
 import useLogout from '../modules/auth/services/useLogout'
 import { UserContext } from '../context/userContext';
 import { Typography } from '@mui/material';
+import { useAppState } from "../AppState";
 const drawerWidth = 240;
 
 function Header(props) {
-    const { user } = useContext(UserContext)
+    const [state] = useAppState()
+    const user = state.user
     const { open } = props
     const [anchorEl, setAnchorEl] = React.useState(null);
     const { logoutUser } = useLogout();
