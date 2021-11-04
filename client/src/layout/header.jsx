@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +11,6 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import useLogout from '../modules/auth/services/useLogout'
-import { UserContext } from '../context/userContext';
 import { Typography } from '@mui/material';
 import { useAppState } from "../AppState";
 const drawerWidth = 240;

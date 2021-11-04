@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useCreatePrice } from '../../utils/apiCalls';
 import { useHistory } from 'react-router'
-import { v4 as uuidv4 } from 'uuid';
 
 function ModalAddNewUser(props) {
     const history = useHistory()

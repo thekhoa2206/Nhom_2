@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { UserContext } from '../context/userContext';
 import Loading from '../common-components/Loading';
 import Layout from '../layout/layout';
 import { clearCookie, getCookie } from '../config';

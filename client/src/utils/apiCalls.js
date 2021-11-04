@@ -1,10 +1,9 @@
-import requestAxios from "./useAxios";
+
 import axios from 'axios';
 import { getCookie } from '../config'
 import { toast } from './snackbarUtils';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAppState } from "../AppState";
-import { uniqueId } from "lodash";
 
 let token = getCookie("jwt")
 axios.defaults.baseURL = 'http://localhost:8080';
