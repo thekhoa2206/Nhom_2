@@ -4,9 +4,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "type_room")
@@ -27,4 +30,8 @@ public class TypeRoom extends BaseEntity {
 
     @Column(name = "status", nullable = true)
     private int status;
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "room_price", joinColumns = @JoinColumn(name = "type_room_id"), inverseJoinColumns = @JoinColumn(name = "type_price_id"))
+//    private List<Price> prices = new ArrayList<Price>();
 }

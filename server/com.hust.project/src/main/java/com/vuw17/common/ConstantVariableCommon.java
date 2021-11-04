@@ -104,6 +104,10 @@ public class ConstantVariableCommon {
     public static final int ACTION_UPDATE = 2;
     public static final int ACTION_DELETE = 3;
     public static final int ACTION_LOGIN = 4;
+    //Biến cố định của type_action
+    public static final String TYPE_ACTION_CREATE = "Thêm mới bản ghi";
+    public static final String TYPE_ACTION_UPDATE = "Cập nhật bản ghi";
+    public static final String TYPE_ACTION_DELETE = "Xóa bản ghi";
 
     //Static final message response
 

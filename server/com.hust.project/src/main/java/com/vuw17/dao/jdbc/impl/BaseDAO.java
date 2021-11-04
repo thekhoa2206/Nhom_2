@@ -9,7 +9,7 @@ public class BaseDAO<T> implements GenericDAO<T> {
     public Connection getConnection() {
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_management?user=root&password=123456789&useUnicode=true&characterEncoding=utf8&useSSL=false";
             return DriverManager.getConnection(url);
 
@@ -87,5 +87,4 @@ public class BaseDAO<T> implements GenericDAO<T> {
 
         }
     }
-
 }

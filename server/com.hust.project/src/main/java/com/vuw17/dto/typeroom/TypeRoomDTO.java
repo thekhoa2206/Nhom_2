@@ -26,5 +26,6 @@ public class TypeRoomDTO extends BaseDTO {
 
     private int status;
     @NotNull(message = "Giá không để trống")
+    @Min(value = 1,message = "Gia tien phai lon hon 0")
     private BigDecimal price;
 }
