@@ -116,8 +116,11 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     @Override
     public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
         TypeRoomDTO typeRoomDTO = findById(id);
-        if (typeRoomDTO != null && typeRoomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
-            return typeRoomDao.deleteOne(id);
+        if (typeRoomDTO != null && typeRoomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && typeRoomDao.deleteOne(id)) {
+            DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_type_room);
+            diaryDTO.setUserId(userDTOResponse.getId());
+            baseService.saveDiary(diaryDTO);
+            return true;
         }
         return false;
     }
