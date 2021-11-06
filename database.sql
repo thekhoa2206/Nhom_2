@@ -66,7 +66,7 @@ CREATE TABLE `guest` (
   `id_card` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `expiry_date` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,6 +75,7 @@ CREATE TABLE `guest` (
 
 LOCK TABLES `guest` WRITE;
 /*!40000 ALTER TABLE `guest` DISABLE KEYS */;
+INSERT INTO `guest` VALUES (1,'Nguyễn','Văn An',NULL,'Việt Nam','số 5 Phạm Hùng-Hà Nội','0688877449','Annv@gmail.com','030199008894',NULL),(2,'Nguyễn','Thị Sen',NULL,'Việt Nam','Đồ Sơn-Hải hòng','0564979999','Sennt@gmail.com','030099015646',NULL),(3,'Trần','Thị Hà',NULL,'Việt Nam','Sao Đỏ-CHí Linh-Hải Dương','0687994666','Hatt@gmail.com','030099008561',NULL),(4,'Đõ','Thị Quyên',NULL,'Việt Nam','Mê Linh-Hà Nội','0568799944','Quyendt@gmail.com','065997899999',NULL),(5,'Trần','Văn Sơn',NULL,NULL,'Mê Linh-Hà Nội','0568566666','Sontv@gmail.com','056977646666',NULL),(6,'Nguyễn','Thị Hà',NULL,NULL,'Từ Sơn-Bắc Ninh','0126649999','Hant@gmail.com','030099007856',NULL),(7,'Đỗ','Văn Hùng',NULL,NULL,'Đống Đa- Hà Nộ','0846979999','Hungdv@gmail.com','030099004566',NULL);
 /*!40000 ALTER TABLE `guest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +94,7 @@ CREATE TABLE `hotel` (
   `phone_number` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,6 +103,7 @@ CREATE TABLE `hotel` (
 
 LOCK TABLES `hotel` WRITE;
 /*!40000 ALTER TABLE `hotel` DISABLE KEYS */;
+INSERT INTO `hotel` VALUES (1,'Daisy','Số 5, Phạm Hùng, HÀ Nội',NULL,'0966888888',NULL),(2,'Venus','270 Võ Nguyên Giáp, Bắc Mỹ Phú, Ngũ Hành Sơn, Đà Nẵng',NULL,'0868688888',NULL);
 /*!40000 ALTER TABLE `hotel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +155,7 @@ CREATE TABLE `product` (
   KEY `fk_product_type_product_id` (`type_product_id`),
   CONSTRAINT `fk_product_type_product_id` FOREIGN KEY (`type_product_id`) REFERENCES `type_product` (`id`),
   CONSTRAINT `fk_product_unit_id` FOREIGN KEY (`unit_id`) REFERENCES `unit` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,6 +164,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'coca','Nước coca',1,20,8000.00,20000.00,2,1),(2,'7up','Nước 7up',1,20,8000.00,20000.00,2,1),(3,'Nước suối','Nước lọc nguyên chất',1,20,3000.00,15000.00,3,1),(4,'Oscar','Oscar',1,20,5000.00,12000.00,4,1),(5,'Cafe','Cà phê đá',1,20,5000.00,10000.00,4,1),(6,'Mì tôm','Mì tôm',1,1,10000.00,20000.00,6,2),(7,'Bít tết','Bít tết',1,1,200000.00,400000.00,5,2),(8,'Giặt là','Dịch vụ giặt khô',1,1,0.00,50000.00,7,3);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +302,7 @@ CREATE TABLE `room` (
   KEY `fk_room_hotel_id_idx` (`hotel_id`),
   CONSTRAINT `fk_room_hotel_id` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`),
   CONSTRAINT `fk_room_type_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,6 +311,7 @@ CREATE TABLE `room` (
 
 LOCK TABLES `room` WRITE;
 /*!40000 ALTER TABLE `room` DISABLE KEYS */;
+INSERT INTO `room` VALUES (1,1,'101',1,NULL,1),(2,1,'102',1,NULL,1),(3,1,'103',1,NULL,1),(4,1,'104',1,NULL,1),(5,1,'201',2,NULL,1),(6,1,'202',2,NULL,1),(7,1,'203',2,NULL,1),(8,1,'204',2,NULL,1),(9,1,'301',3,NULL,1),(10,1,'302',3,NULL,1),(11,2,'101',1,NULL,1),(12,2,'102',1,NULL,1),(13,2,'201',1,NULL,1),(14,2,'202',1,NULL,1),(15,2,'203',2,NULL,1),(16,2,'204',2,NULL,1),(17,2,'301',3,NULL,1),(18,2,'302',3,NULL,1);
 /*!40000 ALTER TABLE `room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +444,7 @@ CREATE TABLE `type_action` (
 
 LOCK TABLES `type_action` WRITE;
 /*!40000 ALTER TABLE `type_action` DISABLE KEYS */;
-INSERT INTO `type_action` VALUES (1,'Thêm mới',NULL,1),(2,'Cập nhật',NULL,1),(3,'Xóa',NULL,1),(4,'Đăng nhập',NULL,NULL);
+INSERT INTO `type_action` VALUES (1,'Thêm mới',NULL,1),(2,'Cập nhật',NULL,1),(3,'Xóa',NULL,1),(4,'Đăng nhập',NULL,1);
 /*!40000 ALTER TABLE `type_action` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -457,7 +461,7 @@ CREATE TABLE `type_product` (
   `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,6 +470,7 @@ CREATE TABLE `type_product` (
 
 LOCK TABLES `type_product` WRITE;
 /*!40000 ALTER TABLE `type_product` DISABLE KEYS */;
+INSERT INTO `type_product` VALUES (1,'Đồ uống','Đồ uống',1),(2,'Đồ ăn','Đồ ăn',1),(3,'Dịch vụ','Dịch vụ',1);
 /*!40000 ALTER TABLE `type_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -484,7 +489,7 @@ CREATE TABLE `type_room` (
   `number_adult` int DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,6 +498,7 @@ CREATE TABLE `type_room` (
 
 LOCK TABLES `type_room` WRITE;
 /*!40000 ALTER TABLE `type_room` DISABLE KEYS */;
+INSERT INTO `type_room` VALUES (1,'Thường',NULL,2,4,1),(2,'VIP1',NULL,2,2,1),(3,'VIP2',NULL,2,2,1),(4,'King',NULL,1,2,1);
 /*!40000 ALTER TABLE `type_room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,7 +514,7 @@ CREATE TABLE `unit` (
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -517,6 +523,7 @@ CREATE TABLE `unit` (
 
 LOCK TABLES `unit` WRITE;
 /*!40000 ALTER TABLE `unit` DISABLE KEYS */;
+INSERT INTO `unit` VALUES (1,'chiếc',1),(2,'lon',1),(3,'chai',1),(4,'gói',1),(5,'đĩa',1),(6,'bát',1),(7,'lần',1);
 /*!40000 ALTER TABLE `unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -559,6 +566,13 @@ CREATE TABLE `users` (
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT NULL,
+  `salary_day` double DEFAULT NULL,
+  `id_card` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -569,7 +583,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','$2a$10$vRT4McPsDuHNTNbGl.Qq5OX8nNjK29rLidPXKRI34JDglNGCJGbhm','Quản trị viên'),(2,'nguyenvana','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn a');
+INSERT INTO `users` VALUES (1,'admin','$2a$10$vRT4McPsDuHNTNbGl.Qq5OX8nNjK29rLidPXKRI34JDglNGCJGbhm','Quản trị viên',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'nguyenvana','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn a',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -590,4 +604,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-26 21:57:16
+-- Dump completed on 2021-11-05 21:38:54
