@@ -84,10 +84,13 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
 
     @Override
     public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
-        if (findById(id) != null) {
-            RoomDTO roomDTO = findById(id);
-            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
-                return roomDao.deleteOne(id);
+        RoomDTO roomDTO = findById(id);
+        if (roomDTO != null) {
+            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && roomDao.deleteOne(id)) {
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_room);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return true;
             }
         }
         return false;
