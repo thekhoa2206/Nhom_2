@@ -26,7 +26,7 @@ public class User extends BaseEntity{
     private String phone;
 
     @Column(name = "sex", length = 100)
-    private String sex;
+    private boolean sex;
 
     @Column(name = "salary_day")
     private double salaryDay;
@@ -71,5 +71,61 @@ public class User extends BaseEntity{
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isSex() {
+        return sex;
+    }
+
+    public void setSex(boolean sex) {
+        this.sex = sex;
+    }
+
+    public double getSalaryDay() {
+        return salaryDay;
+    }
+
+    public void setSalaryDay(double salaryDay) {
+        this.salaryDay = salaryDay;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
