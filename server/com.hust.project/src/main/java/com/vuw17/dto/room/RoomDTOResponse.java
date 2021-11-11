@@ -2,22 +2,20 @@ package com.vuw17.dto.room;
 
 import com.vuw17.dto.BaseDTO;
 import com.vuw17.dto.guest.GuestDTO;
-import com.vuw17.dto.guest.GuestReservationDTO;
 import com.vuw17.dto.product.ProductResponseDTO;
 import com.vuw17.dto.reservation.ReservationDTO;
+import com.vuw17.entities.Guest;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
 import java.util.List;
-
 @Getter
 @Setter
-public class RoomDTO extends BaseDTO {
+public class RoomDTOResponse extends BaseDTO {
+    private ReservationDTO reservation;
     @Min(value = 1,message = "Ma khach san phai lon hon 0")
     private int hotelId;
 
@@ -31,7 +29,4 @@ public class RoomDTO extends BaseDTO {
     private String note;
 
     private int status;
-    private GuestReservationDTO guest;
-    private String dateFrom;
-    private String dateTo;
 }

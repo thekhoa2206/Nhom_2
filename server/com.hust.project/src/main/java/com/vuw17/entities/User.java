@@ -78,11 +78,4 @@ public class User extends BaseEntity{
         this.roles = roles;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 }
