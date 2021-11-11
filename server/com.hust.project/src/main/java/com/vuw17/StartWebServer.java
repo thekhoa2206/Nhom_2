@@ -11,6 +11,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class StartWebServer {
     public static void main(String[] args){
         SpringApplication.run(StartWebServer.class, args);
-//        System.out.println(Common.GeneratePassword("nguyenvana"));
+        System.out.println(Common.GeneratePassword("admin"));
     }
 }
