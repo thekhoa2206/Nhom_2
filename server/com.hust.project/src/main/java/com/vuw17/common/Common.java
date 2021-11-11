@@ -32,7 +32,7 @@ public class Common {
     }
 
     public static String getDateByMilliSeconds( long milliSeconds){
-        String dateFormat=  "hh:mm  dd/MM/yyyy ";
+        String dateFormat=  "hh:mm:ss dd/MM/yyyy ";
         // Create a DateFormatter object for displaying date in specified format.
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 
@@ -82,4 +82,7 @@ public class Common {
         return null;
     }
 
+    public static void main(String[] args) {
+        System.out.println(GeneratePassword("admin"));
+    }
 }
