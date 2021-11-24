@@ -1,6 +1,5 @@
 package com.vuw17.services.impl;
 
-import com.vuw17.dao.jpa.impl.HotelDaoImpl;
 import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.entities.Diary;
 import com.vuw17.repositories.DiaryRepository;

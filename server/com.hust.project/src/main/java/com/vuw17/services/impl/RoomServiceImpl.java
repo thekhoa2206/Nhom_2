@@ -23,7 +23,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private final RoomDao roomDao;
     private final RoomDAO roomDAO;
     private final TypeRoomDao typeRoomDao;
-    private final HotelDao hotelDao;
     private final TableDiaryDAO tableDiaryDAO;
     private final TypeActionDAO typeActionDAO;
     private final TypeActionDao typeActionDao;
@@ -32,12 +31,11 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private static final String NOT_EXIST_HOTEL_ID = "Hotel ID does not exist";
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
-    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, HotelDao hotelDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseServiceImpl baseService) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseServiceImpl baseService) {
         super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
         this.typeRoomDao = typeRoomDao;
-        this.hotelDao = hotelDao;
         this.tableDiaryDAO = tableDiaryDAO;
         this.typeActionDAO = typeActionDAO;
         this.typeActionDao = typeActionDao;
@@ -131,18 +129,13 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         if(typeRoomDao.findById(newData.getTypeRoomId()) != null && newData.getTypeRoomId() != oldData.getTypeRoomId()){
             oldData.setTypeRoomId(newData.getTypeRoomId());
         }
-        if(hotelDao.findById(newData.getHotelId()) != null && newData.getHotelId() != oldData.getHotelId()){
-            oldData.setHotelId(newData.getHotelId());
-        }
         return oldData;
     }
     public Room toEntity(RoomDTO roomDTO) {
         Room room = new Room();
         room.setId(roomDTO.getId());
         room.setName(roomDTO.getName());
-        room.setNote(roomDTO.getNote());
         room.setStatus(roomDTO.getStatus());
-        room.setHotelId(roomDTO.getHotelId());
         room.setTypeRoomId(roomDTO.getTypeRoomId());
         return room;
     }
@@ -161,8 +154,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     public RoomDTO commonTransferData(Room room) {
         RoomDTO roomDTO = new RoomDTO();
         roomDTO.setName(room.getName());
-        roomDTO.setNote(room.getNote());
-        roomDTO.setHotelId(room.getHotelId());
         roomDTO.setTypeRoomId(room.getTypeRoomId());
         roomDTO.setStatus(room.getStatus());
         return roomDTO;
@@ -172,9 +163,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     public String checkInput(RoomDTO roomDTO) {
         String message = null;
         RoomDTO dto = findByName(roomDTO.getName());
-        if(hotelDao.findById(roomDTO.getHotelId()) == null){
-            message = NOT_EXIST_HOTEL_ID;
-        }else if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
+       if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
             message = NOT_EXIST_TYPE_ROOM_ID;
         }else if (dto != null && dto.getHotelId() == roomDTO.getHotelId()) {
             message = ConstantVariableCommon.DUPLICATED_NAME;

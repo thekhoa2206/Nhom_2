@@ -1,9 +1,7 @@
 package com.vuw17.controllers.admin;
 
 import com.vuw17.dto.typeproduct.TypeProductRequestDTO;
-import com.vuw17.dto.typeproduct.TypeProductResponseDTO;
 import com.vuw17.dto.typeproduct.TypeProductResponseListDTO;
-import com.vuw17.entities.TypeProduct;
 import com.vuw17.services.TypeProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

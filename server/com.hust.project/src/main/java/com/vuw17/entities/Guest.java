@@ -37,8 +37,6 @@ public class Guest extends BaseEntity {
     @Column(name = "id_card", nullable = true, length = 50)
     private String idCard;
 
-    @Column(name = "expiry_date", nullable = true)
-    private long expiryDate;
 
 
 }

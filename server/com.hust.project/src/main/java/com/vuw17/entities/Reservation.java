@@ -14,23 +14,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Reservation extends BaseEntity {
-    @Column(name = "total", nullable = true)
-    private BigDecimal total;
-
-    @Column(name = "deposit", nullable = true)
-    private BigDecimal deposit;
-
-    @Column(name = "payment_method", nullable = true)
-    private byte paymentMethod;
-
     @Column(name = "note", nullable = true)
     private String note;
-
-    @Column(name = "reduce_fee", nullable = true)
-    private BigDecimal reduceFee;
-
-    @Column(name = "additional_fee", nullable = true)
-    private BigDecimal additionalFee;
 
     @Column(name = "date_from", nullable = true)
     private long dateFrom;
@@ -40,4 +25,10 @@ public class Reservation extends BaseEntity {
 
     @Column(name = "status", nullable = true)
     private int status;
+
+    @Column(name = "number_room", nullable = true)
+    private int numberRoom;
+
+    @Column(name = "guest_id", nullable = true)
+    private int guestId;
 }

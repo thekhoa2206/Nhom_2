@@ -1,7 +1,5 @@
 package com.vuw17.dao.jpa;
 
-import com.vuw17.dto.unit.UnitRequestDTO;
-import com.vuw17.entities.Unit;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;

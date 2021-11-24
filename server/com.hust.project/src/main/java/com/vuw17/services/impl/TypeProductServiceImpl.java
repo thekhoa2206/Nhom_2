@@ -4,7 +4,6 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.TypeProductDao;
 import com.vuw17.dto.typeproduct.TypeProductRequestDTO;
 import com.vuw17.dto.typeproduct.TypeProductResponseListDTO;
-import com.vuw17.entities.TypeProduct;
 import com.vuw17.repositories.TypeProductRepository;
 import com.vuw17.services.TypeProductService;
 import org.slf4j.Logger;

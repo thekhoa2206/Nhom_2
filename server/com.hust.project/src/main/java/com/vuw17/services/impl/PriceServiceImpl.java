@@ -2,10 +2,8 @@ package com.vuw17.services.impl;
 
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.PriceDao;
-import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.price.PriceDTORequest;
 import com.vuw17.dto.price.PriceDTOResponse;
-import com.vuw17.entities.Price;
 import com.vuw17.repositories.PriceRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.PriceService;

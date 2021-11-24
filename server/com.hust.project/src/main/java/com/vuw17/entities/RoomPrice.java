@@ -25,4 +25,7 @@ public class RoomPrice extends BaseEntity {
     @Column(name = "type_room_id", nullable = false)
     private int typeRoomId;
 
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
+
 }
