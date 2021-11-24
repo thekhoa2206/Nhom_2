@@ -1,11 +1,15 @@
 package com.vuw17.services.impl;
 
+import com.vuw17.common.Common;
 import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jdbc.RoomDAO;
 import com.vuw17.dao.jdbc.TableDiaryDAO;
 import com.vuw17.dao.jdbc.TypeActionDAO;
 import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.base.DiaryDTO;
+import com.vuw17.dto.guest.GuestDTO;
+import com.vuw17.dto.guest.GuestReservationDTO;
+import com.vuw17.dto.reservation.ReservationDTO;
 import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Room;
@@ -82,10 +86,13 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
 
     @Override
     public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
-        if (findById(id) != null) {
-            RoomDTO roomDTO = findById(id);
-            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3) {
-                return roomDao.deleteOne(id);
+        RoomDTO roomDTO = findById(id);
+        if (roomDTO != null) {
+            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && roomDao.deleteOne(id)) {
+                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_room);
+                diaryDTO.setUserId(userDTOResponse.getId());
+                baseService.saveDiary(diaryDTO);
+                return true;
             }
         }
         return false;
@@ -156,6 +163,10 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         roomDTO.setName(room.getName());
         roomDTO.setTypeRoomId(room.getTypeRoomId());
         roomDTO.setStatus(room.getStatus());
+        roomDTO.setGuest(new GuestReservationDTO());
+        roomDTO.setDateFrom(Common.getDateByMilliSeconds(System.currentTimeMillis()));
+        roomDTO.setDateTo(Common.getDateByMilliSeconds(System.currentTimeMillis()));
+//       roomDTO.setReservation(reservationDTO);
         return roomDTO;
     }
 

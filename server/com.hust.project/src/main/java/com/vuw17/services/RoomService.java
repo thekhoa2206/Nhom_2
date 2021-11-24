@@ -1,6 +1,7 @@
 package com.vuw17.services;
 
 import com.vuw17.dto.room.RoomDTO;
+import com.vuw17.dto.room.RoomDTOResponse;
 import com.vuw17.dto.user.UserDTOResponse;
 import org.springframework.stereotype.Service;
 
