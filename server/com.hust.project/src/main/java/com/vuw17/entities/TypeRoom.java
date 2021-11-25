@@ -19,19 +19,14 @@ public class TypeRoom extends BaseEntity {
     @Column(name = "name", nullable = true, length = 30)
     private String name;
 
-    @Column(name = "note", nullable = true, length = 254)
-    private String note;
 
-    @Column(name = "number_children", nullable = true)
-    private int numberChildren;
+    @Column(name = "max_adult", nullable = true)
+    private int max_adult;
 
-    @Column(name = "number_adult", nullable = true)
-    private int numberAdult;
+    @Column(name = "max_child", nullable = true)
+    private int max_child;
 
     @Column(name = "status", nullable = true)
     private int status;
 
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(name = "room_price", joinColumns = @JoinColumn(name = "type_room_id"), inverseJoinColumns = @JoinColumn(name = "type_price_id"))
-//    private List<Price> prices = new ArrayList<Price>();
 }

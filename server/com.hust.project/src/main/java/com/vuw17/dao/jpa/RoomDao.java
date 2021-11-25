@@ -1,6 +1,5 @@
 package com.vuw17.dao.jpa;
 
-import com.vuw17.entities.Hotel;
 import com.vuw17.entities.Room;
 import org.springframework.stereotype.Repository;
 

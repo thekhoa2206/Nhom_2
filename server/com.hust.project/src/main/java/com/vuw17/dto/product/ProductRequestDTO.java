@@ -1,9 +1,6 @@
 package com.vuw17.dto.product;
 
-import com.vuw17.dto.typeproduct.TypeProductResponseDTO;
 import com.vuw17.dto.unit.UnitRequestDTO;
-import com.vuw17.dto.unit.UnitResponseDTO;
-import com.vuw17.entities.Unit;
 import lombok.Getter;
 import lombok.Setter;
 

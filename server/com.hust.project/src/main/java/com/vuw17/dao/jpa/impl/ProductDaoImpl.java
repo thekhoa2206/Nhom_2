@@ -1,10 +1,6 @@
 package com.vuw17.dao.jpa.impl;
 
-import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.ProductDao;
-import com.vuw17.dao.jpa.UserDao;
-import com.vuw17.entities.Price;
-import com.vuw17.entities.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

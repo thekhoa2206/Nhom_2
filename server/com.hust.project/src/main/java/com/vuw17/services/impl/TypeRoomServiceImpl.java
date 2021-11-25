@@ -6,7 +6,6 @@ import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.dto.user.UserDTOResponse;
-import com.vuw17.entities.Price;
 import com.vuw17.entities.RoomPrice;
 import com.vuw17.entities.TypeRoom;
 import com.vuw17.services.BaseService;
@@ -56,11 +55,11 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
             int priceId = getPriceId(typeRoom);
             int typeRoomId = typeRoomDAO.insertOne(toEntity(typeRoom));
             if (typeRoomId > 0) {
-                roomPriceDAO.insertOne(new RoomPrice(priceId, typeRoomId));
-                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, typeRoomId, ConstantVariableCommon.table_type_room);
-                diaryDTO.setUserId(userDTOResponse.getId());
-                baseService.saveDiary(diaryDTO);
-                return typeRoomId;
+//                roomPriceDAO.insertOne(new RoomPrice(priceId, typeRoomId));
+//                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, typeRoomId, ConstantVariableCommon.table_type_room);
+//                diaryDTO.setUserId(userDTOResponse.getId());
+//                baseService.saveDiary(diaryDTO);
+//                return typeRoomId;
             }
         }
         return 0;
@@ -68,14 +67,14 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
 
     //Check gia,ton tai trong bang price thi lay ra dung,con khong thi them vao
     public int getPriceId(TypeRoomDTO typeRoom) {
-        Price price = priceDao.findByPrice(typeRoom.getPrice());
-        int priceId = 0;
-        if (price != null) {
-            priceId = price.getId();
-        } else {
-            priceId = priceDAO.insertOne(new Price(typeRoom.getPrice().toString(), typeRoom.getPrice()));
-        }
-        return priceId;
+//        Price price = priceDao.findByPrice(typeRoom.getPrice());
+//        int priceId = 0;
+//        if (price != null) {
+//            priceId = price.getId();
+//        } else {
+//            priceId = priceDAO.insertOne(new Price(typeRoom.getPrice().toString(), typeRoom.getPrice()));
+//        }
+        return 0;
     }
 
     @Override
@@ -100,7 +99,7 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
             if (checkUpdated) {
                 //Cap nhat bang room_price neu price thay doi
                 if (roomPriceDao.findByTypeRoomId(id).getTypePriceId() != priceId) {
-                    roomPriceDao.updateOne(new RoomPrice(priceId, id));
+//                    roomPriceDao.updateOne(new RoomPrice(priceId, id));
                 }
                 //Update Diary
                 DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, id, ConstantVariableCommon.table_hotel);
@@ -181,9 +180,9 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         TypeRoom typeRoom = new TypeRoom();
         typeRoom.setId(typeRoomDTO.getId());
         typeRoom.setName(typeRoomDTO.getName());
-        typeRoom.setNote(typeRoomDTO.getNote());
-        typeRoom.setNumberAdult(typeRoomDTO.getNumberAdult());
-        typeRoom.setNumberChildren(typeRoomDTO.getNumberChildren());
+//        typeRoom.setNote(typeRoomDTO.getNote());
+//        typeRoom.setNumberAdult(typeRoomDTO.getNumberAdult());
+//        typeRoom.setNumberChildren(typeRoomDTO.getNumberChildren());
         typeRoom.setStatus(typeRoomDTO.getStatus());
         return typeRoom;
     }
@@ -202,9 +201,9 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     public TypeRoomDTO commonTransferData(TypeRoom typeRoom) {
         TypeRoomDTO typeRoomDTO = new TypeRoomDTO();
         typeRoomDTO.setName(typeRoom.getName());
-        typeRoomDTO.setNote(typeRoom.getNote());
-        typeRoomDTO.setNumberAdult(typeRoom.getNumberAdult());
-        typeRoomDTO.setNumberChildren(typeRoom.getNumberChildren());
+//        typeRoomDTO.setNote(typeRoom.getNote());
+//        typeRoomDTO.setNumberAdult(typeRoom.getNumberAdult());
+//        typeRoomDTO.setNumberChildren(typeRoom.getNumberChildren());
         typeRoomDTO.setStatus(typeRoom.getStatus());
         return typeRoomDTO;
     }

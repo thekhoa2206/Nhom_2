@@ -1,7 +1,6 @@
 package com.vuw17.dao.jpa.impl;
 
 import com.vuw17.dao.jpa.PriceDao;
-import com.vuw17.entities.Price;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,7 @@
 package com.vuw17.services;
 
 import com.vuw17.dto.typeproduct.TypeProductRequestDTO;
-import com.vuw17.dto.typeproduct.TypeProductResponseDTO;
 import com.vuw17.dto.typeproduct.TypeProductResponseListDTO;
-import com.vuw17.entities.TypeProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.vuw17.dao.jpa;
 
-import com.vuw17.entities.Price;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;

@@ -1,9 +1,7 @@
 package com.vuw17.services.impl;
 
 import com.vuw17.dao.jpa.UnitDao;
-import com.vuw17.dao.jpa.impl.ProductDaoImpl;
 import com.vuw17.dto.unit.UnitResponseDTO;
-import com.vuw17.entities.Unit;
 import com.vuw17.repositories.UnitRepository;
 import com.vuw17.services.UnitService;
 import org.slf4j.Logger;

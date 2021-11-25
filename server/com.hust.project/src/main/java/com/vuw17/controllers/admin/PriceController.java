@@ -2,7 +2,6 @@ package com.vuw17.controllers.admin;
 
 import com.vuw17.dto.price.PriceDTORequest;
 import com.vuw17.dto.price.PriceDTOResponse;
-import com.vuw17.entities.Price;
 import com.vuw17.services.PriceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
