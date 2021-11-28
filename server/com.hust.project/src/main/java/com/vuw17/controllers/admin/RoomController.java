@@ -50,10 +50,6 @@ public class RoomController extends BaseController {
     public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id,HttpServletRequest request) {
         return ResponseEntity.ok(new UpdateResponse(roomService.deleteOne(id,getUserDTOResponse(request))));
     }
-    @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable int hotelId){
-        return ResponseEntity.ok(roomService.findByHotelId(hotelId));
-    }
     @GetMapping("/type-room/{typeRoomId}")
     public ResponseEntity<List<RoomDTO>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
         return ResponseEntity.ok(roomService.findByTypeRoomId(typeRoomId));

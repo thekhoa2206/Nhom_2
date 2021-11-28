@@ -21,8 +21,6 @@ public interface RoomService {
     RoomDTO findById(int id);
     //Lay room theo name
     RoomDTO findByName(String name);
-    //Lay room theo hotel_id
-    List<RoomDTO> findByHotelId(int hotelId);
     //Lay room theo type_room id
     List<RoomDTO> findByTypeRoomId(int typeRoomId);
 }

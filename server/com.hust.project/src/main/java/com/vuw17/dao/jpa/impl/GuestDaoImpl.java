@@ -2,6 +2,7 @@ package com.vuw17.dao.jpa.impl;
 
 import com.vuw17.dao.jpa.GuestDao;
 import com.vuw17.entities.Guest;
+import com.vuw17.entities.TypeRoom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,15 @@ public class GuestDaoImpl implements GuestDao {
     public List<Guest> findByRoomId(int roomId) {
 
         return null;
+    }
+
+    @Override
+    public Guest findById(int id) {
+        String sql = "SELECT * FROM guest WHERE id = ?";
+        try{
+            return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,id).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 }

@@ -19,8 +19,8 @@ public class Guest extends BaseEntity {
     @Column(name = "last_name", nullable = true, length = 30)
     private String lastName;
 
-    @Column(name = "date_of_birth", nullable = true)
-    private long dateOfBirth;
+    @Column(name = "birthday", nullable = true)
+    private long birthday;
 
     @Column(name = "nationality", nullable = true, length = 30)
     private String nationality;

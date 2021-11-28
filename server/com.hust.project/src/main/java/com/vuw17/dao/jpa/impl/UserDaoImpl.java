@@ -21,7 +21,7 @@ public class UserDaoImpl implements  UserDao{
 
     @Override
     public List<User> findAllUser(){
-        String sql = "SELECT * FROM users ";
+        String sql = "SELECT * FROM user ";
         return entityManager.createNativeQuery(sql,User.class).getResultList();
     }
 }

@@ -35,14 +35,6 @@ public class ConstantVariableCommon {
     public static final int STATUS_PRODUCT_RESERVATION_2 = 2; // trạng thái order sản phẩm: đã duyệt
     public static final int STATUS_PRODUCT_RESERVATION_3 = 3; // trạng thái order sản phẩm: đã hủy
 
-    //Biến cố định của floor
-    public static final int STATUS_FLOOR_1 = 1; // trạng thái của tầng: đang sử dụng
-    public static final int STATUS_FLOOR_2 = 2; // trạng thái của tầng: đang bảo trì
-
-    //Biến cố định của hotel
-    public static final int STATUS_HOTEL_1 = 1; // trạng thái của khách sạn: đang sử dụng
-    public static final int STATUS_HOTEL_2 = 2; // trạng thái của khách sạn: đang đóng cửa
-    public static final int STATUS_HOTEL_3 = 3; // trạng thái của khách sạn: đã xóa
 
     //Biến cố định của type_room
     public static final int STATUS_TYPE_ROOM_1 = 1; // trạng thái của loại phòng: đang sử dụng
@@ -59,6 +51,10 @@ public class ConstantVariableCommon {
     public static final int STATUS_PRICE_2 = 2; // trạng thái giá phòng: ngừng sử dụng
     public static final int STATUS_PRICE_3 = 3; // trạng thái giá phòng: đã xóa
 
+    //Biến cố định của type_room
+    public static final int STATUS_TYPE_PRICE_1 = 1; // trạng thái của loại phòng: đang ap dụng
+    public static final int STATUS_TYPE_PRICE_2 = 2; // trạng thái của loại phòng: ngưng ap dụng
+    public static final int STATUS_TYPE_PRICE_3 = 3; // trạng thái của loại phòng: đã xóa
     //Biến cố định table
     public static final String table_hotel = "hotel";
     public static final String table_room = "room";
@@ -69,12 +65,13 @@ public class ConstantVariableCommon {
     public static final String table_product_reserved = "product_reserved";
     public static final String table_reservation = "reservation";
     public static final String table_reservation_guest = "reservation_guest";
-    public static final String table_roles = "roles";
+    public static final String table_role = "role";
     public static final String table_room_price = "room_price";
     public static final String table_room_reserved = "room_reserved";
     public static final String table_type_product = "type_product";
     public static final String table_unit = "unit";
-    public static final String table_users = "users";
+    public static final String table_user = "user";
+    public static final String table_type_price = "type_price";
 
     //Biến cố định table_id
     public static final int table_hotel_id = 1;

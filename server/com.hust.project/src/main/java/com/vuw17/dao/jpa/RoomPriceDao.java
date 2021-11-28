@@ -6,4 +6,5 @@ public interface RoomPriceDao {
     boolean updateOne(RoomPrice roomPrice);
 
     RoomPrice findByTypeRoomId(int typeRoomId);
+    RoomPrice findByTypeRoomIdAndTypePriceId(int typeRoomId, int typePriceId);
 }

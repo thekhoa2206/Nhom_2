@@ -15,12 +15,14 @@ public class CommonService {
     private final TypeActionDAO typeActionDAO;
     private final TypeActionDao typeActionDao;
     private final TableDiaryDao tableDiaryDao;
+    private final BaseService baseService;
 
-    public CommonService(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao) {
+    public CommonService(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService) {
         this.tableDiaryDAO = tableDiaryDAO;
         this.typeActionDAO = typeActionDAO;
         this.typeActionDao = typeActionDao;
         this.tableDiaryDao = tableDiaryDao;
+        this.baseService = baseService;
     }
 
     public DiaryDTO checkDiary(String typeActionName, int newRowId, String tableName) {
@@ -32,6 +34,11 @@ public class CommonService {
         diaryDTO.setNote(typeActionName + " " + tableName);
         return diaryDTO;
 
+    }
+    public void saveDiary(String actionName,int rowId,String tableName,int userId){
+        DiaryDTO diaryDTO = checkDiary(actionName, rowId, tableName);
+        diaryDTO.setUserId(userId);
+        baseService.saveDiary(diaryDTO);
     }
 
     //Kiem tra type action ton tai,neu chua ton tai thi them moi

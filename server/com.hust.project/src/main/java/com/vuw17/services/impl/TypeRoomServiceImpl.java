@@ -5,6 +5,7 @@ import com.vuw17.dao.jdbc.*;
 import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
+import com.vuw17.dto.typeroom.TypeRoomPriceDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.RoomPrice;
 import com.vuw17.entities.TypeRoom;
@@ -20,8 +21,6 @@ import java.util.List;
 @Service
 public class TypeRoomServiceImpl extends CommonService implements TypeRoomService {
     private final TypeRoomDao typeRoomDao;
-    private final PriceDAO priceDAO;
-    private final PriceDao priceDao;
     private final TypeRoomDAO typeRoomDAO;
     private final RoomPriceDAO roomPriceDAO;
     private final TableDiaryDAO tableDiaryDAO;
@@ -31,11 +30,9 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     private final BaseService baseService;
     private final RoomPriceDao roomPriceDao;
 
-    public TypeRoomServiceImpl(TypeRoomDao typeRoomDao, PriceDAO priceDAO, PriceDao priceDao, TypeRoomDAO typeRoomDAO, RoomPriceDAO roomPriceDAO, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, RoomPriceDao roomPriceDao) {
-        super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao);
+    public TypeRoomServiceImpl(TypeRoomDao typeRoomDao, TypeRoomDAO typeRoomDAO, RoomPriceDAO roomPriceDAO, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, RoomPriceDao roomPriceDao) {
+        super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.typeRoomDao = typeRoomDao;
-        this.priceDAO = priceDAO;
-        this.priceDao = priceDao;
         this.typeRoomDAO = typeRoomDAO;
         this.roomPriceDAO = roomPriceDAO;
         this.tableDiaryDAO = tableDiaryDAO;
@@ -52,14 +49,23 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         if (message == null) {
 //            typeRoomDao.insertOne(toEntity(typeRoom));
 //            return ConstantVariableCommon.CREATE_SUCCESSFUL;
-            int priceId = getPriceId(typeRoom);
+//            int priceId = getPriceId(typeRoom);
             int typeRoomId = typeRoomDAO.insertOne(toEntity(typeRoom));
             if (typeRoomId > 0) {
-//                roomPriceDAO.insertOne(new RoomPrice(priceId, typeRoomId));
-//                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, typeRoomId, ConstantVariableCommon.table_type_room);
-//                diaryDTO.setUserId(userDTOResponse.getId());
-//                baseService.saveDiary(diaryDTO);
-//                return typeRoomId;
+                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,typeRoomId,ConstantVariableCommon.table_type_room,userDTOResponse.getId());
+                //Get type room price list to insert into room_price table
+                List<TypeRoomPriceDTO> list = typeRoom.getTypeRoomPriceList();
+                if(list != null){
+                    for(int i = 0;i < list.size();i++){
+                        TypeRoomPriceDTO typeRoomPriceDTO = list.get(i);
+                        RoomPrice roomPrice = new RoomPrice(typeRoomPriceDTO.getTypePriceId(),typeRoomId,typeRoomPriceDTO.getPrice());
+                        if(roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoomPriceDTO.getTypePriceId(),typeRoomId) == null){
+                            int roomPriceId = roomPriceDAO.insertOne(roomPrice);
+                            saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,roomPriceId,ConstantVariableCommon.table_room_price,userDTOResponse.getId());
+                        }
+                    }
+                }
+                return typeRoomId;
             }
         }
         return 0;
@@ -94,13 +100,13 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         TypeRoomDTO typeRoomBefore = findById(id);
         if (id > 0 && typeRoomBefore != null && message == null && !checkDataNotChanges(typeRoomBefore, typeRoom)) {
             TypeRoomDTO typeRoomUpdate = updateData(typeRoomBefore, typeRoom);
-            int priceId = getPriceId(typeRoomUpdate);
+//            int priceId = getPriceId(typeRoomUpdate);
             boolean checkUpdated = typeRoomDao.updateOne(toEntity(typeRoomUpdate));
             if (checkUpdated) {
-                //Cap nhat bang room_price neu price thay doi
-                if (roomPriceDao.findByTypeRoomId(id).getTypePriceId() != priceId) {
-//                    roomPriceDao.updateOne(new RoomPrice(priceId, id));
-                }
+//                //Cap nhat bang room_price neu price thay doi
+//                if (roomPriceDao.findByTypeRoomId(id).getTypePriceId() != priceId) {
+////                    roomPriceDao.updateOne(new RoomPrice(priceId, id));
+//                }
                 //Update Diary
                 DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, id, ConstantVariableCommon.table_hotel);
                 diaryDTO.setUserId(userDTOResponse.getId());
@@ -115,7 +121,7 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     @Override
     public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
         TypeRoomDTO typeRoomDTO = findById(id);
-        if (typeRoomDTO != null && typeRoomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && typeRoomDao.deleteOne(id)) {
+        if (typeRoomDTO != null && typeRoomDao.deleteOne(id)) {
             DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_type_room);
             diaryDTO.setUserId(userDTOResponse.getId());
             baseService.saveDiary(diaryDTO);
@@ -152,17 +158,14 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         if (StringUtils.hasText(newData.getNote())) {
             oldData.setNote(newData.getNote());
         }
-        if (newData.getNumberAdult() != oldData.getNumberAdult()) {
-            oldData.setNumberAdult(newData.getNumberAdult());
+        if (newData.getMaxAdult() != oldData.getMaxAdult()) {
+            oldData.setMaxAdult(newData.getMaxAdult());
         }
-        if (newData.getNumberChildren() != oldData.getNumberChildren()) {
-            oldData.setNumberChildren(newData.getNumberChildren());
+        if (newData.getMaxChild() != oldData.getMaxChild()) {
+            oldData.setMaxChild(newData.getMaxChild());
         }
         if (newData.getStatus() > 0 && newData.getStatus() <= ConstantVariableCommon.STATUS_TYPE_ROOM_3 && newData.getStatus() != oldData.getStatus()) {
             oldData.setStatus(newData.getStatus());
-        }
-        if (!newData.getPrice().equals(oldData.getPrice())) {
-            oldData.setPrice(newData.getPrice());
         }
         return oldData;
     }
@@ -171,8 +174,8 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     public boolean checkDataNotChanges(TypeRoomDTO typeRoomDTOBefore, TypeRoomDTO typeRoomDTOAfter) {
         boolean checkName = typeRoomDTOBefore.getName().equalsIgnoreCase(typeRoomDTOAfter.getName());
         boolean checkNote = typeRoomDTOBefore.getNote().equalsIgnoreCase(typeRoomDTOAfter.getNote());
-        boolean checkNumberChildren = (typeRoomDTOBefore.getNumberChildren() == typeRoomDTOAfter.getNumberChildren());
-        boolean checkNumberAdult = (typeRoomDTOBefore.getNumberAdult() == typeRoomDTOAfter.getNumberAdult());
+        boolean checkNumberChildren = (typeRoomDTOBefore.getMaxChild() == typeRoomDTOAfter.getMaxChild());
+        boolean checkNumberAdult = (typeRoomDTOBefore.getMaxAdult() == typeRoomDTOAfter.getMaxAdult());
         return checkName && checkNote && checkNumberChildren && checkNumberAdult;
     }
 
@@ -180,9 +183,8 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         TypeRoom typeRoom = new TypeRoom();
         typeRoom.setId(typeRoomDTO.getId());
         typeRoom.setName(typeRoomDTO.getName());
-//        typeRoom.setNote(typeRoomDTO.getNote());
-//        typeRoom.setNumberAdult(typeRoomDTO.getNumberAdult());
-//        typeRoom.setNumberChildren(typeRoomDTO.getNumberChildren());
+        typeRoom.setMaxAdult(typeRoomDTO.getMaxAdult());
+        typeRoom.setMaxChild(typeRoomDTO.getMaxChild());
         typeRoom.setStatus(typeRoomDTO.getStatus());
         return typeRoom;
     }
@@ -201,9 +203,8 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     public TypeRoomDTO commonTransferData(TypeRoom typeRoom) {
         TypeRoomDTO typeRoomDTO = new TypeRoomDTO();
         typeRoomDTO.setName(typeRoom.getName());
-//        typeRoomDTO.setNote(typeRoom.getNote());
-//        typeRoomDTO.setNumberAdult(typeRoom.getNumberAdult());
-//        typeRoomDTO.setNumberChildren(typeRoom.getNumberChildren());
+        typeRoomDTO.setMaxAdult(typeRoom.getMaxAdult());
+        typeRoomDTO.setMaxChild(typeRoom.getMaxChild());
         typeRoomDTO.setStatus(typeRoom.getStatus());
         return typeRoomDTO;
     }

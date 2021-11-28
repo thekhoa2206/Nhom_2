@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Getter
 @Setter
 public class User extends BaseEntity{
@@ -30,16 +30,15 @@ public class User extends BaseEntity{
     @Column(name = "phone", length = 20, nullable = true)
     private String phone;
 
-    @Column(name = "sex",  nullable = true)
+    @Column(name = "sex", length = 100)
     private Boolean sex;
 
-    @Column(name = "salary_day",  nullable = true)
+    @Column(name = "salary_day")
     private Double salaryDay;
 
     @Column(name = "id_card", length = 20, nullable = true)
     private String idCard;
-
-    @Column(name = "status", nullable = true)
+    @Column(name = "status")
     private Integer status;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

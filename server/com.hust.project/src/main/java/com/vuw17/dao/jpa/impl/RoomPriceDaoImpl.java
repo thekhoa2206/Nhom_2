@@ -38,4 +38,14 @@ public class RoomPriceDaoImpl implements RoomPriceDao {
             return null;
         }
     }
+
+    @Override
+    public RoomPrice findByTypeRoomIdAndTypePriceId(int typeRoomId, int typePriceId) {
+        String sql = "SELECT * FROM room_price WHERE type_room_id = ? AND type_price_id = ?";
+        try {
+            return (RoomPrice) entityManager.createNativeQuery(sql,RoomPrice.class).setParameter(1,typeRoomId).setParameter(2,typePriceId).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }
