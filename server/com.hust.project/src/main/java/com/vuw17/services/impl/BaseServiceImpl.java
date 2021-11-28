@@ -15,7 +15,7 @@ import java.util.Date;
 public class BaseServiceImpl implements BaseService {
 
     private final DiaryRepository diaryRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(HotelDaoImpl.class.toString());
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseServiceImpl.class.toString());
 
     public BaseServiceImpl(DiaryRepository diaryRepository) {
         this.diaryRepository = diaryRepository;

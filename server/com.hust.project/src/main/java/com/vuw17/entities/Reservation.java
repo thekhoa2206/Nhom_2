@@ -1,5 +1,6 @@
 package com.vuw17.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Table(name = "reservation")
 @Getter
 @Setter
+@AllArgsConstructor
 public class Reservation extends BaseEntity {
     @Column(name = "note", nullable = true)
     private String note;

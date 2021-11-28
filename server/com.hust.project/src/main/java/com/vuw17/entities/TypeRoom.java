@@ -21,10 +21,10 @@ public class TypeRoom extends BaseEntity {
 
 
     @Column(name = "max_adult", nullable = true)
-    private int max_adult;
+    private int maxAdult;
 
     @Column(name = "max_child", nullable = true)
-    private int max_child;
+    private int maxChild;
 
     @Column(name = "status", nullable = true)
     private int status;

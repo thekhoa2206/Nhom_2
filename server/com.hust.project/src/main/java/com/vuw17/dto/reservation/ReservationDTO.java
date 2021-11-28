@@ -1,33 +1,26 @@
 package com.vuw17.dto.reservation;
 
-import com.vuw17.dto.guest.GuestDTO;
-import com.vuw17.dto.product.ProductResponseDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.List;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ReservationDTO {
-    private BigDecimal total;
-
-    private BigDecimal deposit;
-
-    private byte paymentMethod;
-
     private String note;
 
-    private BigDecimal reduceFee;
-
-    private BigDecimal additionalFee;
-
+    @Size(min = 1,message = "Ngay du dinh den phai lon hon 0")
     private long dateFrom;
 
+    @Size(min = 1,message = "Ngay du dinh roi di phai lon hon 0")
     private long dateTo;
 
     private int status;
-    private List<ProductResponseDTO> products;
-    private List<GuestDTO> guests;
+    @Size(min = 1,message = "So luong phong du dinh phai lon hon 0")
+    private int numberRoom;
+
+    private int guestId;
 }

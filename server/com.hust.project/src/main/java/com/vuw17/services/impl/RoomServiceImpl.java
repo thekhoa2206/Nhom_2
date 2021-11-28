@@ -7,9 +7,7 @@ import com.vuw17.dao.jdbc.TableDiaryDAO;
 import com.vuw17.dao.jdbc.TypeActionDAO;
 import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.base.DiaryDTO;
-import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.dto.guest.GuestReservationDTO;
-import com.vuw17.dto.reservation.ReservationDTO;
 import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Room;
@@ -32,11 +30,10 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private final TypeActionDao typeActionDao;
     private final TableDiaryDao tableDiaryDao;
     private final BaseServiceImpl baseService;
-    private static final String NOT_EXIST_HOTEL_ID = "Hotel ID does not exist";
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
     public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseServiceImpl baseService) {
-        super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao);
+        super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao, baseService);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
         this.typeRoomDao = typeRoomDao;
@@ -88,7 +85,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     public boolean deleteOne(int id, UserDTOResponse userDTOResponse) {
         RoomDTO roomDTO = findById(id);
         if (roomDTO != null) {
-            if (roomDTO.getStatus() != ConstantVariableCommon.STATUS_HOTEL_3 && roomDao.deleteOne(id)) {
+            if (roomDao.deleteOne(id)) {
                 DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_room);
                 diaryDTO.setUserId(userDTOResponse.getId());
                 baseService.saveDiary(diaryDTO);
@@ -116,10 +113,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         return null;
     }
 
-    @Override
-    public List<RoomDTO> findByHotelId(int hotelId) {
-        return convertList(roomDao.findByHotelId(hotelId));
-    }
 
     @Override
     public List<RoomDTO> findByTypeRoomId(int typeRoomId) {
@@ -163,9 +156,9 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         roomDTO.setName(room.getName());
         roomDTO.setTypeRoomId(room.getTypeRoomId());
         roomDTO.setStatus(room.getStatus());
-        roomDTO.setGuest(new GuestReservationDTO());
-        roomDTO.setDateFrom(Common.getDateByMilliSeconds(System.currentTimeMillis()));
-        roomDTO.setDateTo(Common.getDateByMilliSeconds(System.currentTimeMillis()));
+//        roomDTO.setGuest(new GuestReservationDTO());
+//        roomDTO.setDateFrom(Common.getDateByMilliSeconds(System.currentTimeMillis()));
+//        roomDTO.setDateTo(Common.getDateByMilliSeconds(System.currentTimeMillis()));
 //       roomDTO.setReservation(reservationDTO);
         return roomDTO;
     }
@@ -176,8 +169,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         RoomDTO dto = findByName(roomDTO.getName());
        if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
             message = NOT_EXIST_TYPE_ROOM_ID;
-        }else if (dto != null && dto.getHotelId() == roomDTO.getHotelId()) {
-            message = ConstantVariableCommon.DUPLICATED_NAME;
         }
         return message;
     }

@@ -18,8 +18,6 @@ import java.util.List;
 @Getter
 @Setter
 public class RoomDTO extends BaseDTO {
-    @Min(value = 1,message = "Ma khach san phai lon hon 0")
-    private int hotelId;
 
     @NotBlank(message = "Ten phong khong duoc de trong")
     @Size(min = 1, max = 20, message = "Tên không dài quá 20 ký tự")
@@ -31,7 +29,7 @@ public class RoomDTO extends BaseDTO {
     private String note;
 
     private int status;
-    private GuestReservationDTO guest;
-    private String dateFrom;
-    private String dateTo;
+//    private GuestReservationDTO guest;
+//    private String dateFrom;
+//    private String dateTo;
 }

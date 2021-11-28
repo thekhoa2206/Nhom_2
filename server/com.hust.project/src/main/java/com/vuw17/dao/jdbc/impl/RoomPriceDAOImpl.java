@@ -9,7 +9,7 @@ public class RoomPriceDAOImpl extends BaseDAO<RoomPrice> implements RoomPriceDAO
 
     @Override
     public int insertOne(RoomPrice roomPrice) {
-        String sql = "INSERT INTO room_price(type_room_id,type_price_id) VALUES(?,?)";
-        return insertOne(sql,roomPrice.getTypeRoomId(),roomPrice.getTypePriceId());
+        String sql = "INSERT INTO room_price(type_room_id,type_price_id,price) VALUES(?,?,?)";
+        return insertOne(sql,roomPrice.getTypeRoomId(),roomPrice.getTypePriceId(),roomPrice.getPrice());
     }
 }

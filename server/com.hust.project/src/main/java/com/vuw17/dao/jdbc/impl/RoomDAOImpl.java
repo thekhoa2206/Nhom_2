@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class RoomDAOImpl extends BaseDAO<Room> implements RoomDAO {
     @Override
     public int insertOne(Room room) {
-        String sql = "INSERT INTO room(name,hotel_id,type_room_id,note,status) VALUES (?,?,?,?,?)";
-        return insertOne(sql,room.getName(),room.getHotelId(),room.getTypeRoomId(),room.getNote(), ConstantVariableCommon.STATUS_ROOM_1);
+        String sql = "INSERT INTO room(name,type_room_id,status) VALUES (?,?,?)";
+        return insertOne(sql,room.getName(),room.getTypeRoomId(), ConstantVariableCommon.STATUS_ROOM_1);
     }
 }

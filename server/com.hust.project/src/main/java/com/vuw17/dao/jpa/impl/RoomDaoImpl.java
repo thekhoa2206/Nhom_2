@@ -36,11 +36,11 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public boolean updateOne(Room room) {
-        String sql = "UPDATE room SET name = ?,hotel_id = ?,type_room_id = ?,note = ?,status = ? WHERE id = ?";
+        String sql = "UPDATE room SET name = ?,type_room_id = ?,status = ? WHERE id = ?";
         try {
-            entityManager.createNativeQuery(sql).setParameter(1,room.getName()).setParameter(2,room.getHotelId())
-                    .setParameter(3,room.getTypeRoomId()).setParameter(4,room.getNote())
-                    .setParameter(5, room.getNote()).setParameter(6,room.getId()).executeUpdate();
+            entityManager.createNativeQuery(sql).setParameter(1,room.getName())
+                    .setParameter(2,room.getTypeRoomId()).setParameter(3,room.getStatus())
+                   .setParameter(4,room.getId()).executeUpdate();
             return true;
         }catch (Exception e){
             return false;
@@ -79,13 +79,6 @@ public class RoomDaoImpl implements RoomDao {
             return null;
         }
     }
-
-    @Override
-    public List<Room> findByHotelId(int hotelId) {
-        String sql = "SELECT * FROM room WHERE hotel_id = ?";
-        return entityManager.createNativeQuery(sql,Room.class).setParameter(1,hotelId).getResultList();
-    }
-
     @Override
     public List<Room> findByTypeRoomId(int typeRoomId) {
         String sql = "SELECT * FROM room WHERE type_room_id = ?";

@@ -11,4 +11,6 @@ import java.util.List;
 public interface GuestDao {
     //Lay tat ca cac guests theo room id,kiem tra check in time <= thoi gian hien tai <= check out time
     List<Guest> findByRoomId(int roomId);
+    //Tim guest theo id
+    Guest findById(int id);
 }

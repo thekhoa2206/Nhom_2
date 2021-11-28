@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,14 +19,14 @@ public class TypeRoomDTO extends BaseDTO {
 
     @Min(value = 1,message = "So luong tre em phai lon hon 0")
     @Max(value = 2,message = "So luong tre em khong fuoc vuot qua 2")
-    private int numberChildren;
+    private int maxChild;
 
     @Min(value = 1,message = "So luong nguoi lon phai lon hon 0")
     @Max(value = 2,message = "So luong nguoi lon khong fuoc vuot qua 2")
-    private int numberAdult;
+    private int maxAdult;
 
     private int status;
-    @NotNull(message = "Giá không để trống")
-    @Min(value = 1,message = "Gia tien phai lon hon 0")
-    private BigDecimal price;
+
+    @NotEmpty(message = "Gia khong duoc de trong")
+    private List<TypeRoomPriceDTO> typeRoomPriceList;
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/admin/type_rooms")
+@RequestMapping("/api/admin/typerooms")
 public class TypeRoomController extends BaseController {
     private final TypeRoomService typeRoomService;
     private final UserService userService;

@@ -18,7 +18,7 @@ import java.util.List;
 public class TypeRoomDaoImpl implements TypeRoomDao {
     @PersistenceContext
     private EntityManager entityManager;
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class.toString());
+    private static final Logger LOGGER = LoggerFactory.getLogger(TypeRoomDaoImpl.class.toString());
 
     @Override
     public List<TypeRoom> findAll() {
@@ -28,11 +28,11 @@ public class TypeRoomDaoImpl implements TypeRoomDao {
 
     @Override
     public boolean updateOne(TypeRoom typeRoom) {
-        String sql = "UPDATE type_room SET name = ?,note = ?,number_children = ?,number_adult = ?,status = ? WHERE id = ?";
+        String sql = "UPDATE type_room SET name = ?,max_child = ?,max_adult = ?,status = ? WHERE id = ?";
         try {
-            entityManager.createNativeQuery(sql).setParameter(1, typeRoom.getName()).setParameter(2, typeRoom.getNote())
-                    .setParameter(3, typeRoom.getNumberChildren()).setParameter(4, typeRoom.getNumberAdult())
-                    .setParameter(5, typeRoom.getStatus()).setParameter(6, typeRoom.getId()).executeUpdate();
+            entityManager.createNativeQuery(sql).setParameter(1, typeRoom.getName())
+                    .setParameter(2, typeRoom.getMaxChild()).setParameter(3, typeRoom.getMaxAdult())
+                    .setParameter(4, typeRoom.getStatus()).setParameter(5, typeRoom.getId()).executeUpdate();
             return true;
         } catch (Exception e) {
             return false;
