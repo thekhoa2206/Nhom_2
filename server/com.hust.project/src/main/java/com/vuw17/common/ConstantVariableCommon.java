@@ -51,6 +51,10 @@ public class ConstantVariableCommon {
     public static final int STATUS_PRICE_2 = 2; // trạng thái giá phòng: ngừng sử dụng
     public static final int STATUS_PRICE_3 = 3; // trạng thái giá phòng: đã xóa
 
+    //Biến cố định của guest
+    public static final int STATUS_GUEST_1 = 1; // trạng thái khach: đang sử dụng
+    public static final int STATUS_GUEST_2 = 2; // trạng thái khach: da xoa
+
     //Biến cố định của type_room
     public static final int STATUS_TYPE_PRICE_1 = 1; // trạng thái của loại phòng: đang ap dụng
     public static final int STATUS_TYPE_PRICE_2 = 2; // trạng thái của loại phòng: ngưng ap dụng

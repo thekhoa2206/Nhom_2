@@ -12,5 +12,6 @@ public class StartWebServer {
     public static void main(String[] args){
         SpringApplication.run(StartWebServer.class, args);
         System.out.println(Common.GeneratePassword("admin"));
+        System.out.println(System.currentTimeMillis());
     }
 }
