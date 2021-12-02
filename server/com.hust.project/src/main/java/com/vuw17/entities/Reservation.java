@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @Table(name = "reservation")
 @Getter
 @Setter
-@AllArgsConstructor
 public class Reservation extends BaseEntity {
     @Column(name = "note", nullable = true)
     private String note;

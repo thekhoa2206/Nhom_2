@@ -4,9 +4,9 @@ public class ConstantVariableCommon {
     public static final String AUTHORIZATION = "Authorization";
 
     // biến cố định của Reservation
-    public static final int STATUS_RESERVATION_1 = 1; // trạng thái chờ xử lý
-    public static final int STATUS_RESERVATION_2 = 2; // trạng thái đã xác nhận
-    public static final int STATUS_RESERVATION_3 = 3; // trạng thái đã nhận phòng
+    public static final int STATUS_RESERVATION_1 = 1; // trạng thái đã đặt phòng
+    public static final int STATUS_RESERVATION_2 = 2; // trạng thái đã nhận phòng
+    public static final int STATUS_RESERVATION_3 = 3; // trạng thái đã hoàn thành
     public static final int STATUS_RESERVATION_4 = 4; // trạng thái đã hủy
 
     // biến cố định của Room
@@ -129,4 +129,11 @@ public class ConstantVariableCommon {
     public static final String UPDATE_SUCCESSFUL = "Update Successful!";
     public static final String DELETE_SUCCESSFUL = "Delete Successful!";
 
+
+    public static String changeIntToStringReservationStatus(int status){
+        if(status == STATUS_RESERVATION_1) return "Chờ nhận phòng";
+        else if(status == STATUS_RESERVATION_2) return "Đã nhận phòng";
+        else if(status == STATUS_RESERVATION_3) return "Hoàn thành";
+        else return "Đã hủy";
+    }
 }
