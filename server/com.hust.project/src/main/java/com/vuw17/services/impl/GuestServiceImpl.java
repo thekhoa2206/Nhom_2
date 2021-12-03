@@ -21,21 +21,11 @@ import java.util.List;
 
 @Service
 public class GuestServiceImpl extends CommonService implements GuestService {
-    private final TableDiaryDAO tableDiaryDAO;
-    private final TypeActionDAO typeActionDAO;
-    private final TypeActionDao typeActionDao;
-    private final TableDiaryDao tableDiaryDao;
-    private final BaseService baseService;
     private final GuestDao guestDao;
     private final GuestDAO guestDAO;
 
     public GuestServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, GuestDao guestDao, GuestDAO guestDAO) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
-        this.tableDiaryDAO = tableDiaryDAO;
-        this.typeActionDAO = typeActionDAO;
-        this.typeActionDao = typeActionDao;
-        this.tableDiaryDao = tableDiaryDao;
-        this.baseService = baseService;
         this.guestDao = guestDao;
         this.guestDAO = guestDAO;
     }

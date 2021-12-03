@@ -25,10 +25,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private final RoomDao roomDao;
     private final RoomDAO roomDAO;
     private final TypeRoomDao typeRoomDao;
-    private final TableDiaryDAO tableDiaryDAO;
-    private final TypeActionDAO typeActionDAO;
-    private final TypeActionDao typeActionDao;
-    private final TableDiaryDao tableDiaryDao;
     private final BaseServiceImpl baseService;
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
@@ -37,10 +33,6 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
         this.typeRoomDao = typeRoomDao;
-        this.tableDiaryDAO = tableDiaryDAO;
-        this.typeActionDAO = typeActionDAO;
-        this.typeActionDao = typeActionDao;
-        this.tableDiaryDao = tableDiaryDao;
         this.baseService = baseService;
     }
 
@@ -169,6 +161,9 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         RoomDTO dto = findByName(roomDTO.getName());
        if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
             message = NOT_EXIST_TYPE_ROOM_ID;
+        }
+        if(typeRoomDao.findByName(roomDTO.getName()) == null){
+            message = "Trung ten";
         }
         return message;
     }

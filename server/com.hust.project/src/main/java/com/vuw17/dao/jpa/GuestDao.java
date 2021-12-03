@@ -14,7 +14,9 @@ public interface GuestDao {
     List<Guest> findByRoomId(int roomId);
     //Tim guest theo id
     Guest findById(int id);
+    //Tim guest theo id card
     Guest findByIdCard(String idCard);
+    //Tim guest theo phone number
     Guest findByPhoneNumber(String phoneNumber);
     //Lay tat ca guest
     List<Guest> findAll();
