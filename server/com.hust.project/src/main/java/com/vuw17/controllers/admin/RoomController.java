@@ -18,12 +18,10 @@ import java.util.List;
 @RequestMapping("/api/admin/rooms")
 public class RoomController extends BaseController {
     private final RoomService roomService;
-    private final UserService userService;
 
     public RoomController(RoomService roomService, UserService userService) {
         super(userService);
         this.roomService = roomService;
-        this.userService = userService;
     }
 
     @PostMapping()

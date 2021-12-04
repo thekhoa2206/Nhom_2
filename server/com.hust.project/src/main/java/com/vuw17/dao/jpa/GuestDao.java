@@ -1,5 +1,6 @@
 package com.vuw17.dao.jpa;
 
+import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.entities.Guest;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,13 @@ public interface GuestDao {
     List<Guest> findByRoomId(int roomId);
     //Tim guest theo id
     Guest findById(int id);
+    //Tim guest theo id card
+    Guest findByIdCard(String idCard);
+    //Tim guest theo phone number
+    Guest findByPhoneNumber(String phoneNumber);
+    //Lay tat ca guest
+    List<Guest> findAll();
+    //Search Guest by keyword : phone number,id card
+    List<Guest> findByKeyword(String keyword);
+    
 }

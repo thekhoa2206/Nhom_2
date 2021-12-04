@@ -34,4 +34,44 @@ public class GuestDaoImpl implements GuestDao {
             return null;
         }
     }
+
+    @Override
+    public Guest findByIdCard(String idCard) {
+        String sql = "SELECT * FROM guest WHERE id_card = ?";
+        try{
+            return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,idCard).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public Guest findByPhoneNumber(String phoneNumber) {
+        String sql = "SELECT * FROM guest WHERE phone_number = ?";
+        try{
+            return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,phoneNumber).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public List<Guest> findAll() {
+        String sql = "SELECT * FROM guest";
+        try{
+            return entityManager.createNativeQuery(sql,Guest.class).getResultList();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public List<Guest> findByKeyword(String keyword) {
+        String sql = "SELECT * FROM guest WHERE phone_number LIKE '%"+keyword+"%' OR "+"id_card LIKE '%"+keyword+"%'";
+        try{
+            return entityManager.createNativeQuery(sql,Guest.class).getResultList();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

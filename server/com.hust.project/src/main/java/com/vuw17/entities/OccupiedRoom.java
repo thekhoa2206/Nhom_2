@@ -26,6 +26,6 @@ public class OccupiedRoom extends BaseEntity{
     @Column(name = "room_id", nullable = false)
     private int roomId;
 
-    @Column(name = "bill_id", nullable = false)
+    @Column(name = "bill_id")
     private int billId;
 }

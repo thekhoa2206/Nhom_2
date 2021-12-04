@@ -73,6 +73,9 @@ public class BaseDAO<T> implements GenericDAO<T> {
                 if (parameter instanceof BigDecimal) {
                     preparedStatement.setBigDecimal(index, (BigDecimal) parameter);
                 }
+                if (parameter instanceof Long) {
+                    preparedStatement.setLong(index, (Long) parameter);
+                }
                 if (parameter instanceof Boolean) {
                     System.out.println("Boolean");
                     preparedStatement.setBoolean(index, (boolean) parameter);
