@@ -70,14 +70,3 @@ export function useCreatePrice() {
     }
     return { createPrice }
 }
-export function useGetLyric2() {
-    // const { response, isLoading } = useAxios({
-    //     method: 'get',
-    //     url: "https://api.lyrics.ovh/v1/Coldplay/Fix You",
-    //     data: {}
-    // })
-    // return {
-    //     lyrics: response?.lyrics,
-    //     isLoading: isLoading
-    // }
-}
