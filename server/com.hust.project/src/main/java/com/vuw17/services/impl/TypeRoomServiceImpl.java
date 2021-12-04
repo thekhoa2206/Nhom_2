@@ -23,10 +23,6 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     private final TypeRoomDao typeRoomDao;
     private final TypeRoomDAO typeRoomDAO;
     private final RoomPriceDAO roomPriceDAO;
-    private final TableDiaryDAO tableDiaryDAO;
-    private final TypeActionDAO typeActionDAO;
-    private final TypeActionDao typeActionDao;
-    private final TableDiaryDao tableDiaryDao;
     private final BaseService baseService;
     private final RoomPriceDao roomPriceDao;
 
@@ -35,10 +31,6 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         this.typeRoomDao = typeRoomDao;
         this.typeRoomDAO = typeRoomDAO;
         this.roomPriceDAO = roomPriceDAO;
-        this.tableDiaryDAO = tableDiaryDAO;
-        this.typeActionDAO = typeActionDAO;
-        this.typeActionDao = typeActionDao;
-        this.tableDiaryDao = tableDiaryDao;
         this.baseService = baseService;
         this.roomPriceDao = roomPriceDao;
     }
