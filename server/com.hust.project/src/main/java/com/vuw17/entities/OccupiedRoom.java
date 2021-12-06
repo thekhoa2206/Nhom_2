@@ -25,7 +25,4 @@ public class OccupiedRoom extends BaseEntity{
     private BigDecimal deposit;
     @Column(name = "room_id", nullable = false)
     private int roomId;
-
-    @Column(name = "bill_id")
-    private int billId;
 }

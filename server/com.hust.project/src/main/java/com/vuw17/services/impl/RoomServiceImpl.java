@@ -39,8 +39,10 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     @Override
     public int insertOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse) {
         String message = checkInput(roomDTO);
+        System.out.println("Message = "+message);
         if (message == null) {
             int id = roomDAO.insertOne(toEntity(roomDTO));
+            System.out.println("HELLOOO");
             if(id > 0){
                 DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,id,ConstantVariableCommon.table_room);
                 diaryDTO.setUserId(userDTOResponse.getId());
@@ -48,6 +50,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
                 return id;
             }
         }
+        System.out.println("HELLOOO1111");
         return 0;
     }
 
@@ -158,11 +161,10 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     @Override
     public String checkInput(RoomDTO roomDTO) {
         String message = null;
-        RoomDTO dto = findByName(roomDTO.getName());
        if(typeRoomDao.findById(roomDTO.getTypeRoomId()) == null){
             message = NOT_EXIST_TYPE_ROOM_ID;
         }
-        if(typeRoomDao.findByName(roomDTO.getName()) == null){
+        if(roomDao.findByName(roomDTO.getName()) != null){
             message = "Trung ten";
         }
         return message;
