@@ -19,15 +19,17 @@ import java.util.List;
 @Service
 public class CheckInServiceImpl extends CommonService implements CheckInService {
     private final OccupiedRoomDAO occupiedRoomDAO;
+    private final OccupiedRoomDao occupiedRoomDao;
     private final ServiceUsedDAO serviceUsedDAO;
     private final HostedAtDAO hostedAtDAO;
     private final GuestDao guestDao;
     private final ServiceDao serviceDao;
     private final RoomDao roomDao;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, ServiceUsedDAO serviceUsedDAO, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
+        this.occupiedRoomDao = occupiedRoomDao;
         this.serviceUsedDAO = serviceUsedDAO;
         this.hostedAtDAO = hostedAtDAO;
         this.guestDao = guestDao;
@@ -41,7 +43,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
         List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
         //Insert occupied_room -> insert service_used -> insert hosted_at
-        if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null) {
+        if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
             //create a object OccupiedRoom to insert into table occupied_room
             OccupiedRoom occupiedRoom = new OccupiedRoom();
             occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
@@ -58,7 +60,18 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             }
 
         }
-        return -1;
+        return 0;
+    }
+
+    @Override
+    public boolean isOccupied(int roomId) {
+        List<OccupiedRoom> occupiedRooms = occupiedRoomDao.findOccupiedRooms();
+        for(int i = 0;i < occupiedRooms.size();i++){
+            if(occupiedRooms.get(i).getRoomId() == roomId){
+                return true;
+            }
+        }
+        return false;
     }
 
     //    insert service_used

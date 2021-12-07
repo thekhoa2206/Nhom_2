@@ -23,13 +23,19 @@ DROP TABLE IF EXISTS `bill`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bill` (
+<<<<<<< HEAD
   `id` int NOT NULL AUTO_INCREMENT,
   `status` int NOT NULL,
-  `reduced_fee` decimal(13,2) NOT NULL,
-  `additional_fee` decimal(13,2) NOT NULL,
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `payment_method` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+=======
+  `id` int(11) NOT NULL,
+  `occupied_room_id` int(11) NOT NULL,
+  `bill_details_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_occupied_room_id` (`occupied_room_id`),
+  KEY `fk_bill_details_id` (`bill_details_id`),
+  CONSTRAINT `fk_bill_details_id` FOREIGN KEY (`bill_details_id`) REFERENCES `bill_details` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_occupied_room_id` FOREIGN KEY (`occupied_room_id`) REFERENCES `occupied_room` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,6 +46,34 @@ CREATE TABLE `bill` (
 LOCK TABLES `bill` WRITE;
 /*!40000 ALTER TABLE `bill` DISABLE KEYS */;
 /*!40000 ALTER TABLE `bill` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bill_details`
+--
+
+DROP TABLE IF EXISTS `bill_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bill_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `status` int(11) NOT NULL,
+>>>>>>> letiencao
+  `reduced_fee` decimal(13,2) NOT NULL,
+  `additional_fee` decimal(13,2) NOT NULL,
+  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `payment_method` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bill_details`
+--
+
+LOCK TABLES `bill_details` WRITE;
+/*!40000 ALTER TABLE `bill_details` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bill_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -61,7 +95,7 @@ CREATE TABLE `diary` (
   KEY `fk_diary_table_diary_id` (`table_diary_id`),
   CONSTRAINT `fk_diary_table_diary_id` FOREIGN KEY (`table_diary_id`) REFERENCES `table_diary` (`id`),
   CONSTRAINT `fk_diary_type_action_id` FOREIGN KEY (`type_action_id`) REFERENCES `type_action` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +104,7 @@ CREATE TABLE `diary` (
 
 LOCK TABLES `diary` WRITE;
 /*!40000 ALTER TABLE `diary` DISABLE KEYS */;
-INSERT INTO `diary` VALUES (1,1,1,'Thêm mới bản ghi type_price',1638045227989,1),(2,1,2,'Thêm mới bản ghi room_price',1638072571679,1),(3,1,3,'Thêm mới bản ghi type_room',1638072571711,1);
+INSERT INTO `diary` VALUES (1,1,1,'Thêm mới bản ghi type_price',1638045227989,1),(2,1,2,'Thêm mới bản ghi room_price',1638072571679,1),(3,1,3,'Thêm mới bản ghi type_room',1638072571711,1),(4,1,4,'Thêm mới bản ghi room',1638817327094,1),(5,1,5,'Thêm mới bản ghi guest',1638817355703,1),(6,1,6,'Thêm mới bản ghi guest',1638817379031,1),(7,1,7,'Thêm mới bản ghi guest',1638817408049,1),(8,1,8,'Thêm mới bản ghi service',1638817439933,1),(9,1,9,'Thêm mới bản ghi service',1638817451570,1),(10,1,10,'Thêm mới bản ghi occupied_room',1638817456039,1),(11,1,11,'Thêm mới bản ghi service_used',1638817456060,1),(12,1,12,'Thêm mới bản ghi service_used',1638817456075,1),(13,1,13,'Thêm mới bản ghi hosted_at',1638817456089,1),(14,1,14,'Thêm mới bản ghi hosted_at',1638817456101,1);
 /*!40000 ALTER TABLE `diary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +127,7 @@ CREATE TABLE `guest` (
   `id_card` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `status` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,6 +136,7 @@ CREATE TABLE `guest` (
 
 LOCK TABLES `guest` WRITE;
 /*!40000 ALTER TABLE `guest` DISABLE KEYS */;
+INSERT INTO `guest` VALUES (1,'tung','nguyen',1638206091445,'Việt Nam','Hà Nội','0989888997','tungnguyen@gmail.com','333333333333',1),(2,'le','cao',1638206091445,'Việt Nam','Hà Nội','0989888998','letiencao@gmail.com','111111111111',1),(3,'nguyen','nguyen',1638206091445,'Việt Nam','Hà Nội','0989888999','nguyenluongnguyen@gmail.com','222222222222',1);
 /*!40000 ALTER TABLE `guest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +156,7 @@ CREATE TABLE `hosted_at` (
   KEY `fk_hosted_at_guest_id` (`guest_id`),
   CONSTRAINT `fk_hosted_at_guest_id` FOREIGN KEY (`guest_id`) REFERENCES `guest` (`id`),
   CONSTRAINT `fk_hosted_at_occupied_room_id` FOREIGN KEY (`occupied_room_id`) REFERENCES `occupied_room` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,6 +165,7 @@ CREATE TABLE `hosted_at` (
 
 LOCK TABLES `hosted_at` WRITE;
 /*!40000 ALTER TABLE `hosted_at` DISABLE KEYS */;
+INSERT INTO `hosted_at` VALUES (1,1,1),(2,1,2);
 /*!40000 ALTER TABLE `hosted_at` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,14 +210,16 @@ CREATE TABLE `occupied_room` (
   `check_out_time` bigint NOT NULL,
   `status` int NOT NULL,
   `deposit` decimal(13,2) NOT NULL,
+<<<<<<< HEAD
   `room_id` int NOT NULL,
   `bill_id` int NOT NULL,
+=======
+  `room_id` int(11) NOT NULL,
+>>>>>>> letiencao
   PRIMARY KEY (`id`),
   KEY `fk_occupied_room_room_id` (`room_id`),
-  KEY `fk_occupied_room_bill_id` (`bill_id`),
-  CONSTRAINT `fk_occupied_room_bill_id` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`id`),
   CONSTRAINT `fk_occupied_room_room_id` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,6 +228,7 @@ CREATE TABLE `occupied_room` (
 
 LOCK TABLES `occupied_room` WRITE;
 /*!40000 ALTER TABLE `occupied_room` DISABLE KEYS */;
+INSERT INTO `occupied_room` VALUES (1,1638495416974,1648495416974,1,1000000.00,1);
 /*!40000 ALTER TABLE `occupied_room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,7 +476,7 @@ CREATE TABLE `room` (
   PRIMARY KEY (`id`),
   KEY `fk_room_type_room_id` (`type_room_id`),
   CONSTRAINT `fk_room_type_room_id` FOREIGN KEY (`type_room_id`) REFERENCES `type_room` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -446,6 +485,7 @@ CREATE TABLE `room` (
 
 LOCK TABLES `room` WRITE;
 /*!40000 ALTER TABLE `room` DISABLE KEYS */;
+INSERT INTO `room` VALUES (1,'101',1,1);
 /*!40000 ALTER TABLE `room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -523,7 +563,7 @@ CREATE TABLE `service` (
   `status` int NOT NULL,
   `price` decimal(13,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,6 +572,7 @@ CREATE TABLE `service` (
 
 LOCK TABLES `service` WRITE;
 /*!40000 ALTER TABLE `service` DISABLE KEYS */;
+INSERT INTO `service` VALUES (1,'Mai dam','',1,200000.00),(2,'Giat la','',1,50000.00);
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -553,7 +594,7 @@ CREATE TABLE `service_used` (
   KEY `fk_service_used_service_id` (`service_id`),
   CONSTRAINT `fk_service_used_occupied_room_id` FOREIGN KEY (`occupied_room_id`) REFERENCES `occupied_room` (`id`),
   CONSTRAINT `fk_service_used_service_id` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -562,6 +603,7 @@ CREATE TABLE `service_used` (
 
 LOCK TABLES `service_used` WRITE;
 /*!40000 ALTER TABLE `service_used` DISABLE KEYS */;
+INSERT INTO `service_used` VALUES (1,1,1,2,1),(2,1,2,2,1);
 /*!40000 ALTER TABLE `service_used` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -601,7 +643,7 @@ CREATE TABLE `table_diary` (
   `row_id` int NOT NULL,
   `table_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -610,7 +652,7 @@ CREATE TABLE `table_diary` (
 
 LOCK TABLES `table_diary` WRITE;
 /*!40000 ALTER TABLE `table_diary` DISABLE KEYS */;
-INSERT INTO `table_diary` VALUES (1,1,'type_price'),(2,1,'room_price'),(3,1,'type_room');
+INSERT INTO `table_diary` VALUES (1,1,'type_price'),(2,1,'room_price'),(3,1,'type_room'),(4,1,'room'),(5,1,'guest'),(6,2,'guest'),(7,3,'guest'),(8,1,'service'),(9,2,'service'),(10,1,'occupied_room'),(11,1,'service_used'),(12,2,'service_used'),(13,1,'hosted_at'),(14,2,'hosted_at');
 /*!40000 ALTER TABLE `table_diary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -853,4 +895,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+<<<<<<< HEAD
 -- Dump completed on 2021-12-02 22:46:06
+=======
+-- Dump completed on 2021-12-07  2:05:08
+>>>>>>> letiencao
