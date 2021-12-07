@@ -18,5 +18,4 @@ public class ReservationDetailDTOResponse {
     private int numberRoom;
     private String nameCustomer;
     private String phoneCustomer;
-    private List<RoomReservationDTOResponse> listRoom;
 }

@@ -2,7 +2,6 @@ package com.vuw17.dao.jpa.impl;
 
 import com.vuw17.dao.jpa.ReservationDao;
 import com.vuw17.entities.Reservation;
-import com.vuw17.entities.ReservationRoom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -52,14 +51,5 @@ public class ReservationDaoImpl implements ReservationDao {
         }
     }
 
-    //Hàm tìm reservation_room bằng reservation_id
-    @Override
-    public List<ReservationRoom> findReservationRoomByReservationId(int id){
-        String sql = "SELECT * FROM reservation_room WHERE reservation_id = ?";
-        try{
-            return  entityManager.createNativeQuery(sql, Reservation.class).setParameter(1, id).getResultList();
-        }catch (Exception e){
-            return new ArrayList<>();
-        }
-    }
+
 }

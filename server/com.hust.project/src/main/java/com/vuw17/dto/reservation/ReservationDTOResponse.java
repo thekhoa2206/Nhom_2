@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +16,6 @@ public class ReservationDTOResponse {
     private int numberRoom;
     private String nameCustomer;
     private String phoneCustomer;
-    private List<RoomReservationDTOResponse> listRoom;
 
 
 }

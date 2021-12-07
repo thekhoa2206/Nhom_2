@@ -7,10 +7,8 @@ import com.vuw17.dao.jpa.ReservationDao;
 import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dto.reservation.ReservationDTOResponse;
 import com.vuw17.dto.reservation.ReservationDetailDTOResponse;
-import com.vuw17.dto.reservation.RoomReservationDTOResponse;
 import com.vuw17.entities.Guest;
 import com.vuw17.entities.Reservation;
-import com.vuw17.entities.ReservationRoom;
 import com.vuw17.entities.Room;
 import com.vuw17.repositories.ReservationRepository;
 import com.vuw17.services.ReservationService;
@@ -55,15 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
     //Hàm chuyển từ  Reservation sang  ReservationDTO
     private ReservationDTOResponse transferReservationToReservationDTO(Reservation reservation){
         Guest guest = guestDao.findById(reservation.getGuestId());
-        List<RoomReservationDTOResponse> roomReservationDTOResponses = new ArrayList<>();
-        List<ReservationRoom> reservationRooms = reservationDao.findReservationRoomByReservationId(reservation.getId());
-        for (ReservationRoom reservationRoom:reservationRooms) {
-            Room room = roomDao.findById(reservationRoom.getRoomId());
-            RoomReservationDTOResponse roomReservationDTOResponse = new RoomReservationDTOResponse();
-            roomReservationDTOResponse.setNameRoom(room.getName());
-            roomReservationDTOResponses.add(roomReservationDTOResponse);
-        }
-        ReservationDTOResponse reservationDTOResponse = new ReservationDTOResponse(reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber(),roomReservationDTOResponses);
+        ReservationDTOResponse reservationDTOResponse = new ReservationDTOResponse(reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber());
         return reservationDTOResponse;
     }
     //Hàm tìm kiếm reservation bằng id
@@ -77,15 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
     //Hàm chuyển từ  Reservation sang  ReservationDTO
     private ReservationDetailDTOResponse transferReservationToReservationDTODetail(Reservation reservation){
         Guest guest = guestDao.findById(reservation.getGuestId());
-        List<RoomReservationDTOResponse> roomReservationDTOResponses = new ArrayList<>();
-        List<ReservationRoom> reservationRooms = reservationDao.findReservationRoomByReservationId(reservation.getId());
-        for (ReservationRoom reservationRoom:reservationRooms) {
-            Room room = roomDao.findById(reservationRoom.getRoomId());
-            RoomReservationDTOResponse roomReservationDTOResponse = new RoomReservationDTOResponse();
-            roomReservationDTOResponse.setNameRoom(room.getName());
-            roomReservationDTOResponses.add(roomReservationDTOResponse);
-        }
-        ReservationDetailDTOResponse reservationDetailDTOResponse = new ReservationDetailDTOResponse(reservation.getId(), reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber(),roomReservationDTOResponses);
+        ReservationDetailDTOResponse reservationDetailDTOResponse = new ReservationDetailDTOResponse(reservation.getId(), reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber());
         return reservationDetailDTOResponse;
     }
 }
