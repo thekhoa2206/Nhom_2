@@ -14,6 +14,7 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import CustomListItem from "./customListItem"
 import CustomNestedList from "./customNestedList"
@@ -46,6 +47,12 @@ function Sidebar(props) {
                     primary={"Register"}
                     icon={<VpnKeyIcon />}
                     roles={["ROLE_ADMIN"]}
+                />
+                <CustomListItem
+                    to={"/reservation"}
+                    primary={"Đặt phòng"}
+                    icon={<CalendarTodayIcon />}
+                    roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
                 <CustomNestedList
                     primaryFather={"Statistics"}

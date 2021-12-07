@@ -9,6 +9,7 @@ import Statistics from '../modules/statistics/statistics';
 import Register from '../modules/auth/register';
 import RoomManagement from '../modules/rooms/roomsManagement';
 import Statistics2 from '../modules/statistics/statistics2';
+import Reservation from '../modules/reservation/reservation'
 function Routes(props) {
     return (
         <Switch>
@@ -32,6 +33,12 @@ function Routes(props) {
                 path="/home"
                 exact
                 component={Home}
+                roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+            />
+            <ProtectedRoute
+                path="/reservation"
+                exact
+                component={Reservation}
                 roles={['ROLE_ADMIN', 'ROLE_STAFF']}
             />
             <ProtectedRoute
