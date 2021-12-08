@@ -9,25 +9,58 @@ import Loading from '../../common-components/Loading';
 import { useAppState } from '../../AppState';
 import { uniqueId } from 'lodash';
 import useStyles from "./reservation.styles";
+import ReservationService from '../../services/reservation/reservation';
+import DialogDetailReservation from './DialogDetailReservation/DialogDetailReservation';
 
 function Reservation(props) {
     const classes = useStyles();
-    const [state1, setState] = useState(() => initState())
-    const [state] = useAppState()
-    const { price1, isOpenModal } = state1
-    function initState() {
-        return {
-            users: [],
-            price1: [],
-            isOpenModal: false
+    const [reservations, setReServations] = useState([
+        {
+            id: 0,
+            nameCustomer: "",
+            phoneCustomer:"",
+            numberRoom:0,
+            fromDate:"",
+            toDate: "",
+            status: "",
         }
-    }
+    ])
+    const [filters, setFilters] = useState({
+        keyword: ""
+    });
+    const [showDetailReservation, setShowDetailReservation] = useState(false);
+    const [reservationChoose, setReservationChoose] = useState({
+        id: 0,
+        nameCustomer: "",
+        phoneCustomer:"",
+        numberRoom: 0,
+        fromDate:"",
+        toDate: "",
+        status: "",
+    });
     useEffect(() => {
-        let params = {
-            keyword: "vip",
-            status: 1
+        try{
+            ReservationService.getListReservationByParam(filters).then((res) =>{
+                console.log(res.data)
+                setReServations(
+                    res.data.map((reservation) => {
+                        return {
+                            id: reservation.id,
+                            nameCustomer: reservation.reservationGuestDTO.nameCustomer,
+                            phoneCustomer:reservation.reservationGuestDTO.phoneCustomer,
+                            numberRoom: reservation.numberRoom,
+                            fromDate: reservation.fromDate,
+                            toDate: reservation.toDate,
+                            status: reservation.status,
+                        }
+                    })
+                )
+            })
+        }catch(error){
+
         }
-    }, [])
+    }, [filters])
+    
 
     const columns = [
         {
@@ -52,81 +85,77 @@ function Reservation(props) {
                 );
             }
         },
-        { field: 'nameCustomer', headerName: 'Tên khách', type: 'text', width: 160 },
+        { field: 'nameCustomer', headerName: 'Tên khách', type: 'text', width: 180, headerAlign: 'center', align: "center",},
         {
-            field: 'phoneNumber',
+            field: 'phoneCustomer',
             headerName: 'Số điện thoại',
             headerAlign: 'center',
             type: 'text',
-            width: 150,
-        },
-        {
-            field: 'fromDate',
-            headerName: 'Ngày đến',
-            headerAlign: 'center',
-            type: 'text',
-            width: 160,
-        },
-        {
-            field: 'toDate',
-            headerName: 'Ngày đi',
-            headerAlign: 'center',
-            type: 'text',
-            width: 160,
+            minWidth: 150,
+            align: "center",
         },
         {
             field: 'numberRoom',
             headerName: 'Số phòng',
             headerAlign: 'center',
             type: 'text',
-            width: 160,
+            minWidth: 160,
+            align: "center",
         },
         {
-            field: 'numberPeople',
-            headerName: 'Số người',
+            field: 'fromDate',
+            headerName: 'Ngày đến',
             headerAlign: 'center',
             type: 'text',
-            width: 160,
+            minWidth: 220,
+            align: "center",
+        },
+        {
+            field: 'toDate',
+            headerName: 'Ngày đi',
+            headerAlign: 'center',
+            type: 'text',
+            minWidth: 220,
+            align: "center",
         },
         {
             field: 'status',
             headerName: 'Trạng thái',
             headerAlign: 'center',
             type: 'text',
-            width: 160,
-        },
+            minWidth: 160,
+            align: "center",
+        }
     ];
     const handleClick = (event, cellValues) => {
-        alert(cellValues.row.name);
+        console.log(cellValues);
     };
 
-    const openModalAddNewUser = () => {
-        setState({
-            ...state1,
-            isOpenModal: !isOpenModal
-        })
-    }
-
-    const handleCellClick = (param, event) => {
-        event.stopPropagation();
+    const handleCellClick = (params) => {
+        setShowDetailReservation(true);
+        setReservationChoose(params.row)
     };
 
     const handleRowClick = (param, event) => {
+        console.log("show")
         event.stopPropagation();
     };
     return (
         <React.Fragment>
             <React.Fragment>
-                    <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd} onClick={openModalAddNewUser}>
+                    <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd}>
                         Đặt phòng
                     </Button>
+                    <Box>
+                        <DialogDetailReservation open={showDetailReservation} reservationChoose={reservationChoose}/>
+                    </Box>
                     <DataGrid
                         autoHeight
-                        rows={price1}
+                        rows={reservations}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
-                        onCellClick={handleCellClick}
+                        onCellClick={(param) => handleCellClick(param)}
                         onRowClick={handleRowClick}
                     />
                 </React.Fragment>

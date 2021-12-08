@@ -21,21 +21,15 @@ public class ReservationDaoImpl implements ReservationDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationDaoImpl.class.toString());
 
     @Override
-    public List<Reservation> findReservationByParam(String keyword, int status){
+    public List<Reservation> findReservationByParam(String keyword){
         String sql = "SELECT * FROM reservation WHERE 1 = 1 ";
 
         if(keyword != null && keyword.length() !=0 ){
             sql = sql + " AND  reservation.note LIKE CONCAT('%',LCASE(:keyword),'%') ";
         }
-        if(status > 0) {
-            sql = sql + " AND reservation.status = :status";
-        }
         Query query = entityManager.createNativeQuery(sql, Reservation.class);
         if(keyword != null && keyword.length() !=0 ){
             query.setParameter("keyword", keyword);
-        }
-        if(status > 0){
-            query.setParameter("status", status);
         }
         List<Reservation> reservations = query.getResultList();
         return reservations;

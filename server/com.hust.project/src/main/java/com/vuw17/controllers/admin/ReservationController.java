@@ -19,8 +19,8 @@ public class ReservationController {
     }
     //API lấy danh sách đặt phòng
     @GetMapping("/list")
-    public ResponseEntity<List<ReservationDTOResponse>> listReservation(@RequestParam String keyword, @RequestParam int status){
-        List<ReservationDTOResponse> reservationDTOResponses = reservationService.findAllReservationByKeyword(keyword, status);
+    public ResponseEntity<List<ReservationDTOResponse>> listReservation(@RequestParam String keyword){
+        List<ReservationDTOResponse> reservationDTOResponses = reservationService.findAllReservationByKeyword(keyword);
         return ResponseEntity.ok(reservationDTOResponses);
     }
     //API xem chi tiết đơn đặt phòng

@@ -7,6 +7,7 @@ import com.vuw17.dao.jpa.ReservationDao;
 import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dto.reservation.ReservationDTOResponse;
 import com.vuw17.dto.reservation.ReservationDetailDTOResponse;
+import com.vuw17.dto.reservation.ReservationGuestDTO;
 import com.vuw17.entities.Guest;
 import com.vuw17.entities.Reservation;
 import com.vuw17.entities.Room;
@@ -34,8 +35,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     // Hàm lấy danh sách và lọc theo keyword và trạng thái của đơn đặt phòng
     @Override
-    public List<ReservationDTOResponse> findAllReservationByKeyword(String keyword, int status){
-        List<Reservation> reservations = reservationDao.findReservationByParam(keyword, status);
+    public List<ReservationDTOResponse> findAllReservationByKeyword(String keyword){
+        List<Reservation> reservations = reservationDao.findReservationByParam(keyword);
         List<ReservationDTOResponse> reservationDTOResponses = transferReservationToReservationDTO(reservations);
         return reservationDTOResponses;
     }
@@ -53,7 +54,8 @@ public class ReservationServiceImpl implements ReservationService {
     //Hàm chuyển từ  Reservation sang  ReservationDTO
     private ReservationDTOResponse transferReservationToReservationDTO(Reservation reservation){
         Guest guest = guestDao.findById(reservation.getGuestId());
-        ReservationDTOResponse reservationDTOResponse = new ReservationDTOResponse(reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber());
+        ReservationGuestDTO reservationGuestDTO = new ReservationGuestDTO(guest.getFirstName()+" "+guest.getLastName(), guest.getPhoneNumber());
+        ReservationDTOResponse reservationDTOResponse = new ReservationDTOResponse( reservation.getId(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), reservationGuestDTO);
         return reservationDTOResponse;
     }
     //Hàm tìm kiếm reservation bằng id

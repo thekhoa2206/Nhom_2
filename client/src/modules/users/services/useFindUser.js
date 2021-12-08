@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getCookie } from "../../../config";
+import { clearCookie, getCookie } from "../../../config";
 import { useAppState } from '../../../AppState';
 
 export default function useFindUser() {
@@ -15,6 +15,7 @@ export default function useFindUser() {
                     dispatch({ type: 'GET_USER', payload: { data: res.data } })
                 }).catch(err => {
                     console.log(err.response);
+                    clearCookie();
                 });
         }
     }

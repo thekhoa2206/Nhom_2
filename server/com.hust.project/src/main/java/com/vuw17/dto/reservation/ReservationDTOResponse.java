@@ -9,13 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ReservationDTOResponse {
-    private String note;
+    private int id;
     private String fromDate;
     private String toDate;
     private String status;
     private int numberRoom;
-    private String nameCustomer;
-    private String phoneCustomer;
-
-
+    ReservationGuestDTO reservationGuestDTO;
 }

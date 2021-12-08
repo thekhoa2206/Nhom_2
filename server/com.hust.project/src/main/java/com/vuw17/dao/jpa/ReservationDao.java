@@ -9,7 +9,7 @@ import java.util.List;
 public interface ReservationDao {
 
     //Hàm lấy danh sách reservation theo param
-    List<Reservation> findReservationByParam(String keyword, int status);
+    List<Reservation> findReservationByParam(String keyword);
 
     //hàm tìm reservation theo id
     Reservation findReservationById(int id);

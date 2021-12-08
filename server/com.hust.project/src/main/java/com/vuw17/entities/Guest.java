@@ -37,6 +37,9 @@ public class Guest extends BaseEntity {
     @Column(name = "id_card", nullable = true, length = 50)
     private String idCard;
 
+    @Column(name = "status")
+    private int status;
+
 
 
 }
