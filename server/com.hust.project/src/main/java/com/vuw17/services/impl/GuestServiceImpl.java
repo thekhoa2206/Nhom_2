@@ -59,6 +59,11 @@ public class GuestServiceImpl extends CommonService implements GuestService {
         return list;
     }
 
+    @Override
+    public GuestDTO findById(int id) {
+        return toDTO(guestDao.findById(id));
+    }
+
     public Guest toEntity(GuestDTO guestDTO){
         Guest guest = new Guest();
         guest.setFirstName(guestDTO.getFirstName());

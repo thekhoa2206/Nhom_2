@@ -4,6 +4,7 @@ import com.vuw17.controllers.BaseController;
 import com.vuw17.dto.InsertResponse;
 import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.room.RoomDTO;
+import com.vuw17.dto.room.RoomDTOResponse;
 import com.vuw17.services.RoomService;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +31,12 @@ public class RoomController extends BaseController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+    public ResponseEntity<List<RoomDTOResponse>> getAllRooms() {
         return ResponseEntity.ok(roomService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomDTO> getRoom(@PathVariable int id) {
+    public ResponseEntity<RoomDTOResponse> getRoom(@PathVariable int id) {
         return ResponseEntity.ok(roomService.findById(id));
     }
 
@@ -49,7 +50,7 @@ public class RoomController extends BaseController {
         return ResponseEntity.ok(new UpdateResponse(roomService.deleteOne(id,getUserDTOResponse(request))));
     }
     @GetMapping("/type-room/{typeRoomId}")
-    public ResponseEntity<List<RoomDTO>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
+    public ResponseEntity<List<RoomDTOResponse>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
         return ResponseEntity.ok(roomService.findByTypeRoomId(typeRoomId));
     }
 }

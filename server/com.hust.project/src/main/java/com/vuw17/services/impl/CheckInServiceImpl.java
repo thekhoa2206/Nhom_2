@@ -4,6 +4,7 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jdbc.*;
 import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.checkin.CheckInRequest;
+import com.vuw17.dto.checkin.InsertServiceRequest;
 import com.vuw17.dto.service.ServiceUsedDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.HostedAt;
@@ -21,16 +22,18 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private final OccupiedRoomDAO occupiedRoomDAO;
     private final OccupiedRoomDao occupiedRoomDao;
     private final ServiceUsedDAO serviceUsedDAO;
+    private final ServiceUsedDao serviceUsedDao;
     private final HostedAtDAO hostedAtDAO;
     private final GuestDao guestDao;
     private final ServiceDao serviceDao;
     private final RoomDao roomDao;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
         this.serviceUsedDAO = serviceUsedDAO;
+        this.serviceUsedDao = serviceUsedDao;
         this.hostedAtDAO = hostedAtDAO;
         this.guestDao = guestDao;
         this.serviceDao = serviceDao;
@@ -66,26 +69,51 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     @Override
     public boolean isOccupied(int roomId) {
         List<OccupiedRoom> occupiedRooms = occupiedRoomDao.findOccupiedRooms();
-        for(int i = 0;i < occupiedRooms.size();i++){
-            if(occupiedRooms.get(i).getRoomId() == roomId){
+        for (int i = 0; i < occupiedRooms.size(); i++) {
+            if (occupiedRooms.get(i).getRoomId() == roomId) {
                 return true;
             }
         }
         return false;
     }
 
+    //phai tim theo occupied_id va paid va service_id
+    @Override
+    public boolean insertServicesIntoRoom(InsertServiceRequest insertServiceRequest, UserDTOResponse userDTOResponse) {
+        int roomId = insertServiceRequest.getRoomId();
+        OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
+        if (occupiedRoom.getStatus() == 1) {
+            int occupiedRoomId = occupiedRoom.getId();
+            insertServicesUsed(insertServiceRequest.getServices(), occupiedRoomId, userDTOResponse);
+            return true;
+        }
+        return false;
+    }
+
     //    insert service_used
     public void insertServicesUsed(List<ServiceUsedDTORequest> servicesUsed, int occupiedRoomId, UserDTOResponse userDTOResponse) {
-        if (servicesUsed != null && servicesUsed.size() > 0) {
-            for (int i = 0; i < servicesUsed.size(); i++) {
-                ServiceUsedDTORequest serviceUsedDTORequest = servicesUsed.get(i);
-                if (serviceDao.findById(serviceUsedDTORequest.getServiceId()) != null) {
-                    ServiceUsed serviceUsed = new ServiceUsed();
-                    serviceUsed.setOccupiedRoomId(occupiedRoomId);
-                    serviceUsed.setServiceId(serviceUsedDTORequest.getServiceId());
-                    serviceUsed.setQuantity(serviceUsedDTORequest.getQuantity());
-                    serviceUsed.setPaid(serviceUsedDTORequest.isPaid());
-                    int serviceUsedId = serviceUsedDAO.insertOne(serviceUsed);
+        for (int i = 0; i < servicesUsed.size(); i++) {
+            //lay ra 1 object tu list service used request
+            ServiceUsedDTORequest serviceUsedDTORequest = servicesUsed.get(i);
+            if (serviceDao.findById(serviceUsedDTORequest.getServiceId()) != null) {
+                //lay ra danh sach object service used request tu db by OccupiedRoomId
+                List<ServiceUsed> serviceUsedEntities = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoomId);
+                ServiceUsed serviceUsed = checkContains(serviceUsedEntities, serviceUsedDTORequest);
+                if (serviceUsed != null) {
+                    //neu trung occupied room id && service id && paid thi update
+                    //ko thi insert moi
+                    serviceUsed.setQuantity(serviceUsed.getQuantity() + serviceUsedDTORequest.getQuantity());
+                    boolean check = serviceUsedDao.update(serviceUsed);
+                    if (check) {
+                        saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, serviceUsed.getId(), ConstantVariableCommon.table_service_used, userDTOResponse.getId());
+                    }
+                } else {
+                    ServiceUsed newServiceUsed = new ServiceUsed();
+                    newServiceUsed.setOccupiedRoomId(occupiedRoomId);
+                    newServiceUsed.setServiceId(serviceUsedDTORequest.getServiceId());
+                    newServiceUsed.setQuantity(serviceUsedDTORequest.getQuantity());
+                    newServiceUsed.setPaid(serviceUsedDTORequest.isPaid());
+                    int serviceUsedId = serviceUsedDAO.insertOne(newServiceUsed);
                     if (serviceUsedId > 0) {
                         saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, serviceUsedId, ConstantVariableCommon.table_service_used, userDTOResponse.getId());
                     }
@@ -111,5 +139,16 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                 }
             }
         }
+    }
+
+    public ServiceUsed checkContains(List<ServiceUsed> servicesUsed, ServiceUsedDTORequest serviceUsedDTORequest) {
+        for (int i = 0; i < servicesUsed.size(); i++) {
+            ServiceUsed serviceUsed = servicesUsed.get(i);
+            if (serviceUsed.getServiceId() == serviceUsedDTORequest.getServiceId() && serviceUsed.isPaid() == serviceUsedDTORequest.isPaid()) {
+                return serviceUsed;
+            }
+        }
+        return null;
+
     }
 }
