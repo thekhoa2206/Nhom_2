@@ -12,15 +12,15 @@ public interface RoomService {
     //Them moi 1 room
     int insertOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse);
     //Lay tat ca cac rooms
-    List<RoomDTO> findAll();
+    List<RoomDTOResponse> findAll();
     //Sua thong tin cua room
     boolean updateOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse);
     //Xoa room
     boolean deleteOne(int id, UserDTOResponse userDTOResponse);
     //Lay room theo id
-    RoomDTO findById(int id);
+    RoomDTOResponse findById(int id);
     //Lay room theo name
-    RoomDTO findByName(String name);
+    RoomDTOResponse findByName(String name);
     //Lay room theo type_room id
-    List<RoomDTO> findByTypeRoomId(int typeRoomId);
+    List<RoomDTOResponse> findByTypeRoomId(int typeRoomId);
 }

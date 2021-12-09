@@ -12,4 +12,6 @@ public interface GuestService {
     List<GuestDTO> findAll();
     //Search Guest by keyword : phone number,id card
     List<GuestDTO> findByKeyword(String keyword);
+    //Tim theo id
+    GuestDTO findById(int id);
 }

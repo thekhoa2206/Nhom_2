@@ -9,7 +9,6 @@ import com.vuw17.dao.jpa.TableDiaryDao;
 import com.vuw17.dao.jpa.TypeActionDao;
 import com.vuw17.dto.service.ServiceDTORequest;
 import com.vuw17.dto.service.ServiceDTOResponse;
-import com.vuw17.dto.service.ServiceUsedDTOResponse;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CommonService;
@@ -51,7 +50,12 @@ public class ServiceServiceImpl extends CommonService implements ServiceService 
         List<ServiceDTOResponse> serviceDTOResponses = new ArrayList<>();
         for(int i = 0;i < services.size();i++){
             com.vuw17.entities.Service service = services.get(i);
-            serviceDTOResponses.add(new ServiceDTOResponse(service.getName(),service.getNote(),service.getStatus(),service.getPrice()));
+            ServiceDTOResponse serviceDTOResponse = new ServiceDTOResponse();
+            serviceDTOResponse.setName(service.getName());
+            serviceDTOResponse.setNote(service.getNote());
+            serviceDTOResponse.setStatus(service.getStatus());
+            serviceDTOResponse.setPrice(service.getPrice());
+            serviceDTOResponses.add(serviceDTOResponse);
         }
         return serviceDTOResponses;
     }

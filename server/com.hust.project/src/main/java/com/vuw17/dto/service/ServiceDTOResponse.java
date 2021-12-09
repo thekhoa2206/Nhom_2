@@ -1,9 +1,12 @@
 package com.vuw17.dto.service;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-@AllArgsConstructor
+@Getter
+@Setter
 public class ServiceDTOResponse {
     private String name;
     private String note;
