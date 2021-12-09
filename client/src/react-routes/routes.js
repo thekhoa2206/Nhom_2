@@ -9,7 +9,7 @@ import Statistics from '../modules/statistics/statistics';
 import Register from '../modules/auth/register';
 import RoomManagement from '../modules/rooms/roomsManagement';
 import Statistics2 from '../modules/statistics/statistics2';
-import Reservation from '../modules/Reservation/Reservation'
+import Reservation from '../modules/reservation/reservation'
 function Routes(props) {
     return (
         <Switch>

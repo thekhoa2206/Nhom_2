@@ -10,14 +10,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
-import useLogout from '../modules/auth/services/useLogout'
+import { useLogout } from '../services/auth/auth.service'
 import { Typography } from '@mui/material';
 import { useAppState } from "../AppState";
 const drawerWidth = 240;
 
 function Header(props) {
-    const [state] = useAppState()
-    const user = state.user
+    const [appState] = useAppState()
+    const user = appState.user
     const { open } = props
     const [anchorEl, setAnchorEl] = React.useState(null);
     const { logoutUser } = useLogout();

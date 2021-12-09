@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom"
 import { useAppState } from "../AppState";
 
 function CustomListItem(props) {
-    const [state] = useAppState()
-    const user = state.user
+    const [appState] = useAppState()
+    const user = appState.user
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()

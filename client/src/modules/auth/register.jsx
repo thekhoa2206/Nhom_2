@@ -13,7 +13,7 @@ import { uniqueId } from 'lodash';
 
 function Register(props) {
     const [state1, setState] = useState(() => initState())
-    const [state] = useAppState()
+    const [appState] = useAppState()
     const { price1, isOpenModal } = state1
     const { getAllPrice, isLoading } = useGetAllPrice()
     function initState() {
@@ -33,15 +33,15 @@ function Register(props) {
 
 
     useEffect(() => {
-        if (state.price) {
-            console.log("state.price", state.price)
+        if (appState.price) {
+            console.log("appState.price", appState.price)
             setState({
                 ...state1,
-                price1: state.price.map(x => ({ ...x, id: uniqueId() }))
+                price1: appState.price.map(x => ({ ...x, id: uniqueId() }))
             })
         }
 
-    }, [JSON.stringify(state.price)])
+    }, [JSON.stringify(appState.price)])
 
     console.log("isLoading", isLoading)
     const columns = [

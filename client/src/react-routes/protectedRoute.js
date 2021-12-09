@@ -6,7 +6,7 @@ import Layout from '../layout/layout';
 import { clearCookie, getCookie } from '../config';
 import _ from "lodash"
 import { useAppState } from '../AppState';
-import useFindUser from '../modules/users/services/useFindUser';
+import useFindUser from '../services/users/user.service';
 
 
 export default function ProtectedRoute(props) {
