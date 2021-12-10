@@ -1,6 +1,7 @@
 package com.vuw17.dao.jpa.impl;
 
 import com.vuw17.dao.jpa.UserDao;
+import com.vuw17.entities.Role;
 import com.vuw17.entities.TypeRoom;
 import com.vuw17.entities.User;
 import org.slf4j.Logger;
@@ -23,5 +24,11 @@ public class UserDaoImpl implements  UserDao{
     public List<User> findAllUser(){
         String sql = "SELECT * FROM user ";
         return entityManager.createNativeQuery(sql,User.class).getResultList();
+    }
+
+    @Override
+    public Role findRoleById(int id){
+        String sql = "SELECT * FROM role where id = ?";
+        return (Role) entityManager.createNativeQuery(sql,Role.class).setParameter(1,id).getSingleResult();
     }
 }

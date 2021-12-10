@@ -93,6 +93,11 @@ public class Common {
         return null;
     }
 
+    public static String getStringSex(boolean sex){
+        if(sex == false) return "Nữ";
+        else return "Nam";
+    }
+
     public static void main(String[] args) {
         System.out.println(GeneratePassword("admin"));
     }

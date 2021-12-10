@@ -149,11 +149,20 @@ public class ConstantVariableCommon {
     public static final String UPDATE_SUCCESSFUL = "Update Successful!";
     public static final String DELETE_SUCCESSFUL = "Delete Successful!";
 
+    public static final int STATUS_USER_1 = 1;
+    public static final int STATUS_USER_2 = 2;
+    public static final int STATUS_USER_3 = 3;
 
     public static String changeIntToStringReservationStatus(int status){
         if(status == STATUS_RESERVATION_1) return "Chờ nhận phòng";
         else if(status == STATUS_RESERVATION_2) return "Đã nhận phòng";
         else if(status == STATUS_RESERVATION_3) return "Hoàn thành";
         else return "Đã hủy";
+    }
+
+    public static String changeIntToStringUserStatus(int status){
+        if(status == STATUS_USER_1) return "Đang làm việc";
+        else if(status == STATUS_USER_2) return "Đã nghỉ";
+        else return "Đã xóa";
     }
 }

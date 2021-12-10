@@ -1,5 +1,6 @@
 package com.vuw17.services;
 
+import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import org.springframework.stereotype.Service;
 
@@ -12,4 +13,7 @@ public interface UserService {
 
     //Hàm lấy list user DTO
     List<UserDTOResponse> findAllUser();
+
+    //Hàm tạo user
+    void createUser(UserDTORequest userDTORequest);
 }

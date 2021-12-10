@@ -1,14 +1,19 @@
 package com.vuw17.services.impl;
 
+import com.vuw17.common.Common;
+import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
 
 import com.vuw17.dao.jpa.UserDao;
 import com.vuw17.dto.user.RoleByUserResponseDTO;
+import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Role;
 import com.vuw17.entities.User;
 import com.vuw17.repositories.UserRepository;
 import com.vuw17.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
     private final UserDao userDao;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class.toString());
 
     public UserServiceImpl(JwtProvider jwtProvider, UserRepository userRepository, UserDao userDao) {
         this.jwtProvider = jwtProvider;
@@ -39,6 +45,13 @@ public class UserServiceImpl implements UserService {
             userDTO.setId(user.getId());
             userDTO.setName(user.getName());
             userDTO.setUsername(user.getUsername());
+            userDTO.setIdCard(user.getIdCard());
+            userDTO.setPhone(user.getName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAddress(user.getAddress());
+            userDTO.setSalaryDay(user.getSalaryDay());
+            userDTO.setSex(Common.getStringSex(user.getSex()));
+            userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
             List<RoleByUserResponseDTO> roleName = new ArrayList<>();
             for(int i = 0; i< user.getRoles().size(); i++){
                 RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
@@ -48,7 +61,7 @@ public class UserServiceImpl implements UserService {
             userDTO.setRole(roleName);
             return userDTO;
         }catch (NullPointerException e){
-            System.out.println("findInfoUser : "+e.getMessage());
+
             return null;
         }
     }
@@ -60,8 +73,16 @@ public class UserServiceImpl implements UserService {
         List<UserDTOResponse> userDTOResponses = new ArrayList<>();
         for (User user : users){
             UserDTOResponse userDTOResponse = new UserDTOResponse();
+            userDTOResponse.setId(user.getId());
             userDTOResponse.setUsername(user.getUsername());
             userDTOResponse.setName(user.getName());
+            userDTOResponse.setAddress(user.getAddress());
+            userDTOResponse.setEmail(user.getEmail());
+            userDTOResponse.setPhone(user.getPhone());
+            userDTOResponse.setSalaryDay(user.getSalaryDay());
+            userDTOResponse.setSex(Common.getStringSex(user.getSex()));
+            userDTOResponse.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
+            userDTOResponse.setIdCard(user.getIdCard());
             List<RoleByUserResponseDTO> roleByUserResponseDTOs = new ArrayList<>();
             for (Role role : user.getRoles()){
                 RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
@@ -72,5 +93,37 @@ public class UserServiceImpl implements UserService {
             userDTOResponses.add(userDTOResponse);
         }
         return userDTOResponses;
+    }
+
+    //Hàm tạo user
+    @Override
+    public void createUser(UserDTORequest userDTORequest){
+        User user = new User();
+        user.setName(userDTORequest.getName());
+        user.setUsername(userDTORequest.getUsername());
+        user.setPassword(Common.GeneratePassword(userDTORequest.getPassword()));
+        user.setAddress(userDTORequest.getAddress());
+        user.setEmail(userDTORequest.getEmail());
+        user.setIdCard(userDTORequest.getIdCard());
+        user.setPhone(userDTORequest.getPhone());
+        user.setSalaryDay(userDTORequest.getSalaryDay());
+        user.setStatus(ConstantVariableCommon.STATUS_USER_1);
+        user.setSex(userDTORequest.isSex());
+        List<Role> roles = new ArrayList<>();
+        for (Integer roleId: userDTORequest.getRoleIds()) {
+            Role role = userDao.findRoleById(roleId);
+            roles.add(role);
+        }
+        user.setRoles(roles);
+        saveUser(user);
+    }
+
+    //Hàm lưu người dùng
+    private void saveUser(User user){
+        try{
+            userRepository.save(user);
+        }catch (Exception e){
+            LOGGER.error("ERROR || Lỗi không lưu được người dùng service", e.getMessage());
+        }
     }
 }
