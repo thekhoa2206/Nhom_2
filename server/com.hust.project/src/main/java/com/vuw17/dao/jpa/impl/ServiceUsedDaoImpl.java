@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -24,7 +25,7 @@ public class ServiceUsedDaoImpl implements ServiceUsedDao {
         try {
             return entityManager.createNativeQuery(sql, ServiceUsed.class).setParameter(1, occupiedRoomId).getResultList();
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 

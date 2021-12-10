@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional(rollbackOn = Exception.class)
@@ -30,10 +31,10 @@ public class RoomPriceDaoImpl implements RoomPriceDao {
     }
 
     @Override
-    public RoomPrice findByTypeRoomId(int typeRoomId) {
+    public List<RoomPrice> findByTypeRoomId(int typeRoomId) {
         String sql = "SELECT * FROM room_price WHERE type_room_id = ?";
         try {
-            return (RoomPrice) entityManager.createNativeQuery(sql,RoomPrice.class).setParameter(1,typeRoomId).getSingleResult();
+            return entityManager.createNativeQuery(sql,RoomPrice.class).setParameter(1,typeRoomId).getResultList();
         }catch (Exception e){
             return null;
         }

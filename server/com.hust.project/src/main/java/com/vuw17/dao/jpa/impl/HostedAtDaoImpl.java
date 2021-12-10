@@ -28,4 +28,14 @@ public class HostedAtDaoImpl implements HostedAtDao {
             return null;
         }
     }
+
+    @Override
+    public List<HostedAt> findByGuestId(int guestId) {
+        String sql = "SELECT * FROM hosted_at WHERE guest_id = ?";
+        try{
+            return entityManager.createNativeQuery(sql,HostedAt.class).setParameter(1,guestId).getResultList();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

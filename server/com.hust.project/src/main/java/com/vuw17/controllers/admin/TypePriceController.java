@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/admin/typeprices")
+@RequestMapping("/api/admin/type-prices")
 public class TypePriceController extends BaseController {
     private final TypePriceService typePriceService;
     public TypePriceController(UserService userService, TypePriceService typePriceService) {
@@ -23,7 +23,7 @@ public class TypePriceController extends BaseController {
     }
 
     @PostMapping()
-    public ResponseEntity<InsertResponse> insertRoom(@Valid @RequestBody TypePriceDTO typePriceDTO, HttpServletRequest request) {
+    public ResponseEntity<InsertResponse> insertTypePrice(@Valid @RequestBody TypePriceDTO typePriceDTO, HttpServletRequest request) {
         return ResponseEntity.ok(new InsertResponse(typePriceService.insertOne(typePriceDTO,getUserDTOResponse(request))));
     }
 }

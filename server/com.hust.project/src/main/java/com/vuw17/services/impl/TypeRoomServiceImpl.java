@@ -7,6 +7,7 @@ import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.typeroom.TypeRoomDTO;
 import com.vuw17.dto.typeroom.TypeRoomPriceDTO;
 import com.vuw17.dto.user.UserDTOResponse;
+import com.vuw17.entities.Room;
 import com.vuw17.entities.RoomPrice;
 import com.vuw17.entities.TypeRoom;
 import com.vuw17.services.BaseService;
@@ -15,6 +16,7 @@ import com.vuw17.services.TypeRoomService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +41,11 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     public int insertOne(TypeRoomDTO typeRoom, UserDTOResponse userDTOResponse) {
         String message = checkInput(typeRoom);
         if (message == null) {
-//            typeRoomDao.insertOne(toEntity(typeRoom));
-//            return ConstantVariableCommon.CREATE_SUCCESSFUL;
-//            int priceId = getPriceId(typeRoom);
             int typeRoomId = typeRoomDAO.insertOne(toEntity(typeRoom));
             if (typeRoomId > 0) {
                 saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,typeRoomId,ConstantVariableCommon.table_type_room,userDTOResponse.getId());
                 //Get type room price list to insert into room_price table
-                List<TypeRoomPriceDTO> list = typeRoom.getTypeRoomPriceList();
+                List<TypeRoomPriceDTO> list = typeRoom.getPrices();
                 if(list != null){
                     for(int i = 0;i < list.size();i++){
                         TypeRoomPriceDTO typeRoomPriceDTO = list.get(i);
@@ -80,7 +79,10 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
         List<TypeRoomDTO> typeRoomDTOs = new ArrayList<>();
         List<TypeRoom> typeRooms = typeRoomDao.findAll();
         for (TypeRoom typeRoom : typeRooms) {
-            typeRoomDTOs.add(toDTO(typeRoom));
+
+            TypeRoomDTO typeRoomDTO = toDTO(typeRoom);
+            typeRoomDTO.setPrices(getList(typeRoom));
+            typeRoomDTOs.add(typeRoomDTO);
         }
         return typeRoomDTOs;
     }
@@ -126,7 +128,9 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
     public TypeRoomDTO findById(int id) {
         TypeRoom typeRoom = typeRoomDao.findById(id);
         if (typeRoom != null) {
-            return toDTO(typeRoom);
+            TypeRoomDTO typeRoomDTO = toDTO(typeRoom);
+            typeRoomDTO.setPrices(getList(typeRoom));
+            return typeRoomDTO;
         }
         return null;
     }
@@ -207,5 +211,21 @@ public class TypeRoomServiceImpl extends CommonService implements TypeRoomServic
             message = ConstantVariableCommon.DUPLICATED_NAME;
         }
         return message;
+    }
+    //lay list object co gia va typePriceId
+    public List<TypeRoomPriceDTO> getList(TypeRoom typeRoom){
+        List<TypeRoomPriceDTO> list = new ArrayList<>();
+        List<RoomPrice> roomPrices = roomPriceDao.findByTypeRoomId(typeRoom.getId());
+        for(int i = 0;i < roomPrices.size();i++){
+            TypeRoomPriceDTO typeRoomPriceDTO = new TypeRoomPriceDTO();
+            typeRoomPriceDTO.setTypePriceId(roomPrices.get(i).getTypePriceId());
+            typeRoomPriceDTO.setPrice(roomPrices.get(i).getPrice());
+
+            //insert into list
+            list.add(typeRoomPriceDTO);
+        }
+        return list;
+
+
     }
 }

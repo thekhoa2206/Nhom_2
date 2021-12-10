@@ -24,17 +24,18 @@ public class RoomController extends BaseController {
         super(userService);
         this.roomService = roomService;
     }
-
+    //OK
     @PostMapping()
     public ResponseEntity<InsertResponse> insertRoom(@Valid @RequestBody RoomDTO roomDTO, HttpServletRequest request) {
         return ResponseEntity.ok(new InsertResponse(roomService.insertOne(roomDTO,getUserDTOResponse(request))));
     }
-
+    //OK
     @GetMapping()
     public ResponseEntity<List<RoomDTOResponse>> getAllRooms() {
         return ResponseEntity.ok(roomService.findAll());
     }
 
+    //OK
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTOResponse> getRoom(@PathVariable int id) {
         return ResponseEntity.ok(roomService.findById(id));
@@ -49,6 +50,8 @@ public class RoomController extends BaseController {
     public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id,HttpServletRequest request) {
         return ResponseEntity.ok(new UpdateResponse(roomService.deleteOne(id,getUserDTOResponse(request))));
     }
+
+    //OK
     @GetMapping("/type-room/{typeRoomId}")
     public ResponseEntity<List<RoomDTOResponse>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
         return ResponseEntity.ok(roomService.findByTypeRoomId(typeRoomId));

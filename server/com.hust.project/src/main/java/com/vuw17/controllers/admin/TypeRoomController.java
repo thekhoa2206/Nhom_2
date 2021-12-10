@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/admin/typerooms")
+@RequestMapping("/api/admin/type-rooms")
 public class TypeRoomController extends BaseController {
     private final TypeRoomService typeRoomService;
     private final UserService userService;
@@ -25,16 +25,17 @@ public class TypeRoomController extends BaseController {
         this.typeRoomService = typeRoomService;
         this.userService = userService;
     }
+    //OK
     @PostMapping()
     public ResponseEntity<InsertResponse> insertTypeRoom(@Valid  @RequestBody TypeRoomDTO typeRoomDTO, HttpServletRequest request) {
         return ResponseEntity.ok(new InsertResponse(typeRoomService.insertOne(typeRoomDTO,getUserDTOResponse(request))));
     }
-
+    //OK
     @GetMapping()
     public ResponseEntity<List<TypeRoomDTO>> getAllTypeRooms() {
         return ResponseEntity.ok(typeRoomService.findAll());
     }
-
+    //OK
     @GetMapping("/{id}")
     public ResponseEntity<TypeRoomDTO> getTypeRoom(@PathVariable int id) {
         return ResponseEntity.ok(typeRoomService.findById(id));

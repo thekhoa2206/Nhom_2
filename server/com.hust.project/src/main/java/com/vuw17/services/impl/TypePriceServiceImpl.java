@@ -37,12 +37,8 @@ public class TypePriceServiceImpl extends CommonService implements TypePriceServ
     public int insertOne(TypePriceDTO typePriceDTO, UserDTOResponse userDTOResponse) {
         String message = checkInput(typePriceDTO);
         if (message == null) {
-//            typeRoomDao.insertOne(toEntity(typeRoom));
-//            return ConstantVariableCommon.CREATE_SUCCESSFUL;
-//            int priceId = getPriceId(typeRoom);
             int typePriceId = typePriceDAO.insertOne(toEntity(typePriceDTO));
             if (typePriceId > 0) {
-//                roomPriceDAO.insertOne(new RoomPrice(priceId, typeRoomId));
                 DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, typePriceId, ConstantVariableCommon.table_type_price);
                 diaryDTO.setUserId(userDTOResponse.getId());
                 baseService.saveDiary(diaryDTO);

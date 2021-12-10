@@ -7,4 +7,7 @@ import java.util.List;
 public interface HostedAtDao {
     //lay danh sach thong tin theo occupied_room_id
     List<HostedAt> findByOccupiedRoomId(int occupiedRoomId);
+
+    //lay danh sach thong tin theo guest_id
+    List<HostedAt> findByGuestId(int guestId);
 }

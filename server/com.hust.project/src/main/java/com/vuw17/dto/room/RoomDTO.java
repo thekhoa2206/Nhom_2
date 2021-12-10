@@ -29,7 +29,4 @@ public class RoomDTO extends BaseDTO {
     private String note;
 
     private int status;
-//    private GuestReservationDTO guest;
-//    private String dateFrom;
-//    private String dateTo;
 }

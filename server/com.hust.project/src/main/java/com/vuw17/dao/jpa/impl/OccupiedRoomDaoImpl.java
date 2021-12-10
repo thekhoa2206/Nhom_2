@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -25,7 +26,7 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
         try{
             return entityManager.createNativeQuery(sql, OccupiedRoom.class).getResultList();
         }catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -34,6 +35,16 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
         String sql = "SELECT * FROM occupied_room WHERE room_id = ? AND status = 1";
         try{
             return (OccupiedRoom) entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,roomId).getSingleResult();
+        }catch (Exception e) {
+            return new OccupiedRoom();
+        }
+    }
+
+    @Override
+    public OccupiedRoom findByIdAndStatus(int id) {
+        String sql = "SELECT * FROM occupied_room WHERE id = ? AND status = 2";
+        try{
+            return (OccupiedRoom) entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,id).getSingleResult();
         }catch (Exception e) {
             return new OccupiedRoom();
         }

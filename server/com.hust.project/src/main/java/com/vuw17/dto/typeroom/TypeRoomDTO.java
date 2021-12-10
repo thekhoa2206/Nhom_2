@@ -28,5 +28,5 @@ public class TypeRoomDTO extends BaseDTO {
     private int status;
 
     @NotEmpty(message = "Gia khong duoc de trong")
-    private List<TypeRoomPriceDTO> typeRoomPriceList;
+    private List<TypeRoomPriceDTO> prices;
 }
