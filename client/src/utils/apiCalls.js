@@ -8,31 +8,8 @@ import { useAppState } from "../AppState";
 let token = getCookie("jwt")
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.common["Authorization"] = token;
-/** Gọi API mẫu:
-    export function xxxxxx() {
-        const { response, isLoading } = useAxios({
-            method: 'xxxxxx',
-            url: "xxxxxx",
-            data: {xxxxxx},
-            params:{xxxxxxx}
-        })
-        return {
-            xxxxx: response,
-            isLoading: isLoading
-        }
-    }
- */
-// export function useGetAllUsers() {
-//     const { response, isLoading } = useAxios({
-//         method: 'get',
-//         url: "/api/users/list",
-//         data: {}
-//     })
-//     return {
-//         data: response,
-//         isLoading: isLoading
-//     }
-// }
+
+//mẫu get service
 export function useGetAllPrice() {
     const [state, dispatch] = useAppState()
     const [isLoading, setIsLoading] = useState(true)
@@ -55,6 +32,8 @@ export function useGetAllPrice() {
         getAllPrice
     }
 }
+
+//mẫu post service
 export function useCreatePrice() {
     const [state, dispatch] = useAppState()
     const createPrice = async (data) => {

@@ -5,7 +5,7 @@ const initialState = {
 }
 
 const combineReducers = reducers => {
-    return (state, action) => {
+    return (state1, action) => {
         return Object.keys(reducers).reduce(
             (acc, prop) => {
                 return ({
@@ -13,7 +13,7 @@ const combineReducers = reducers => {
                     ...reducers[prop]({ [prop]: acc[prop] }, action),
                 })
             },
-            state
+            state1
         )
     }
 }
