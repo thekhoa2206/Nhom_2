@@ -22,11 +22,12 @@ public class ServiceController extends BaseController {
         super(userService);
         this.serviceService = serviceService;
     }
+    //OK
     @PostMapping()
     public ResponseEntity<InsertResponse> insertRoom(@Valid @RequestBody ServiceDTORequest serviceDTORequest, HttpServletRequest request) {
         return ResponseEntity.ok(new InsertResponse(serviceService.insertOne(serviceDTORequest,getUserDTOResponse(request))));
     }
-
+    //OK
     @GetMapping()
     public ResponseEntity<List<ServiceDTOResponse>> getAllServices() {
         return ResponseEntity.ok(serviceService.findAll());

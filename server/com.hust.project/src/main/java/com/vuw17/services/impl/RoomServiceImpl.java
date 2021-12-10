@@ -18,7 +18,9 @@ import com.vuw17.services.GuestService;
 import com.vuw17.services.RoomService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import sun.rmi.runtime.Log;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,18 +53,13 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     @Override
     public int insertOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse) {
         String message = checkInput(roomDTO);
-        System.out.println("Message = "+message);
         if (message == null) {
             int id = roomDAO.insertOne(toEntity(roomDTO));
-            System.out.println("HELLOOO");
             if(id > 0){
-                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,id,ConstantVariableCommon.table_room);
-                diaryDTO.setUserId(userDTOResponse.getId());
-                baseService.saveDiary(diaryDTO);
+                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE,id,ConstantVariableCommon.table_room,userDTOResponse.getId());
                 return id;
             }
         }
-        System.out.println("HELLOOO1111");
         return 0;
     }
 
@@ -188,37 +185,48 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         roomDTOResponse.setStatus(room.getStatus());
         //lay type room id de set type room name cho object response
         roomDTOResponse.setTypeRoomName(typeRoomDao.findById(room.getTypeRoomId()).getName());
-        //lay check in /check out time/deposit  de set vao object response
-        OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(room.getId());
-        roomDTOResponse.setCheckInTime(occupiedRoom.getCheckInTime());
-        roomDTOResponse.setCheckOutTime(occupiedRoom.getCheckOutTime());
-        roomDTOResponse.setDeposit(occupiedRoom.getDeposit());
+        try {
 
-        //set list services used
-        List<ServiceUsedDTOResponse> serviceUsedDTOResponses = new ArrayList<>();
-        List<ServiceUsed> servicesUsed = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoom.getId());
-        for(int i = 0;i < servicesUsed.size();i++){
-            ServiceUsed serviceUsed = servicesUsed.get(i);
-            com.vuw17.entities.Service service = serviceDao.findById(serviceUsed.getServiceId());
-            ServiceUsedDTOResponse serviceUsedDTOResponse = new ServiceUsedDTOResponse();
-            serviceUsedDTOResponse.setId(serviceUsed.getId());
-            serviceUsedDTOResponse.setName(service.getName());
-            serviceUsedDTOResponse.setPaid(serviceUsed.isPaid());
-            serviceUsedDTOResponse.setPrice(service.getPrice());
-            serviceUsedDTOResponse.setQuantity(serviceUsed.getQuantity());
-            serviceUsedDTOResponses.add(serviceUsedDTOResponse);
-        }
 
-        roomDTOResponse.setServicesUsed(serviceUsedDTOResponses);
+            //lay check in /check out time/deposit  de set vao object response
+            OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(room.getId());
+            roomDTOResponse.setCheckInTime(occupiedRoom.getCheckInTime());
+            roomDTOResponse.setCheckOutTime(occupiedRoom.getCheckOutTime());
+            roomDTOResponse.setDeposit(occupiedRoom.getDeposit());
+
+            //set list services used
+            List<ServiceUsedDTOResponse> serviceUsedDTOResponses = new ArrayList<>();
+            List<ServiceUsed> servicesUsed = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoom.getId());
+            for (int i = 0; i < servicesUsed.size(); i++) {
+                ServiceUsed serviceUsed = servicesUsed.get(i);
+                com.vuw17.entities.Service service = serviceDao.findById(serviceUsed.getServiceId());
+                ServiceUsedDTOResponse serviceUsedDTOResponse = setServiceUsedDTOResponse(serviceUsed, service);
+                serviceUsedDTOResponses.add(serviceUsedDTOResponse);
+            }
+
+            roomDTOResponse.setServicesUsed(serviceUsedDTOResponses);
 
         //set list guest
         List<GuestDTO> guestDTOS = new ArrayList<>();
         List<HostedAt> hostedAts = hostedAtDao.findByOccupiedRoomId(occupiedRoom.getId());
+
         for(int i = 0;i < hostedAts.size();i++){
             guestDTOS.add(guestService.findById(hostedAts.get(i).getGuestId()));
         }
 
         roomDTOResponse.setGuests(guestDTOS);
+        }catch (NullPointerException e){
+            Log.getLog("Null",e.getMessage(),true);
+        }
         return roomDTOResponse;
+    }
+    public ServiceUsedDTOResponse setServiceUsedDTOResponse(ServiceUsed serviceUsed, com.vuw17.entities.Service service){
+        ServiceUsedDTOResponse serviceUsedDTOResponse = new ServiceUsedDTOResponse();
+        serviceUsedDTOResponse.setId(serviceUsed.getId());
+        serviceUsedDTOResponse.setName(service.getName());
+        serviceUsedDTOResponse.setPaid(serviceUsed.isPaid());
+        serviceUsedDTOResponse.setPrice(service.getPrice());
+        serviceUsedDTOResponse.setQuantity(serviceUsed.getQuantity());
+        return serviceUsedDTOResponse;
     }
 }

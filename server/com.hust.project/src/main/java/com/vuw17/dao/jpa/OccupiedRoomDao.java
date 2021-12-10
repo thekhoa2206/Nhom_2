@@ -9,4 +9,6 @@ public interface OccupiedRoomDao {
     List<OccupiedRoom> findOccupiedRooms();
     //Lay ra theo room id
     OccupiedRoom findByRoomId(int roomId);
+    //Lay ra theo id va status = chua check out
+    OccupiedRoom findByIdAndStatus(int id);
 }

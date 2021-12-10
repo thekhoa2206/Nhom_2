@@ -28,7 +28,11 @@ public class ConstantVariableCommon {
     //Biến cố định của occupied_room
     public static final int STATUS_OCCUPIED_ROOM_1 = 1; // da check in thanh cong
     public static final int STATUS_OCCUPIED_ROOM_2 = 2; // da check out thanh cong
-    public static final int STATUS_OCCUPIED_ROOM_3 = 3; // da thanh toan
+
+    //Biến cố định của bill
+    public static final int STATUS_BILL_1 = 1; // chua thanh toan
+    public static final int STATUS_BILL_2 = 2; // da thanh toan
+
 
     //Biến cố định của type_product
     public static final int STATUS_TYPE_PRODUCT_1 = 1; // trạng thái loại sản phẩm: đang sử dụng
@@ -90,6 +94,7 @@ public class ConstantVariableCommon {
     public static final String table_service_used = "service_used";
     public static final String table_hosted_at = "hosted_at";
     public static final String table_service = "service";
+    public static final String table_bill = "bill";
 
 
     //Biến cố định table_id

@@ -24,15 +24,18 @@ public class GuestController extends BaseController {
     }
 
     //api insert guest
+    //OK
     @PostMapping
     public ResponseEntity<InsertResponse> insertGuest(@Valid @RequestBody GuestDTO guestDTO, HttpServletRequest request){
         return ResponseEntity.ok(new InsertResponse(guestService.insertOne(guestDTO,getUserDTOResponse(request))));
     }
+    //OK
     @GetMapping
     public ResponseEntity<List<GuestDTO>> getAllGuests(){
         return ResponseEntity.ok(guestService.findAll());
     }
     //api search guest by id card,phone number
+    //OK
     @GetMapping("/searching")
     public ResponseEntity<List<GuestDTO>> getAllGuestsByKeyword(@RequestParam("keyword") String keyword){
         return ResponseEntity.ok(guestService.findByKeyword(keyword));

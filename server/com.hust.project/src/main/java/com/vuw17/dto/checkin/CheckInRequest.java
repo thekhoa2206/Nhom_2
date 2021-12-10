@@ -16,13 +16,14 @@ public class CheckInRequest{
     private List<Integer> guestIds;
     private List<ServiceUsedDTORequest> servicesUsed;
     @Min(value = 1,message = "Thoi gian phai > 0")
-    private long checkInTime;
-    @Min(value = 1,message = "Thoi gian phai > 0")
     private long checkOutTime;
     @Min(value = 1,message = "Tien phai > 0")
     private BigDecimal deposit;
     @Min(value = 1,message = "Ma phong phai > 0")
     private int roomId;
+    private int billId;
+
+
 
 
 }

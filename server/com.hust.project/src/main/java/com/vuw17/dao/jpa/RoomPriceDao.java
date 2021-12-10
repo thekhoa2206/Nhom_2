@@ -2,9 +2,11 @@ package com.vuw17.dao.jpa;
 
 import com.vuw17.entities.RoomPrice;
 
+import java.util.List;
+
 public interface RoomPriceDao {
     boolean updateOne(RoomPrice roomPrice);
 
-    RoomPrice findByTypeRoomId(int typeRoomId);
+    List<RoomPrice> findByTypeRoomId(int typeRoomId);
     RoomPrice findByTypeRoomIdAndTypePriceId(int typeRoomId, int typePriceId);
 }
