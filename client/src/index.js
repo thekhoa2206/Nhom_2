@@ -8,7 +8,7 @@ import { SnackbarUtilsConfigurator } from "./utils/snackbarUtils";
 import { initialState, combineReducers } from './context/reducers'
 import { AppStateProvider } from './AppState'
 import priceReducer from './modules/rooms/price.reducer';
-import userReducer from './modules/users/services/user.reducer';
+import userReducer from '../src/services/users/user.reducer';
 
 const appReducers = combineReducers({
   price: priceReducer,

@@ -8,6 +8,7 @@ import com.vuw17.dao.jpa.UserDao;
 import com.vuw17.dto.user.RoleByUserResponseDTO;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
+import com.vuw17.dto.user.UserDTOUpdateRequest;
 import com.vuw17.entities.Role;
 import com.vuw17.entities.User;
 import com.vuw17.repositories.UserRepository;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,24 +43,7 @@ public class UserServiceImpl implements UserService {
             String[] splits = token.split(" ");
             String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
             User user = userRepository.findUserByUsername(username);
-            UserDTOResponse userDTO = new UserDTOResponse();
-            userDTO.setId(user.getId());
-            userDTO.setName(user.getName());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setIdCard(user.getIdCard());
-            userDTO.setPhone(user.getName());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setAddress(user.getAddress());
-            userDTO.setSalaryDay(user.getSalaryDay());
-            userDTO.setSex(Common.getStringSex(user.getSex()));
-            userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
-            List<RoleByUserResponseDTO> roleName = new ArrayList<>();
-            for(int i = 0; i< user.getRoles().size(); i++){
-                RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
-                roleByUserResponseDTO.setNameRole(user.getRoles().get(i).getName());
-                roleName.add(roleByUserResponseDTO);
-            }
-            userDTO.setRole(roleName);
+            UserDTOResponse userDTO = transferUserDTOResponse(user);
             return userDTO;
         }catch (NullPointerException e){
 
@@ -119,11 +104,74 @@ public class UserServiceImpl implements UserService {
     }
 
     //Hàm lưu người dùng
-    private void saveUser(User user){
+    @Transactional(rollbackOn = Exception.class)
+    public void saveUser(User user){
         try{
             userRepository.save(user);
         }catch (Exception e){
             LOGGER.error("ERROR || Lỗi không lưu được người dùng service", e.getMessage());
         }
+    }
+
+    private UserDTOResponse transferUserDTOResponse(User user){
+        UserDTOResponse userDTO = new UserDTOResponse();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setIdCard(user.getIdCard());
+        userDTO.setPhone(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setSalaryDay(user.getSalaryDay());
+        userDTO.setSex(Common.getStringSex(user.getSex()));
+        userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
+        List<RoleByUserResponseDTO> roleName = new ArrayList<>();
+        for(int i = 0; i< user.getRoles().size(); i++){
+            RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
+            roleByUserResponseDTO.setNameRole(user.getRoles().get(i).getName());
+            roleName.add(roleByUserResponseDTO);
+        }
+        userDTO.setRole(roleName);
+        return userDTO;
+    }
+
+
+    // hàm lấy user theo id
+    @Override
+    public UserDTOResponse selectUserById(int id){
+        User user = userRepository.findUserById(id);
+        UserDTOResponse userDTOResponse = transferUserDTOResponse(user);
+        return userDTOResponse;
+    }
+
+    //Hàm sửa thông tin user
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
+        User user = new User();
+        user.setName(userDTOUpdateRequest.getName());
+        user.setUsername(userDTOUpdateRequest.getUsername());
+        user.setAddress(userDTOUpdateRequest.getAddress());
+        user.setEmail(userDTOUpdateRequest.getEmail());
+        user.setIdCard(userDTOUpdateRequest.getIdCard());
+        user.setPhone(userDTOUpdateRequest.getPhone());
+        user.setSalaryDay(userDTOUpdateRequest.getSalaryDay());
+        user.setStatus(ConstantVariableCommon.STATUS_USER_1);
+        user.setSex(userDTOUpdateRequest.isSex());
+        List<Role> roles = new ArrayList<>();
+        for (Integer roleId: userDTOUpdateRequest.getRoleIds()) {
+            Role role = userDao.findRoleById(roleId);
+            roles.add(role);
+        }
+        user.setRoles(roles);
+        saveUser(user);
+    }
+
+    //Hàm xóa user
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteUser(int id){
+        User user = userRepository.findUserById(id);
+        userRepository.delete(user);
     }
 }

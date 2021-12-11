@@ -3,6 +3,7 @@ package com.vuw17.controllers.user;
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
+import com.vuw17.dto.user.UserDTOUpdateRequest;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,8 +49,23 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    //API lấy chi tiết người dùng
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTOResponse> getUserById(@PathVariable int id){
+        UserDTOResponse userDTOResponse = userService.selectUserById(id);
+        return ResponseEntity.ok(userDTOResponse);
+    }
     //API sửa người dùng
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable int id, @Valid @RequestBody UserDTOUpdateRequest userDTOUpdateRequest){
+        userService.updateUser(userDTOUpdateRequest, id);
+        return ResponseEntity.ok().build();
+    }
 
     //API xóa
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int id){
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
 }
