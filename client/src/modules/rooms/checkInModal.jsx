@@ -39,9 +39,10 @@ function CheckInModal(props) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
-        isOpenModalAddGuest: false
+        isOpenModalAddGuest: false,
+        servicesUsed: []
     })
-    const { isOpenModalAddGuest, guests } = state
+    const { isOpenModalAddGuest, guests, servicesUsed } = state
     const columns = [
         {
             field: " ",
@@ -88,7 +89,7 @@ function CheckInModal(props) {
                         style={{ alignContent: "center" }}
                         size="small"
                         onClick={(event) => {
-                            handleClick(event, cellValues);
+                            handleAddItem(event, cellValues);
                         }}
                     >
                         <ControlPointIcon style={{ fill: "#2196f3" }} />
@@ -122,10 +123,46 @@ function CheckInModal(props) {
     const handleCellClick = (param, event) => {
         event.stopPropagation();
     };
-
     const handleRowClick = (param, event) => {
         event.stopPropagation();
     };
+    const handleAddItem = (event, cellValues) => {
+        let idArr = servicesUsed.map(a => a.id)
+        let rowId = cellValues.row.id
+        //nếu đã có sp thì +1
+        if (idArr.includes(rowId)) {
+            let item = servicesUsed.find(x => x.id === rowId)
+            let updatedItem = {
+                ...item,
+                quantity: item.quantity + 1
+            }
+            let newServicesUsed = servicesUsed.filter(function (item) {
+                return item.id != rowId;
+            });
+            newServicesUsed.push(updatedItem)
+            newServicesUsed.sort(function (a, b) {
+                return a.id - b.id || a.name.localeCompare(b.name);
+            });
+            setState({
+                ...state,
+                servicesUsed: newServicesUsed
+            })
+        }
+        //chưa có thì thêm mới vào
+        else {
+            let newItem = {
+                id: cellValues.row.id,
+                name: cellValues.row.name,
+                quantity: 1,
+                price: cellValues.row.price
+            }
+            setState({
+                ...state,
+                servicesUsed: [...state.servicesUsed, newItem]
+            })
+        }
+    };
+    console.log("state", state)
     const handleSelectionChange = (selection) => {
         setSelectedRows(selection);
     };
@@ -149,21 +186,25 @@ function CheckInModal(props) {
             isOpenModalAddGuest: false
         })
     }
+    const onChangeSelect = (event) => {
+        console.log(event.target.value);
+    };
+
     console.log("guests ", guests)
-    const servicesUsed = [
-        {
-            id: 1,
-            name: "Cocacola",
-            quantity: 2,
-            price: 10000
-        },
-        {
-            id: 2,
-            name: "Nước lọc",
-            quantity: 3,
-            price: 10000
-        },
-    ]
+    // const servicesUsed = [
+    //     {
+    //         id: 1,
+    //         name: "Cocacola",
+    //         quantity: 2,
+    //         price: 10000
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Nước lọc",
+    //         quantity: 3,
+    //         price: 10000
+    //     },
+    // ]
 
 
     return (
@@ -249,11 +290,13 @@ function CheckInModal(props) {
                                                     labelId="type-price"
                                                     id="type-price"
                                                     label="Hình thức nghỉ"
+                                                    value={"Ngày đêm"}
+                                                    onChange={onChangeSelect}
                                                 >
-                                                    <MenuItem value={10}>Đêm</MenuItem>
-                                                    <MenuItem value={20}>Ngày đêm</MenuItem>
-                                                    <MenuItem value={30}>Tuần</MenuItem>
-                                                    <MenuItem value={40}>Tháng</MenuItem>
+                                                    <MenuItem key={1} value={"Đêm"}>Đêm</MenuItem>
+                                                    <MenuItem key={2} value={"Ngày đêm"}>Ngày đêm</MenuItem>
+                                                    <MenuItem key={3} value={"Tuần"}>Tuần</MenuItem>
+                                                    <MenuItem key={4} value={"Tháng"}>Tháng</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </Box>

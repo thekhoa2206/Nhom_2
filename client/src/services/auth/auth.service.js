@@ -4,19 +4,22 @@ import { setCookie, getCookie, clearCookie } from "../../config";
 import { useAppState } from "../../AppState";
 
 
-let token = getCookie("jwt")
 axios.defaults.baseURL = 'http://localhost:8080';
-axios.defaults.headers.common["Authorization"] = token;
 
 export function useAuth() {
 	let history = useHistory();
 	const [state, dispatch] = useAppState()
+
 	//set user
 	const setUserContext = async () => {
+		let token = getCookie("jwt")
+
+		axios.defaults.headers.common["Authorization"] = token;
 		return await
 			axios.get("/api/users/info")
 				.then((res) => {
 					dispatch({ type: 'GET_USER', payload: { data: res.data } })
+					console.log("res.data", res)
 					history.push("/home");
 				})
 				.catch((err) => {

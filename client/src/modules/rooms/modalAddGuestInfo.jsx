@@ -129,9 +129,9 @@ function ModalAddGuestInfo(props) {
                                     onChange={handleChangeNationality}
                                 >
                                     {
-                                        countryList.map((country) => {
+                                        countryList.map((country, index) => {
                                             return (
-                                                <MenuItem value={country}>{country}</MenuItem>
+                                                <MenuItem key={index} value={country}>{country}</MenuItem>
                                             )
                                         })
                                     }

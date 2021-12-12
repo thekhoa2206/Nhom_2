@@ -11,6 +11,7 @@ export default function useFindUser() {
     const findUser = () => {
         axios.get('/api/users/info')
             .then(res => {
+                console.log("res", res)
                 dispatch({ type: 'GET_USER', payload: { data: res.data } })
             }).catch(err => {
                 console.log(err);
