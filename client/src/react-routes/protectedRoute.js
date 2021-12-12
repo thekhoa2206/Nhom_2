@@ -6,7 +6,7 @@ import Layout from '../layout/layout';
 import { clearCookie, getCookie } from '../config';
 import _ from "lodash"
 import { useAppState } from '../AppState';
-import useFindUser from '../services/users/user.service';
+import { useFindUser } from '../services/users/user.service';
 
 
 export default function ProtectedRoute(props) {
@@ -27,6 +27,7 @@ export default function ProtectedRoute(props) {
     if (isLoading) {
         return <Loading />
     }
+
     if (!userRole?.some(r => roles?.includes(r))) {
         // role not authorised so redirect to home page
         return <Redirect to='/home' />

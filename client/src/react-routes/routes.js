@@ -6,10 +6,10 @@ import LandingPage from '../modules/landingPage';
 import ProtectedRoute from './protectedRoute'
 import AuthRoute from './authRoute';
 import Statistics from '../modules/statistics/statistics';
-import Register from '../modules/auth/register';
+import Register from '../modules/users/register';
 import RoomManagement from '../modules/rooms/roomsManagement';
 import Statistics2 from '../modules/statistics/statistics2';
-import Reservation from '../modules/Reservation/reservation'
+import Reservation from '../modules/reservation/reservation'
 function Routes(props) {
     return (
         <Switch>

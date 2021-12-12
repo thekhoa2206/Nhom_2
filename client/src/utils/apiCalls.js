@@ -10,6 +10,30 @@ axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.common["Authorization"] = token;
 
 //mẫu get service
+// export function use...() {
+//     const [state, dispatch] = useAppState()
+//     const [isLoading, setIsLoading] = useState(true)
+//     const get... = async (params) => {
+
+//         axios.get("/api/", { params })
+//             .then(res => {
+//                 dispatch({ type: 'GET....', payload: res.data })
+//                 toast.success("Gọi api thành công")
+//             })
+//             .catch((err) => {
+//                 toast.error("Gọi api thất bại")
+//             }).finally(() => {
+//                 setIsLoading(false)
+//             })
+//     }
+
+//     return {
+//         isLoading,
+//         get...
+//     }
+// }
+
+
 export function useGetAllPrice() {
     const [state, dispatch] = useAppState()
     const [isLoading, setIsLoading] = useState(true)

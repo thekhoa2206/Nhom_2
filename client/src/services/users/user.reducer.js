@@ -8,7 +8,12 @@ const userReducer = (state, action = {}) => {
                 user: action.payload.data,
                 isLoading: false
             }
-
+        case 'GET_ALL_USERs':
+            return {
+                ...state,
+                userList: action.payload.data,
+                isLoading: false
+            }
         default:
             return state
     }

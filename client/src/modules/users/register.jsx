@@ -6,44 +6,41 @@ import ModalAddNewUser from './modalAddNewUser'
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import { useGetAllUsers, useGetAllPrice } from '../../utils/apiCalls';
+import { useGetAllUsers, useGetAllPrice } from '../../services/users/user.service';
 import Loading from '../../common-components/Loading';
 import { useAppState } from '../../AppState';
 import { uniqueId } from 'lodash';
 
 function Register(props) {
-    const [state1, setState] = useState(() => initState())
+    const [state, setState] = useState(() => initState())
     const [appState] = useAppState()
-    const { price1, isOpenModal } = state1
-    const { getAllPrice, isLoading } = useGetAllPrice()
+    const { userList, isOpenModal } = state
+    const { getAllUsers, isLoading } = useGetAllUsers()
     function initState() {
         return {
             users: [],
-            price1: [],
+            userList: [],
             isOpenModal: false
         }
     }
     useEffect(() => {
-        let params = {
-            keyword: "vip",
-            status: 1
-        }
-        getAllPrice(params)
+        getAllUsers()
     }, [])
 
 
     useEffect(() => {
-        if (appState.price) {
-            console.log("appState.price", appState.price)
+        if (appState.userList) {
+            console.log("appState.userList", appState.userList)
             setState({
-                ...state1,
-                price1: appState.price.map(x => ({ ...x, id: uniqueId() }))
+                ...state,
+                userList: appState.userList //.map(x => ({ ...x, id: uniqueId() }))
             })
         }
 
-    }, [JSON.stringify(appState.price)])
+    }, [JSON.stringify(appState.userList)])
 
     console.log("isLoading", isLoading)
+    console.log("userList", userList)
     const columns = [
         {
             field: "Hành động",
@@ -81,13 +78,13 @@ function Register(props) {
     };
     const handleAddPrice = (data) => {
         setState({
-            ...state1,
+            ...state,
             isOpenModal: !isOpenModal
         })
     }
     const openModalAddNewUser = () => {
         setState({
-            ...state1,
+            ...state,
             isOpenModal: !isOpenModal
         })
     }
@@ -99,7 +96,7 @@ function Register(props) {
     const handleRowClick = (param, event) => {
         event.stopPropagation();
     };
-    console.log("users", price1)
+    console.log("users", userList)
     return (
         <React.Fragment>
 
@@ -115,7 +112,7 @@ function Register(props) {
 
                     <DataGrid
                         autoHeight
-                        rows={price1}
+                        rows={userList}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
@@ -124,7 +121,7 @@ function Register(props) {
 
                     />
                     <Box>
-                        {JSON.stringify(price1)}
+                        {JSON.stringify(userList)}
                     </Box>
                 </React.Fragment>
             }
