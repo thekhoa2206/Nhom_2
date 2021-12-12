@@ -5,16 +5,17 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jpa.GuestDao;
 import com.vuw17.dao.jpa.ReservationDao;
 import com.vuw17.dao.jpa.RoomDao;
-import com.vuw17.dto.reservation.ReservationDTOResponse;
-import com.vuw17.dto.reservation.ReservationDetailDTOResponse;
-import com.vuw17.dto.reservation.ReservationGuestDTO;
+import com.vuw17.dto.reservation.*;
 import com.vuw17.entities.Guest;
-import com.vuw17.entities.Reservation;
-import com.vuw17.entities.Room;
+import com.vuw17.entities.Reservation;;
 import com.vuw17.repositories.ReservationRepository;
 import com.vuw17.services.ReservationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final GuestDao guestDao;
     private final RoomDao roomDao;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class.toString());
 
     public ReservationServiceImpl(ReservationDao reservationDao, ReservationRepository reservationRepository, GuestDao guestDao, RoomDao roomDao) {
         this.reservationDao = reservationDao;
@@ -71,5 +72,49 @@ public class ReservationServiceImpl implements ReservationService {
         Guest guest = guestDao.findById(reservation.getGuestId());
         ReservationDetailDTOResponse reservationDetailDTOResponse = new ReservationDetailDTOResponse(reservation.getId(), reservation.getNote(), Common.getDate(reservation.getDateFrom()), Common.getDate(reservation.getDateTo()), ConstantVariableCommon.changeIntToStringReservationStatus(reservation.getStatus()), reservation.getNumberRoom(), guest.getFirstName()+guest.getLastName(), guest.getPhoneNumber());
         return reservationDetailDTOResponse;
+    }
+
+    @Override
+    public void createReservation(ReservationDTORequest reservationDTORequest) throws ParseException {
+        Reservation reservation = new Reservation();
+        reservation.setDateFrom(Common.getMilliSeconds(reservationDTORequest.getDateFrom()));
+        reservation.setDateTo(Common.getMilliSeconds(reservationDTORequest.getDateFrom()));
+        reservation.setGuestId(reservationDTORequest.getGuestId());
+        reservation.setNote(reservation.getNote());
+        reservation.setNumberRoom(reservation.getNumberRoom());
+        reservation.setStatus(ConstantVariableCommon.STATUS_RESERVATION_1);
+        saveReservation(reservation);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void saveReservation(Reservation reservation){
+        try{
+            reservationRepository.save(reservation);
+        }catch (Exception e){
+            LOGGER.error("ERROR | Lỗi không lưu được đơn đặt phòng - ", e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateReservation(int id, ReservationDTOUpdateRequest reservationDTOUpdateRequest) throws ParseException {
+        Reservation reservation = reservationDao.findReservationById(id);
+        reservation.setNumberRoom(reservationDTOUpdateRequest.getNumberRoom());
+        reservation.setDateFrom(Common.getMilliSeconds(reservationDTOUpdateRequest.getDateFrom()));
+        reservation.setDateTo(Common.getMilliSeconds(reservationDTOUpdateRequest.getDateTo()));
+        reservation.setNote(reservationDTOUpdateRequest.getNote());
+        saveReservation(reservation);
+    }
+
+    @Override
+    public void changeStatusReservation(int id, int status){
+        Reservation reservation = reservationDao.findReservationById(id);
+        reservation.setStatus(status);
+        saveReservation(reservation);
+    }
+
+    @Override
+    public List<StatusReservation> listStatusReservation(){
+        List<StatusReservation> listStatusReservation = new ArrayList<>();
+        return listStatusReservation;
     }
 }

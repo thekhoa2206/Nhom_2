@@ -1,10 +1,9 @@
 package com.vuw17.services;
 
-import com.vuw17.dto.reservation.ReservationDTO;
-import com.vuw17.dto.reservation.ReservationDTOResponse;
-import com.vuw17.dto.reservation.ReservationDetailDTOResponse;
+import com.vuw17.dto.reservation.*;
 import com.vuw17.dto.user.UserDTOResponse;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface ReservationService {
@@ -13,4 +12,16 @@ public interface ReservationService {
 
     // Hàm tìm kiếm reservation bằng id
     ReservationDetailDTOResponse findReservationDTOById(int id);
+
+    //Hàm tạo đơn đặt phòng
+    void createReservation(ReservationDTORequest reservationDTORequest) throws ParseException;
+
+    // Hàm sửa thông tin đặt phòng
+    void updateReservation(int id, ReservationDTOUpdateRequest reservationDTOUpdateRequest) throws ParseException;
+
+    //Thay đổi trạng thái status
+    void changeStatusReservation(int id, int status);
+
+    //Lấy list trạng thái
+    List<StatusReservation> listStatusReservation();
 }

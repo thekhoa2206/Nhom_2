@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
             UserDTOResponse userDTO = transferUserDTOResponse(user);
             return userDTO;
         }catch (NullPointerException e){
-
             return null;
         }
     }
@@ -85,10 +84,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserDTORequest userDTORequest){
         User user = new User();
-        InputValidateUser.validateEmail(user.getEmail());
-        InputValidateUser.validatePhone(user.getPhone());
+        InputValidateUser.validateEmail(userDTORequest.getEmail());
+        InputValidateUser.validatePhone(userDTORequest.getPhone());
         List<User> users = userRepository.findAll();
-        InputValidateUser.validateUsername(user.getUsername(), users);
+        InputValidateUser.validateUsername(userDTORequest.getUsername(), users);
         user.setName(userDTORequest.getName());
         user.setUsername(userDTORequest.getUsername());
         user.setPassword(Common.GeneratePassword(userDTORequest.getPassword()));
@@ -153,11 +152,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
-        User user = new User();
-        InputValidateUser.validateEmail(user.getEmail());
-        InputValidateUser.validatePhone(user.getPhone());
+        User user = userRepository.findUserById(id);
+        InputValidateUser.validateEmail(userDTOUpdateRequest.getEmail());
+        InputValidateUser.validatePhone(userDTOUpdateRequest.getPhone());
         List<User> users = userRepository.findAll();
-        InputValidateUser.validateUsername(user.getUsername(), users);
+        InputValidateUser.validateUsername(userDTOUpdateRequest.getUsername(), users);
         user.setName(userDTOUpdateRequest.getName());
         user.setUsername(userDTOUpdateRequest.getUsername());
         user.setAddress(userDTOUpdateRequest.getAddress());

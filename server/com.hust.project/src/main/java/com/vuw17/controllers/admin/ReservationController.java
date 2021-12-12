@@ -1,11 +1,13 @@
 package com.vuw17.controllers.admin;
 
-import com.vuw17.dto.reservation.ReservationDTOResponse;
-import com.vuw17.dto.reservation.ReservationDetailDTOResponse;
+import com.vuw17.dto.reservation.*;
+import com.vuw17.entities.Reservation;
 import com.vuw17.services.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -30,7 +32,31 @@ public class ReservationController {
         return ResponseEntity.ok(reservationDetailDTOResponse);
     }
     //API tạo đơn đặt phòng
+    @PostMapping
+    public ResponseEntity<Void> createReservationById(@Valid @RequestBody ReservationDTORequest reservationDTORequest) throws ParseException {
+        reservationService.createReservation(reservationDTORequest);
+        return ResponseEntity.ok().build();
+    }
+
     //API sửa đơn đặt phòng
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateReservationById(@PathVariable int id,@Valid @RequestBody ReservationDTOUpdateRequest reservationDTOUpdateRequest) throws ParseException {
+        reservationService.updateReservation(id, reservationDTOUpdateRequest);
+        return ResponseEntity.ok().build();
+    }
+
     //API thay đổi trạng thái đơn đặt phòng
+    @PutMapping("/change-status/{id}")
+    public ResponseEntity<Void> changeStatusReservation(@PathVariable int id, @RequestParam int status){
+        reservationService.changeStatusReservation(id, status);
+        return ResponseEntity.ok().build();
+    }
+
+    //API lấy list trạng thái đặt phòng
+    @PutMapping("/list-status/{id}")
+    public ResponseEntity<List<StatusReservation>> listStatusReservation(){
+        List<StatusReservation> listStatusReservation = reservationService.listStatusReservation();
+        return ResponseEntity.ok(listStatusReservation);
+    }
 
 }
