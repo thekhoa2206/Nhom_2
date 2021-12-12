@@ -13,6 +13,7 @@ import com.vuw17.entities.Role;
 import com.vuw17.entities.User;
 import com.vuw17.repositories.UserRepository;
 import com.vuw17.services.UserService;
+import com.vuw17.validate.InputValidateUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserDTORequest userDTORequest){
         User user = new User();
+        InputValidateUser.validateEmail(user.getEmail());
+        InputValidateUser.validatePhone(user.getPhone());
+        List<User> users = userRepository.findAll();
+        InputValidateUser.validateUsername(user.getUsername(), users);
         user.setName(userDTORequest.getName());
         user.setUsername(userDTORequest.getUsername());
         user.setPassword(Common.GeneratePassword(userDTORequest.getPassword()));
@@ -149,6 +154,10 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public void updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
         User user = new User();
+        InputValidateUser.validateEmail(user.getEmail());
+        InputValidateUser.validatePhone(user.getPhone());
+        List<User> users = userRepository.findAll();
+        InputValidateUser.validateUsername(user.getUsername(), users);
         user.setName(userDTOUpdateRequest.getName());
         user.setUsername(userDTOUpdateRequest.getUsername());
         user.setAddress(userDTOUpdateRequest.getAddress());
