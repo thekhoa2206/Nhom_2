@@ -82,12 +82,8 @@ public class UserServiceImpl implements UserService {
 
     //Hàm tạo user
     @Override
-    public void createUser(UserDTORequest userDTORequest){
+    public User createUser(UserDTORequest userDTORequest){
         User user = new User();
-        InputValidateUser.validateEmail(userDTORequest.getEmail());
-        InputValidateUser.validatePhone(userDTORequest.getPhone());
-        List<User> users = userRepository.findAll();
-        InputValidateUser.validateUsername(userDTORequest.getUsername(), users);
         user.setName(userDTORequest.getName());
         user.setUsername(userDTORequest.getUsername());
         user.setPassword(Common.GeneratePassword(userDTORequest.getPassword()));
@@ -105,6 +101,8 @@ public class UserServiceImpl implements UserService {
         }
         user.setRoles(roles);
         saveUser(user);
+        User userResponse = userRepository.findUserByUsername(user.getUsername());
+        return userResponse;
     }
 
     //Hàm lưu người dùng
@@ -151,12 +149,8 @@ public class UserServiceImpl implements UserService {
     //Hàm sửa thông tin user
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
+    public User updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
         User user = userRepository.findUserById(id);
-        InputValidateUser.validateEmail(userDTOUpdateRequest.getEmail());
-        InputValidateUser.validatePhone(userDTOUpdateRequest.getPhone());
-        List<User> users = userRepository.findAll();
-        InputValidateUser.validateUsername(userDTOUpdateRequest.getUsername(), users);
         user.setName(userDTOUpdateRequest.getName());
         user.setUsername(userDTOUpdateRequest.getUsername());
         user.setAddress(userDTOUpdateRequest.getAddress());
@@ -173,6 +167,8 @@ public class UserServiceImpl implements UserService {
         }
         user.setRoles(roles);
         saveUser(user);
+        User userResponse = userRepository.findUserByUsername(user.getUsername());
+        return userResponse;
     }
 
     //Hàm xóa user

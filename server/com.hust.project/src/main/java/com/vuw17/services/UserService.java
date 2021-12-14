@@ -3,6 +3,7 @@ package com.vuw17.services;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.dto.user.UserDTOUpdateRequest;
+import com.vuw17.entities.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +17,13 @@ public interface UserService {
     List<UserDTOResponse> findAllUser();
 
     //Hàm tạo user
-    void createUser(UserDTORequest userDTORequest);
+    User createUser(UserDTORequest userDTORequest);
 
     // hàm lấy user theo id
     UserDTOResponse selectUserById(int id);
 
     //Hàm sửa thông tin user
-    void updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id);
+    User updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id);
 
     //Hàm xóa user
     void deleteUser(int id);

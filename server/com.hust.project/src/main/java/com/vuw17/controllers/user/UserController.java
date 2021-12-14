@@ -4,6 +4,7 @@ import com.vuw17.configuration.sercurity.jwt.JwtProvider;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.dto.user.UserDTOUpdateRequest;
+import com.vuw17.entities.User;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,9 +45,9 @@ public class UserController {
 
     //Api tạo mới user
     @PostMapping
-    public ResponseEntity<Void> createUser(@Valid @RequestBody UserDTORequest userDTORequest){
-        userService.createUser(userDTORequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTORequest userDTORequest){
+        User user = userService.createUser(userDTORequest);
+        return ResponseEntity.ok(user);
     }
 
     //API lấy chi tiết người dùng
@@ -57,15 +58,15 @@ public class UserController {
     }
     //API sửa người dùng
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable int id, @Valid @RequestBody UserDTOUpdateRequest userDTOUpdateRequest){
-        userService.updateUser(userDTOUpdateRequest, id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<User> updateUser(@PathVariable int id, @Valid @RequestBody UserDTOUpdateRequest userDTOUpdateRequest){
+        User user = userService.updateUser(userDTOUpdateRequest, id);
+        return ResponseEntity.ok(user);
     }
 
     //API xóa
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id){
+    public ResponseEntity<Integer> deleteUser(@PathVariable int id){
         userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(id);
     }
 }

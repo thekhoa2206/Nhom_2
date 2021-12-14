@@ -59,4 +59,6 @@ public class ReservationController {
         return ResponseEntity.ok(listStatusReservation);
     }
 
+    //API Đặt phòng chi tiết
+
 }
