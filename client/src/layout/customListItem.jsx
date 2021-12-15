@@ -4,15 +4,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import React from "react"
 import { Link } from "react-router-dom"
 import { useLocation } from "react-router-dom"
-import { useAppState } from "../AppState";
+import { useSelector } from "react-redux";
 
 function CustomListItem(props) {
-    const [appState] = useAppState()
-    const user = appState.user
+    const user = useSelector((state) => state.userReducer.user);
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()
-    console.log("props", props)
     if (!userRole?.some(r => roles?.includes(r))) {
         return <div></div>
     }

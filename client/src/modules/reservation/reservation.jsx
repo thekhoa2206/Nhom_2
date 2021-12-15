@@ -6,8 +6,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Loading from '../../common-components/Loading';
-import { useAppState } from '../../AppState';
-import { uniqueId } from 'lodash';
 import useStyles from "./reservation.styles";
 import ReservationService from '../../services/reservation/reservation';
 import DialogDetailReservation from './DialogDetailReservation/DialogDetailReservation';
@@ -18,9 +16,9 @@ function Reservation(props) {
         {
             id: 0,
             nameCustomer: "",
-            phoneCustomer:"",
-            numberRoom:0,
-            fromDate:"",
+            phoneCustomer: "",
+            numberRoom: 0,
+            fromDate: "",
             toDate: "",
             status: "",
         }
@@ -32,22 +30,22 @@ function Reservation(props) {
     const [reservationChoose, setReservationChoose] = useState({
         id: 0,
         nameCustomer: "",
-        phoneCustomer:"",
+        phoneCustomer: "",
         numberRoom: 0,
-        fromDate:"",
+        fromDate: "",
         toDate: "",
         status: "",
     });
     useEffect(() => {
-        try{
-            ReservationService.getListReservationByParam(filters).then((res) =>{
+        try {
+            ReservationService.getListReservationByParam(filters).then((res) => {
                 console.log(res.data)
                 setReServations(
                     res.data.map((reservation) => {
                         return {
                             id: reservation.id,
                             nameCustomer: reservation.reservationGuestDTO.nameCustomer,
-                            phoneCustomer:reservation.reservationGuestDTO.phoneCustomer,
+                            phoneCustomer: reservation.reservationGuestDTO.phoneCustomer,
                             numberRoom: reservation.numberRoom,
                             fromDate: reservation.fromDate,
                             toDate: reservation.toDate,
@@ -56,11 +54,11 @@ function Reservation(props) {
                     })
                 )
             })
-        }catch(error){
+        } catch (error) {
 
         }
     }, [filters])
-    
+
 
     const columns = [
         {
@@ -85,7 +83,7 @@ function Reservation(props) {
                 );
             }
         },
-        { field: 'nameCustomer', headerName: 'Tên khách', type: 'text', width: 180, headerAlign: 'center', align: "center",},
+        { field: 'nameCustomer', headerName: 'Tên khách', type: 'text', width: 180, headerAlign: 'center', align: "center", },
         {
             field: 'phoneCustomer',
             headerName: 'Số điện thoại',
@@ -143,23 +141,23 @@ function Reservation(props) {
     return (
         <React.Fragment>
             <React.Fragment>
-                    <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd}>
-                        Đặt phòng
-                    </Button>
-                    <Box>
-                        <DialogDetailReservation open={showDetailReservation} reservationChoose={reservationChoose}/>
-                    </Box>
-                    <DataGrid
-                        autoHeight
-                        rows={reservations}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        onCellClick={(param) => handleCellClick(param)}
-                        onRowClick={handleRowClick}
-                    />
-                </React.Fragment>
-            
+                <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd}>
+                    Đặt phòng
+                </Button>
+                <Box>
+                    <DialogDetailReservation open={showDetailReservation} reservationChoose={reservationChoose} />
+                </Box>
+                <DataGrid
+                    autoHeight
+                    rows={reservations}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    onCellClick={(param) => handleCellClick(param)}
+                    onRowClick={handleRowClick}
+                />
+            </React.Fragment>
+
         </React.Fragment>
 
     );

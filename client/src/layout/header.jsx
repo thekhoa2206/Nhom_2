@@ -11,13 +11,11 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { useLogout } from '../services/auth/auth.service'
-import { Typography } from '@mui/material';
-import { useAppState } from "../AppState";
+import { useSelector } from "react-redux";
 const drawerWidth = 240;
 
 function Header(props) {
-    const [appState] = useAppState()
-    const user = appState.user
+    const user = useSelector((state) => state.userReducer.user);
     const { open } = props
     const [anchorEl, setAnchorEl] = React.useState(null);
     const { logoutUser } = useLogout();

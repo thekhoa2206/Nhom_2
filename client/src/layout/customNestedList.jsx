@@ -8,22 +8,19 @@ import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { useAppState } from "../AppState";
+import { useSelector } from "react-redux";
+
 function CustomNestedList(props) {
-    const [appState] = useAppState()
-    const user = appState.user
+    const user = useSelector((state) => state.userReducer.user);
     const userRole = user?.role?.map(r => r.nameRole)
     const { roles } = props
     const location = useLocation()
     const [open, setOpen] = React.useState(false);
-    // const [selected, setSelected] = React.useState(true);
 
     const handleClick = () => {
         setOpen(!open);
     };
-    // const handleSelected = () => {
-    //     setSelected(true);
-    // };
+
     if (!userRole.some(r => roles?.includes(r))) {
         return <div></div>
     } else {
