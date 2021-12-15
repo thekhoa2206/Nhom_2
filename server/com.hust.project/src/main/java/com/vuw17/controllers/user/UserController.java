@@ -72,7 +72,7 @@ public class UserController {
     }
 
     //APi list role
-    @GetMapping
+    @GetMapping("/roles")
     public ResponseEntity<List<RoleByUserResponseDTO>> listRole(){
         List<RoleByUserResponseDTO> roles = userService.findAllRole();
         return ResponseEntity.ok(roles);
