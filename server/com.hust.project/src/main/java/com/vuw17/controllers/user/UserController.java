@@ -1,10 +1,7 @@
 package com.vuw17.controllers.user;
 
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
-import com.vuw17.dto.user.RoleByUserResponseDTO;
-import com.vuw17.dto.user.UserDTORequest;
-import com.vuw17.dto.user.UserDTOResponse;
-import com.vuw17.dto.user.UserDTOUpdateRequest;
+import com.vuw17.dto.user.*;
 import com.vuw17.entities.User;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +29,8 @@ public class UserController {
 
     //API lấy chi tiết người dùng
     @GetMapping("/info")
-    public ResponseEntity<UserDTOResponse> getUser(final HttpServletRequest request){
-        UserDTOResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
+    public ResponseEntity<UserInfoResponse> getUser(final HttpServletRequest request){
+        UserInfoResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
         return ResponseEntity.ok(userDTOResponse);
     }
 

@@ -36,14 +36,26 @@ public class UserServiceImpl implements UserService {
 
     //Hàm tìm thông tin user bằng token
     @Override
-    public UserDTOResponse findInfoUser(String token){
+    public UserInfoResponse findInfoUser(String token){
         try{
             //        jwtProvider.validateJwtToken(token);
             System.out.println("token: " +token);
             String[] splits = token.split(" ");
             String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
             User user = userRepository.findUserByUsername(username);
-            UserDTOResponse userDTO = transferUserDTOResponse(user);
+            UserInfoResponse userDTO = new UserInfoResponse();
+            userDTO.setId(user.getId());
+            userDTO.setName(user.getName());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setIdCard(user.getIdCard());
+            userDTO.setPhone(user.getName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAddress(user.getAddress());
+            userDTO.setSalaryDay(user.getSalaryDay());
+            userDTO.setSex(Common.getStringSex(user.getSex()));
+            userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
+            List<RoleUserDTO> roles = new ArrayList<>();
+            userDTO.setRoles(user.getRoles());
             return userDTO;
         }catch (NullPointerException e){
             return null;

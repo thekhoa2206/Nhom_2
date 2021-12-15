@@ -1,9 +1,6 @@
 package com.vuw17.services;
 
-import com.vuw17.dto.user.RoleByUserResponseDTO;
-import com.vuw17.dto.user.UserDTORequest;
-import com.vuw17.dto.user.UserDTOResponse;
-import com.vuw17.dto.user.UserDTOUpdateRequest;
+import com.vuw17.dto.user.*;
 import com.vuw17.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +9,7 @@ import java.util.List;
 @Service
 public interface UserService {
     //Hàm lấy thông tin user bằng token
-    UserDTOResponse findInfoUser(String token);
+    UserInfoResponse findInfoUser(String token);
 
     //Hàm lấy list user DTO
     List<UserDTOResponse> findAllUser();
