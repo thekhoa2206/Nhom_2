@@ -29,8 +29,8 @@ public class UserController {
 
     //API lấy chi tiết người dùng
     @GetMapping("/info")
-    public ResponseEntity<UserInfoResponse> getUser(final HttpServletRequest request){
-        UserInfoResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
+    public ResponseEntity<UserDTOResponse> getUser(final HttpServletRequest request){
+        UserDTOResponse userDTOResponse = userService.findInfoUser(request.getHeader("Authorization"));
         return ResponseEntity.ok(userDTOResponse);
     }
 
@@ -50,8 +50,8 @@ public class UserController {
 
     //API lấy chi tiết người dùng
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTOResponse> getUserById(@PathVariable int id){
-        UserDTOResponse userDTOResponse = userService.selectUserById(id);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable int id){
+        UserResponse userDTOResponse = userService.selectUserById(id);
         return ResponseEntity.ok(userDTOResponse);
     }
     //API sửa người dùng

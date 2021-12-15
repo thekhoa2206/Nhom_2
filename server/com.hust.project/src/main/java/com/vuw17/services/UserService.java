@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface UserService {
     //Hàm lấy thông tin user bằng token
-    UserInfoResponse findInfoUser(String token);
+    UserDTOResponse findInfoUser(String token);
 
     //Hàm lấy list user DTO
     List<UserDTOResponse> findAllUser();
@@ -18,7 +18,7 @@ public interface UserService {
     User createUser(UserDTORequest userDTORequest);
 
     // hàm lấy user theo id
-    UserDTOResponse selectUserById(int id);
+    UserResponse selectUserById(int id);
 
     //Hàm sửa thông tin user
     User updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id);

@@ -3,11 +3,10 @@ package com.vuw17.dto.user;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 @Getter
 @Setter
-public class UserDTOResponse {
+public class UserResponse {
     private int id;
     private String username;
     private String name;
@@ -18,6 +17,5 @@ public class UserDTOResponse {
     private Double salaryDay;
     private String idCard;
     private String status;
-    private List<RoleByUserResponseDTO> roles;
-
+    private List<RoleUserDTO> roles;
 }

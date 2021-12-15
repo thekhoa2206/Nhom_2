@@ -36,14 +36,14 @@ public class UserServiceImpl implements UserService {
 
     //Hàm tìm thông tin user bằng token
     @Override
-    public UserInfoResponse findInfoUser(String token){
+    public UserDTOResponse findInfoUser(String token){
         try{
             //        jwtProvider.validateJwtToken(token);
             System.out.println("token: " +token);
             String[] splits = token.split(" ");
             String username = jwtProvider.getUserNameFromJwtToken(splits[1]);
             User user = userRepository.findUserByUsername(username);
-            UserInfoResponse userDTO = new UserInfoResponse();
+            UserDTOResponse userDTO = new UserDTOResponse();
             userDTO.setId(user.getId());
             userDTO.setName(user.getName());
             userDTO.setUsername(user.getUsername());
@@ -54,8 +54,15 @@ public class UserServiceImpl implements UserService {
             userDTO.setSalaryDay(user.getSalaryDay());
             userDTO.setSex(Common.getStringSex(user.getSex()));
             userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
-            List<RoleUserDTO> roles = new ArrayList<>();
-            userDTO.setRoles(user.getRoles());
+            List<RoleByUserResponseDTO> roleDTOs = new ArrayList<>();
+            for (Role role : user.getRoles()){
+                RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
+                roleDTO.setId(role.getId());
+                roleDTO.setName(role.getName());
+                roleDTO.setDescription(role.getDescription());
+                roleDTOs.add(roleDTO);
+            }
+            userDTO.setRoles(roleDTOs);
             return userDTO;
         }catch (NullPointerException e){
             return null;
@@ -79,10 +86,12 @@ public class UserServiceImpl implements UserService {
             userDTOResponse.setSex(Common.getStringSex(user.getSex()));
             userDTOResponse.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
             userDTOResponse.setIdCard(user.getIdCard());
-            List<RoleUserDTO> roleDTOs = new ArrayList<>();
+            List<RoleByUserResponseDTO> roleDTOs = new ArrayList<>();
             for (Role role : user.getRoles()){
-                RoleUserDTO roleDTO = new RoleUserDTO();
+                RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
                 roleDTO.setId(role.getId());
+                roleDTO.setName(role.getName());
+                roleDTO.setDescription(role.getDescription());
                 roleDTOs.add(roleDTO);
             }
             userDTOResponse.setRoles(roleDTOs);
@@ -126,8 +135,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private UserDTOResponse transferUserDTOResponse(User user){
-        UserDTOResponse userDTO = new UserDTOResponse();
+    private UserResponse transferUserDTOResponse(User user){
+        UserResponse userDTO = new UserResponse();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setUsername(user.getUsername());
@@ -151,9 +160,9 @@ public class UserServiceImpl implements UserService {
 
     // hàm lấy user theo id
     @Override
-    public UserDTOResponse selectUserById(int id){
+    public UserResponse selectUserById(int id){
         User user = userRepository.findUserById(id);
-        UserDTOResponse userDTOResponse = transferUserDTOResponse(user);
+        UserResponse userDTOResponse = transferUserDTOResponse(user);
         return userDTOResponse;
     }
 
