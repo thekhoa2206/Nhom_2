@@ -3,8 +3,7 @@ import axios from 'axios';
 import { getCookie } from '../config'
 import { toast } from './snackbarUtils';
 import { useState } from 'react';
-import { useAppState } from "../AppState";
-
+import { useDispatch } from "react-redux";
 let token = getCookie("jwt")
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.common["Authorization"] = token;
@@ -35,7 +34,7 @@ axios.defaults.headers.common["Authorization"] = token;
 
 
 export function useGetAllPrice() {
-    const [state, dispatch] = useAppState()
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true)
     const getAllPrice = async (params) => {
 
@@ -59,7 +58,7 @@ export function useGetAllPrice() {
 
 //mẫu post service
 export function useCreatePrice() {
-    const [state, dispatch] = useAppState()
+    const dispatch = useDispatch();
     const createPrice = async (data) => {
         axios
             .post("/api/admin/price", data)

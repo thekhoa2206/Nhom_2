@@ -30,12 +30,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
-import { useAppState } from '../../AppState';
 
 function CheckInModal(props) {
     const { open, id } = props;
-    const [appState] = useAppState()
-    console.log("appState", appState)
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],

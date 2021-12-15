@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { clearCookie, getCookie } from "../../config";
-import { useAppState } from '../../AppState';
+import { useDispatch } from "react-redux";
 import { toast } from '../../utils/snackbarUtils';
 
 let token = getCookie("jwt")
@@ -9,14 +9,12 @@ axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.common["Authorization"] = token;
 
 export function useFindUser() {
-    const [state, dispatch] = useAppState()
+    const dispatch = useDispatch();
     const findUser = () => {
         axios.get('/api/users/info')
             .then(res => {
-                console.log("res", res)
                 dispatch({ type: 'GET_USER', payload: { data: res.data } })
             }).catch(err => {
-                console.log(err);
                 clearCookie("jwt")
             });
     }
@@ -24,18 +22,32 @@ export function useFindUser() {
 }
 
 export function useGetAllUsers() {
-    const [state, dispatch] = useAppState()
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true)
     const getAllUsers = () => {
         axios.get('api/users/list')
             .then(res => {
-                console.log("res", res)
                 dispatch({ type: 'GET_ALL_USERS', payload: { data: res.data } })
             }).catch(err => {
-                toast.error("gọi fail")
+                toast.error("Lấy danh sách user thất bại")
             }).finally(() => {
                 setIsLoading(false)
             });
     }
     return { getAllUsers, isLoading }
+}
+export function useCreateUser() {
+    const dispatch = useDispatch();
+    const createUser = async (data) => {
+        await axios
+            .post("/api/users", data)
+            .then(res => {
+                dispatch({ type: 'ADD_USER', payload: { data: res.data } })
+                toast.success("Tạo mới user thành công")
+            })
+            .catch((err) => {
+                toast.error("Tạo mới user thất bại")
+            });
+    }
+    return { createUser }
 }

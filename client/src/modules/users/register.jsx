@@ -6,20 +6,20 @@ import ModalAddNewUser from './modalAddNewUser'
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import { useGetAllUsers, useGetAllPrice } from '../../services/users/user.service';
+import { useGetAllUsers } from '../../services/users/user.service';
 import Loading from '../../common-components/Loading';
-import { useAppState } from '../../AppState';
+import { useSelector } from "react-redux";
 import { uniqueId } from 'lodash';
 
 function Register(props) {
     const [state, setState] = useState(() => initState())
-    const [appState] = useAppState()
-    const { userList, isOpenModal } = state
+    const userList = useSelector((state) => state.userReducer.userList);
+    const { usersList, isOpenModal } = state
     const { getAllUsers, isLoading } = useGetAllUsers()
     function initState() {
         return {
             users: [],
-            userList: [],
+            usersList: [],
             isOpenModal: false
         }
     }
@@ -29,22 +29,19 @@ function Register(props) {
 
 
     useEffect(() => {
-        if (appState.userList) {
-            console.log("appState.userList", appState.userList)
+        if (userList) {
             setState({
                 ...state,
-                userList: appState.userList //.map(x => ({ ...x, id: uniqueId() }))
+                usersList: userList //.map(x => ({ ...x, id: uniqueId() }))
             })
         }
 
-    }, [JSON.stringify(appState.userList)])
-
-    console.log("isLoading", isLoading)
-    console.log("userList", userList)
+    }, [JSON.stringify(userList)])
+    console.log("state", state)
     const columns = [
         {
-            field: "Hành động",
-            width: 130,
+            field: " ",
+            width: 60,
             sortable: false,
             filterable: false,
             disableClickEventBubbling: true,
@@ -64,19 +61,16 @@ function Register(props) {
                 );
             }
         },
-        { field: 'name', headerName: 'Tên Giá', width: 150 },
-        {
-            field: 'price',
-            headerName: 'Giá',
-            headerAlign: 'center',
-            type: 'text',
-            width: 150,
-        },
+        { field: 'name', headerName: 'Họ và tên', width: 150 },
+        { field: 'email', headerName: 'Email', headerAlign: 'center', width: 150, },
+        { field: 'address', headerName: 'Địa chỉ', headerAlign: 'center', width: 150, },
+        { field: 'phone', headerName: 'Số điện thoại', headerAlign: 'center', width: 150, },
+
     ];
     const handleClick = (event, cellValues) => {
         alert(cellValues.row.name);
     };
-    const handleAddPrice = (data) => {
+    const handleAddUser = (data) => {
         setState({
             ...state,
             isOpenModal: !isOpenModal
@@ -96,7 +90,6 @@ function Register(props) {
     const handleRowClick = (param, event) => {
         event.stopPropagation();
     };
-    console.log("users", userList)
     return (
         <React.Fragment>
 
@@ -108,11 +101,11 @@ function Register(props) {
                         Thêm mới người dùng
                     </Button>
                     <span></span>
-                    <ModalAddNewUser open={isOpenModal} handleClose={openModalAddNewUser} handleAddPrice={handleAddPrice} />
+                    <ModalAddNewUser open={isOpenModal} handleClose={openModalAddNewUser} handleAddUser={handleAddUser} />
 
                     <DataGrid
                         autoHeight
-                        rows={userList}
+                        rows={usersList}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
@@ -120,9 +113,6 @@ function Register(props) {
                         onRowClick={handleRowClick}
 
                     />
-                    <Box>
-                        {JSON.stringify(userList)}
-                    </Box>
                 </React.Fragment>
             }
         </React.Fragment>

@@ -3,31 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { SnackbarProvider } from 'notistack'
-import { SnackbarUtilsConfigurator } from "./utils/snackbarUtils";
-import { initialState, combineReducers } from './context/reducers'
-import { AppStateProvider } from './AppState'
-import priceReducer from './modules/rooms/price.reducer';
-import userReducer from '../src/services/users/user.reducer';
-
-const appReducers = combineReducers({
-  price: priceReducer,
-  user: userReducer
-})
-
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppStateProvider reducer={appReducers} initialState={initialState}>
-      <SnackbarProvider maxSnack={2} anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      >
-        <SnackbarUtilsConfigurator />
-        <App />
-      </SnackbarProvider>
-    </AppStateProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

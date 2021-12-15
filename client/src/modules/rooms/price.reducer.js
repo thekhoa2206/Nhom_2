@@ -1,9 +1,9 @@
 import { uniqueId } from "lodash"
-
-const priceReducer = (state, action = {}) => {
-    const { type } = action
-    console.log("action price", action)
-    switch (type) {
+let initState = {
+    price: []
+}
+const priceReducer = (state = initState, action) => {
+    switch (action.type) {
         case 'GET_ALL_PRICE':
             return {
                 ...state,
