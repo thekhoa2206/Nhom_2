@@ -24,4 +24,7 @@ public interface ReservationService {
 
     //Lấy list trạng thái
     List<StatusReservation> listStatusReservation();
+
+    //Hàm đặt phòng cho khách
+    void chooseRoom(ReservationRoomDTORequest reservationRoomDTORequest);
 }

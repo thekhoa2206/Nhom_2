@@ -1,6 +1,7 @@
 package com.vuw17.controllers.user;
 
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
+import com.vuw17.dto.user.RoleByUserResponseDTO;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.dto.user.UserDTOUpdateRequest;
@@ -68,5 +69,12 @@ public class UserController {
     public ResponseEntity<Integer> deleteUser(@PathVariable int id){
         userService.deleteUser(id);
         return ResponseEntity.ok(id);
+    }
+
+    //APi list role
+    @GetMapping
+    public ResponseEntity<List<RoleByUserResponseDTO>> listRole(){
+        List<RoleByUserResponseDTO> roles = userService.findAllRole();
+        return ResponseEntity.ok(roles);
     }
 }

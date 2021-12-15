@@ -1,5 +1,6 @@
 package com.vuw17.services;
 
+import com.vuw17.dto.user.RoleByUserResponseDTO;
 import com.vuw17.dto.user.UserDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.dto.user.UserDTOUpdateRequest;
@@ -27,4 +28,7 @@ public interface UserService {
 
     //Hàm xóa user
     void deleteUser(int id);
+
+    //Hàm lấy list role
+    List<RoleByUserResponseDTO> findAllRole();
 }

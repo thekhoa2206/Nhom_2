@@ -60,5 +60,10 @@ public class ReservationController {
     }
 
     //API Đặt phòng chi tiết
+    @PostMapping("/room")
+    public ResponseEntity<Void> chooseRoom(@Valid @RequestBody ReservationRoomDTORequest reservationRoomDTORequest){
+        reservationService.chooseRoom(reservationRoomDTORequest);
+        return ResponseEntity.ok().build();
+    }
 
 }

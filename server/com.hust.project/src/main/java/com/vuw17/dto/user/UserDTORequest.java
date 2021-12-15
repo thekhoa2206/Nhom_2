@@ -31,5 +31,5 @@ public class UserDTORequest {
     @NotBlank(message = "Id card không được để trống!")
     @NotNull(message = "Id card không được để trống!")
     private String idCard;
-    private List<Integer> roleIds;
+    private List<RoleUserDTO> roles;
 }

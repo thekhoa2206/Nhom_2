@@ -5,15 +5,12 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.configuration.sercurity.jwt.JwtProvider;
 
 import com.vuw17.dao.jpa.UserDao;
-import com.vuw17.dto.user.RoleByUserResponseDTO;
-import com.vuw17.dto.user.UserDTORequest;
-import com.vuw17.dto.user.UserDTOResponse;
-import com.vuw17.dto.user.UserDTOUpdateRequest;
+import com.vuw17.dto.user.*;
 import com.vuw17.entities.Role;
 import com.vuw17.entities.User;
+import com.vuw17.repositories.RoleRepository;
 import com.vuw17.repositories.UserRepository;
 import com.vuw17.services.UserService;
-import com.vuw17.validate.InputValidateUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,12 +24,14 @@ public class UserServiceImpl implements UserService {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
     private final UserDao userDao;
+    private final RoleRepository roleRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class.toString());
 
-    public UserServiceImpl(JwtProvider jwtProvider, UserRepository userRepository, UserDao userDao) {
+    public UserServiceImpl(JwtProvider jwtProvider, UserRepository userRepository, UserDao userDao, RoleRepository roleRepository) {
         this.jwtProvider = jwtProvider;
         this.userRepository = userRepository;
         this.userDao = userDao;
+        this.roleRepository = roleRepository;
     }
 
     //Hàm tìm thông tin user bằng token
@@ -68,13 +67,13 @@ public class UserServiceImpl implements UserService {
             userDTOResponse.setSex(Common.getStringSex(user.getSex()));
             userDTOResponse.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
             userDTOResponse.setIdCard(user.getIdCard());
-            List<RoleByUserResponseDTO> roleByUserResponseDTOs = new ArrayList<>();
+            List<RoleUserDTO> roleDTOs = new ArrayList<>();
             for (Role role : user.getRoles()){
-                RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
-                roleDTO.setNameRole(role.getName());
-                roleByUserResponseDTOs.add(roleDTO);
+                RoleUserDTO roleDTO = new RoleUserDTO();
+                roleDTO.setId(role.getId());
+                roleDTOs.add(roleDTO);
             }
-            userDTOResponse.setRole(roleByUserResponseDTOs);
+            userDTOResponse.setRoles(roleDTOs);
             userDTOResponses.add(userDTOResponse);
         }
         return userDTOResponses;
@@ -95,8 +94,8 @@ public class UserServiceImpl implements UserService {
         user.setStatus(ConstantVariableCommon.STATUS_USER_1);
         user.setSex(userDTORequest.isSex());
         List<Role> roles = new ArrayList<>();
-        for (Integer roleId: userDTORequest.getRoleIds()) {
-            Role role = userDao.findRoleById(roleId);
+        for (RoleUserDTO roleDTO: userDTORequest.getRoles()) {
+            Role role = userDao.findRoleById(roleDTO.getId());
             roles.add(role);
         }
         user.setRoles(roles);
@@ -127,13 +126,13 @@ public class UserServiceImpl implements UserService {
         userDTO.setSalaryDay(user.getSalaryDay());
         userDTO.setSex(Common.getStringSex(user.getSex()));
         userDTO.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(user.getStatus()));
-        List<RoleByUserResponseDTO> roleName = new ArrayList<>();
+        List<RoleUserDTO> roles = new ArrayList<>();
         for(int i = 0; i< user.getRoles().size(); i++){
-            RoleByUserResponseDTO roleByUserResponseDTO = new RoleByUserResponseDTO();
-            roleByUserResponseDTO.setNameRole(user.getRoles().get(i).getName());
-            roleName.add(roleByUserResponseDTO);
+            RoleUserDTO roleByUserResponseDTO = new RoleUserDTO();
+            roleByUserResponseDTO.setId(user.getRoles().get(i).getId());
+            roles.add(roleByUserResponseDTO);
         }
-        userDTO.setRole(roleName);
+        userDTO.setRoles(roles);
         return userDTO;
     }
 
@@ -161,8 +160,8 @@ public class UserServiceImpl implements UserService {
         user.setStatus(ConstantVariableCommon.STATUS_USER_1);
         user.setSex(userDTOUpdateRequest.isSex());
         List<Role> roles = new ArrayList<>();
-        for (Integer roleId: userDTOUpdateRequest.getRoleIds()) {
-            Role role = userDao.findRoleById(roleId);
+        for (RoleUserDTO roleDTO: userDTOUpdateRequest.getRoles()) {
+            Role role = userDao.findRoleById(roleDTO.getId());
             roles.add(role);
         }
         user.setRoles(roles);
@@ -177,5 +176,20 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int id){
         User user = userRepository.findUserById(id);
         userRepository.delete(user);
+    }
+
+    //Hàm lấy list role
+    @Override
+    public List<RoleByUserResponseDTO> findAllRole(){
+        List<Role> roles = roleRepository.findAll();
+        List<RoleByUserResponseDTO> roleDTOs = new ArrayList<>();
+        for (Role role: roles) {
+            RoleByUserResponseDTO roleDTO = new RoleByUserResponseDTO();
+            roleDTO.setId(role.getId());
+            roleDTO.setName(role.getName());
+            roleDTO.setDescription(role.getDescription());
+            roleDTOs.add(roleDTO);
+        }
+        return roleDTOs;
     }
 }

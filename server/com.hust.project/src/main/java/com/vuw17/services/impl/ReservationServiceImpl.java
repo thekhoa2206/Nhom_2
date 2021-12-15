@@ -117,4 +117,9 @@ public class ReservationServiceImpl implements ReservationService {
         List<StatusReservation> listStatusReservation = new ArrayList<>();
         return listStatusReservation;
     }
+
+    @Override
+    public void chooseRoom(ReservationRoomDTORequest reservationRoomDTORequest){
+
+    }
 }
