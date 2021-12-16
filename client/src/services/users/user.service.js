@@ -51,3 +51,18 @@ export function useCreateUser() {
     }
     return { createUser }
 }
+export function useEditUser() {
+    const dispatch = useDispatch();
+    const editUser = async (id, data) => {
+        await axios
+            .put(`/api/users/${id}`, data)
+            .then(res => {
+                dispatch({ type: 'EDIT_USER', payload: { data: res.data } })
+                toast.success("Chỉnh sửa user thành công")
+            })
+            .catch((err) => {
+                toast.error("Chỉnh sửa user thất bại")
+            });
+    }
+    return { editUser }
+}

@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { setCookie, getCookie, clearCookie } from "../../config";
 import { useDispatch } from "react-redux";
-
+import { toast } from '../../utils/snackbarUtils';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -53,4 +53,16 @@ export function useLogout() {
 	return {
 		logoutUser
 	}
+}
+export function useGetAllRoles() {
+	const dispatch = useDispatch();
+	const getAllRoles = () => {
+		axios.get('api/roles')
+			.then(res => {
+				dispatch({ type: 'GET_ALL_ROLES', payload: { data: res.data } })
+			}).catch(err => {
+				toast.error("Lấy danh sách role thất bại")
+			})
+	}
+	return { getAllRoles }
 }

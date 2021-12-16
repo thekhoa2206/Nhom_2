@@ -15,30 +15,53 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useCreateUser } from '../../services/users/user.service';
-import { useHistory } from 'react-router'
+import { useEditUser } from '../../services/users/user.service';
 
-function ModalAddNewUser(props) {
-    const history = useHistory()
-    const { open } = props;
-    const [state, setState] = useState({ roles: [] })
-    const { name, dob, roles } = state
+function ModalEditNewUser(props) {
+    const { open, user } = props;
+    console.log("props", props)
+    const [state, setState] = useState({
+        roleIds: []
+    })
 
-    const { createUser } = useCreateUser()
-    const handleAddUser = (event) => {
+    useEffect(() => {
+        if (user) {
+            setState({
+                id: user.id,
+                address: user.address,
+                email: user.email,
+                idCard: user.idCard,
+                name: user.name,
+                phone: user.phone,
+                roleIds: user?.roles?.map(x => {
+                    if (x.nameRole == "ROLE_STAFF")
+                        return 2
+                    if (x.nameRole == "ROLE_ADMIN")
+                        return 1
+                }),
+                salaryDay: 0,
+                gender: user.sex,
+                username: user.username
+            })
+        }
+    }, [user?.id])
+
+    const { name, address, email, idCard, phone, roleIds, salaryDay, gender, username } = state
+
+    const { editUser } = useEditUser()
+    const handleEditUser = (event) => {
         let data = {
             address: state.address,
             email: state.email,
             idCard: state.idCard,
             name: state.name,
-            password: state.username,
             phone: state.phone,
-            roles: state.roles,
+            roles: state.roleIds,
             salaryDay: 0,
-            sex: state.gender,
+            sex: state.gender == "Nam" ? true : false,
             username: state.username
         }
-        createUser(data)
+        editUser(state.id, data)
         props.handleClose()
     }
     const handleNameChange = (e) => {
@@ -67,7 +90,7 @@ function ModalAddNewUser(props) {
             // On autofill we get a the stringified value.
             {
                 ...state,
-                roles: typeof value === 'string' ? value.split(',') : value,
+                roleIds: typeof value === 'string' ? value.split(',') : value,
             }
         );
     };
@@ -110,7 +133,7 @@ function ModalAddNewUser(props) {
     console.log("state", state)
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle align="center">THÊM MỚI NGƯỜI DÙNG </DialogTitle>
+            <DialogTitle align="center">CHỈNH SỬA THÔNG TIN NGƯỜI DÙNG </DialogTitle>
             <DialogContent>
                 <Box onSubmit={handleSubmit} pl={4}>
                     <Grid
@@ -121,6 +144,7 @@ function ModalAddNewUser(props) {
                     >
                         <Grid item xs={6} pl={3}>
                             <TextField
+                                value={name}
                                 onChange={handleNameChange}
                                 margin="normal"
                                 required
@@ -133,6 +157,7 @@ function ModalAddNewUser(props) {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
+                                value={username}
                                 onChange={handleUsernameChange}
                                 margin="normal"
                                 required
@@ -145,7 +170,7 @@ function ModalAddNewUser(props) {
                         <Grid item xs={6} pl={4}>
                             <FormControl required component="fieldset">
                                 <FormLabel component="legend">Giới tính</FormLabel>
-                                <RadioGroup onChange={handleGenderChange} row aria-label="gender" name="row-radio-buttons-group">
+                                <RadioGroup onChange={handleGenderChange} value={gender == "Nam" ? true : false} row aria-label="gender" name="row-radio-buttons-group">
                                     <FormControlLabel value={true} control={<Radio />} label="Nam" />
                                     <FormControlLabel value={false} control={<Radio />} label="Nữ" />
                                 </RadioGroup>
@@ -160,7 +185,7 @@ function ModalAddNewUser(props) {
                                         labelId="role"
                                         id="role"
                                         label="Phân quyền"
-                                        value={roles}
+                                        value={roleIds}
                                         onChange={handleRoleChange}
                                     >
                                         <MenuItem key={1} value={1}>Quản trị viên</MenuItem>
@@ -173,6 +198,7 @@ function ModalAddNewUser(props) {
 
                         <Grid item xs={6} pl={3}>
                             <TextField
+                                value={address}
                                 onChange={handleAddressChange}
                                 margin="normal"
                                 required
@@ -183,6 +209,7 @@ function ModalAddNewUser(props) {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
+                                value={email}
                                 onChange={handleEmailChange}
                                 margin="normal"
                                 required
@@ -194,6 +221,7 @@ function ModalAddNewUser(props) {
                         </Grid>
                         <Grid item xs={6} pl={3}>
                             <TextField
+                                value={phone}
                                 onChange={handlePhoneChange}
                                 margin="normal"
                                 required
@@ -204,6 +232,7 @@ function ModalAddNewUser(props) {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
+                                value={idCard}
                                 onChange={handleIdCardChange}
                                 margin="normal"
                                 required
@@ -234,7 +263,7 @@ function ModalAddNewUser(props) {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleAddUser}>
+                    onClick={handleEditUser}>
                     Thêm
                 </Button>
             </DialogActions>
@@ -243,4 +272,4 @@ function ModalAddNewUser(props) {
     );
 }
 
-export default ModalAddNewUser;
+export default ModalEditNewUser;
