@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 function CustomNestedList(props) {
     const user = useSelector((state) => state.userReducer.user);
-    const userRole = user?.role?.map(r => r.nameRole)
+    const userRole = user?.roles?.map(r => r.name)
     const { roles } = props
     const location = useLocation()
     const [open, setOpen] = React.useState(false);

@@ -3,6 +3,7 @@ import { withSnackbar } from 'notistack';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import ModalAddNewUser from './modalAddNewUser'
+import ModalEditUser from './modalEditUser'
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
@@ -14,13 +15,14 @@ import { uniqueId } from 'lodash';
 function Register(props) {
     const [state, setState] = useState(() => initState())
     const userList = useSelector((state) => state.userReducer.userList);
-    const { usersList, isOpenModal } = state
+    const { usersList, isOpenModalAdd, isOpenModalEdit, user } = state
     const { getAllUsers, isLoading } = useGetAllUsers()
     function initState() {
         return {
-            users: [],
+            user: {},
             usersList: [],
-            isOpenModal: false
+            isOpenModalAdd: false,
+            isOpenModalEdit: false,
         }
     }
     useEffect(() => {
@@ -37,7 +39,7 @@ function Register(props) {
         }
 
     }, [JSON.stringify(userList)])
-    console.log("state", state)
+
     const columns = [
         {
             field: " ",
@@ -53,7 +55,7 @@ function Register(props) {
                         style={{ alignContent: "center" }}
                         size="small"
                         onClick={(event) => {
-                            handleClick(event, cellValues);
+                            handleClickEdit(event, cellValues);
                         }}
                     >
                         <EditIcon style={{ fill: "orange" }} />
@@ -67,19 +69,24 @@ function Register(props) {
         { field: 'phone', headerName: 'Số điện thoại', headerAlign: 'center', width: 150, },
 
     ];
-    const handleClick = (event, cellValues) => {
-        alert(cellValues.row.name);
-    };
-    const handleAddUser = (data) => {
+    const handleClickEdit = (event, cellValues) => {
+        console.log("cellValues.row", cellValues.row)
         setState({
             ...state,
-            isOpenModal: !isOpenModal
+            user: cellValues.row,
+            isOpenModalEdit: !isOpenModalEdit
         })
-    }
+    };
     const openModalAddNewUser = () => {
         setState({
             ...state,
-            isOpenModal: !isOpenModal
+            isOpenModalAdd: !isOpenModalAdd
+        })
+    }
+    const openModalEditUser = () => {
+        setState({
+            ...state,
+            isOpenModalEdit: !isOpenModalEdit
         })
     }
 
@@ -90,6 +97,7 @@ function Register(props) {
     const handleRowClick = (param, event) => {
         event.stopPropagation();
     };
+    console.log("state", state)
     return (
         <React.Fragment>
 
@@ -97,17 +105,20 @@ function Register(props) {
                 <Loading />
                 :
                 <React.Fragment>
-                    <Button sx={{ mb: 3 }} variant="contained" color="success" onClick={openModalAddNewUser}>
-                        Thêm mới người dùng
+                    <Button sx={{ mb: 3 }} variant="contained" color="primary" onClick={openModalAddNewUser}>
+                        Thêm mới
                     </Button>
                     <span></span>
-                    <ModalAddNewUser open={isOpenModal} handleClose={openModalAddNewUser} handleAddUser={handleAddUser} />
+                    <ModalAddNewUser open={isOpenModalAdd} handleClose={openModalAddNewUser} />
+                    <ModalEditUser open={isOpenModalEdit} handleClose={openModalEditUser} user={user} />
+
+
 
                     <DataGrid
                         autoHeight
                         rows={usersList}
                         columns={columns}
-                        pageSize={5}
+                        pageSize={10}
                         rowsPerPageOptions={[5]}
                         onCellClick={handleCellClick}
                         onRowClick={handleRowClick}

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 function CustomListItem(props) {
     const user = useSelector((state) => state.userReducer.user);
-    const userRole = user?.role?.map(r => r.nameRole)
+    const userRole = user?.roles?.map(r => r.name)
     const { roles } = props
     const location = useLocation()
     if (!userRole?.some(r => roles?.includes(r))) {

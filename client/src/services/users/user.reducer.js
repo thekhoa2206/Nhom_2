@@ -24,6 +24,18 @@ const userReducer = (state = initState, action) => {
                 userList: [...state?.userList, action.payload.data],
                 isLoading: false
             }
+        case 'EDIT_USER':
+            const updatedUser = action.payload.data;
+            const updatedUsers = state.userList.map((user) => {
+                if (user.id === updatedUser.id) {
+                    return updatedUser;
+                }
+                return user;
+            });
+            return {
+                ...state,
+                userList: updatedUsers,
+            };
         default:
             return state
     }

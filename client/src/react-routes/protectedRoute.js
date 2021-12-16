@@ -16,7 +16,7 @@ export default function ProtectedRoute(props) {
     }, [])
     const user = useSelector((state) => state.userReducer.user);
     const isLoading = useSelector((state) => state.userReducer.isLoading);
-    const userRole = user?.role?.map(r => r.nameRole)
+    const userRole = user?.roles?.map(r => r.name)
     const { roles, component: Component, ...rest } = props;
     let jwt = getCookie("jwt")
 
