@@ -27,5 +27,5 @@ public class UserDTOUpdateRequest {
     @NotBlank(message = "Id card không được để trống!")
     @NotNull(message = "Id card không được để trống!")
     private String idCard;
-    private List<RoleUserDTO> roles;
+    private List<Integer> roleIds;
 }

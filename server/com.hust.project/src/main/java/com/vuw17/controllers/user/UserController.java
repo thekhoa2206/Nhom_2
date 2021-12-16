@@ -43,8 +43,8 @@ public class UserController {
 
     //Api tạo mới user
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTORequest userDTORequest){
-        User user = userService.createUser(userDTORequest);
+    public ResponseEntity<UserRoleDTOResponse> createUser(@Valid @RequestBody UserDTORequest userDTORequest){
+        UserRoleDTOResponse user = userService.createUser(userDTORequest);
         return ResponseEntity.ok(user);
     }
 
@@ -56,8 +56,8 @@ public class UserController {
     }
     //API sửa người dùng
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @Valid @RequestBody UserDTOUpdateRequest userDTOUpdateRequest){
-        User user = userService.updateUser(userDTOUpdateRequest, id);
+    public ResponseEntity<UserRoleDTOResponse> updateUser(@PathVariable int id, @Valid @RequestBody UserDTOUpdateRequest userDTOUpdateRequest){
+        UserRoleDTOResponse user = userService.updateUser(userDTOUpdateRequest, id);
         return ResponseEntity.ok(user);
     }
 

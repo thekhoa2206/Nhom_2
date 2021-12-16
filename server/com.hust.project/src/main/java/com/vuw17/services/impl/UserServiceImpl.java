@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
     //Hàm tạo user
     @Override
-    public User createUser(UserDTORequest userDTORequest){
+    public UserRoleDTOResponse createUser(UserDTORequest userDTORequest){
         User user = new User();
         user.setName(userDTORequest.getName());
         user.setUsername(userDTORequest.getUsername());
@@ -115,14 +115,30 @@ public class UserServiceImpl implements UserService {
         user.setStatus(ConstantVariableCommon.STATUS_USER_1);
         user.setSex(userDTORequest.isSex());
         List<Role> roles = new ArrayList<>();
-        for (RoleUserDTO roleDTO: userDTORequest.getRoles()) {
-            Role role = userDao.findRoleById(roleDTO.getId());
+        for (Integer roleId: userDTORequest.getRoleIds()) {
+            Role role = userDao.findRoleById(roleId);
             roles.add(role);
         }
         user.setRoles(roles);
         saveUser(user);
         User userResponse = userRepository.findUserByUsername(user.getUsername());
-        return userResponse;
+        UserRoleDTOResponse userRoleDTOResponse = new UserRoleDTOResponse();
+        userRoleDTOResponse.setName(userResponse.getName());
+        userRoleDTOResponse.setAddress(userResponse.getAddress());
+        userRoleDTOResponse.setEmail(userResponse.getEmail());
+        userRoleDTOResponse.setId(userResponse.getId());
+        userRoleDTOResponse.setIdCard(userResponse.getIdCard());
+        userRoleDTOResponse.setPhone(userResponse.getPhone());
+        userRoleDTOResponse.setUsername(userResponse.getUsername());
+        userRoleDTOResponse.setSex(Common.getStringSex(userResponse.getSex()));
+        userRoleDTOResponse.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(userResponse.getStatus()));
+        userRoleDTOResponse.setSalaryDay(userResponse.getSalaryDay());
+        List<Integer> roleIds = new ArrayList<>();
+        for (Role role : userResponse.getRoles()) {
+            roleIds.add(role.getId());
+        }
+        userRoleDTOResponse.setRoleIds(roleIds);
+        return userRoleDTOResponse;
     }
 
     //Hàm lưu người dùng
@@ -169,7 +185,7 @@ public class UserServiceImpl implements UserService {
     //Hàm sửa thông tin user
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public User updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
+    public UserRoleDTOResponse updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id){
         User user = userRepository.findUserById(id);
         user.setName(userDTOUpdateRequest.getName());
         user.setUsername(userDTOUpdateRequest.getUsername());
@@ -181,14 +197,30 @@ public class UserServiceImpl implements UserService {
         user.setStatus(ConstantVariableCommon.STATUS_USER_1);
         user.setSex(userDTOUpdateRequest.isSex());
         List<Role> roles = new ArrayList<>();
-        for (RoleUserDTO roleDTO: userDTOUpdateRequest.getRoles()) {
-            Role role = userDao.findRoleById(roleDTO.getId());
+        for (Integer roleId: userDTOUpdateRequest.getRoleIds()) {
+            Role role = userDao.findRoleById(roleId);
             roles.add(role);
         }
         user.setRoles(roles);
         saveUser(user);
         User userResponse = userRepository.findUserByUsername(user.getUsername());
-        return userResponse;
+        UserRoleDTOResponse userRoleDTOResponse = new UserRoleDTOResponse();
+        userRoleDTOResponse.setName(userResponse.getName());
+        userRoleDTOResponse.setAddress(userResponse.getAddress());
+        userRoleDTOResponse.setEmail(userResponse.getEmail());
+        userRoleDTOResponse.setId(userResponse.getId());
+        userRoleDTOResponse.setIdCard(userResponse.getIdCard());
+        userRoleDTOResponse.setPhone(userResponse.getPhone());
+        userRoleDTOResponse.setUsername(userResponse.getUsername());
+        userRoleDTOResponse.setSex(Common.getStringSex(userResponse.getSex()));
+        userRoleDTOResponse.setStatus(ConstantVariableCommon.changeIntToStringUserStatus(userResponse.getStatus()));
+        userRoleDTOResponse.setSalaryDay(userResponse.getSalaryDay());
+        List<Integer> roleIds = new ArrayList<>();
+        for (Role role : userResponse.getRoles()) {
+            roleIds.add(role.getId());
+        }
+        userRoleDTOResponse.setRoleIds(roleIds);
+        return userRoleDTOResponse;
     }
 
     //Hàm xóa user

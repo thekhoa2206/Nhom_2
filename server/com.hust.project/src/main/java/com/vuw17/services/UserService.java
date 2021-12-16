@@ -15,13 +15,13 @@ public interface UserService {
     List<UserDTOResponse> findAllUser();
 
     //Hàm tạo user
-    User createUser(UserDTORequest userDTORequest);
+    UserRoleDTOResponse createUser(UserDTORequest userDTORequest);
 
     // hàm lấy user theo id
     UserResponse selectUserById(int id);
 
     //Hàm sửa thông tin user
-    User updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id);
+    UserRoleDTOResponse updateUser(UserDTOUpdateRequest userDTOUpdateRequest, int id);
 
     //Hàm xóa user
     void deleteUser(int id);
