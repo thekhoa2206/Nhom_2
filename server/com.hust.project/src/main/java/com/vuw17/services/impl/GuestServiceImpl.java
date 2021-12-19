@@ -8,6 +8,7 @@ import com.vuw17.dao.jdbc.TypeActionDAO;
 import com.vuw17.dao.jpa.GuestDao;
 import com.vuw17.dao.jpa.TableDiaryDao;
 import com.vuw17.dao.jpa.TypeActionDao;
+import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.Guest;
@@ -15,6 +16,7 @@ import com.vuw17.services.BaseService;
 import com.vuw17.services.CommonService;
 import com.vuw17.services.GuestService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +66,58 @@ public class GuestServiceImpl extends CommonService implements GuestService {
         return toDTO(guestDao.findById(id));
     }
 
+    @Override
+    public GuestDTO update(GuestDTO guestDTO, UserDTOResponse userDTOResponse) {
+        GuestDTO newData = updateData(findById(guestDTO.getId()),guestDTO);
+
+        boolean check = guestDao.update(toEntity(newData));
+        if(check){
+            saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, newData.getId(),ConstantVariableCommon.table_guest, userDTOResponse.getId());
+            return newData;
+        }
+        return null;
+    }
+
+    @Override
+    public UpdateResponse delete(int id, UserDTOResponse userDTOResponse) {
+        if(findById(id) != null){
+            boolean check = guestDao.delete(id);
+            if(check){
+                saveDiary(ConstantVariableCommon.TYPE_ACTION_DELETE,id,ConstantVariableCommon.table_guest, userDTOResponse.getId());
+                return new UpdateResponse(true);
+            }
+        }
+        return new UpdateResponse(false);
+    }
+
+    //Nếu các trường request lên khác null và nếu trường nào khác với bản cũ trong DB thì update
+    public GuestDTO updateData(GuestDTO oldData,GuestDTO newData){
+        if(!oldData.getFirstName().equals(newData.getFirstName())){
+            oldData.setFirstName(newData.getFirstName());
+        }
+        if(!oldData.getLastName().equals(newData.getLastName())){
+            oldData.setLastName(newData.getLastName());
+        }
+        if(!oldData.getAddress().equals(newData.getAddress())){
+            oldData.setAddress(newData.getAddress());
+        }
+        if(oldData.getBirthday() != newData.getBirthday()){
+            oldData.setBirthday(newData.getBirthday());
+        }
+        if(!oldData.getEmail().equals(newData.getEmail())){
+            oldData.setEmail(newData.getEmail());
+        }
+        if(!oldData.getIdCard().equals(newData.getIdCard())){
+            oldData.setIdCard(newData.getIdCard());
+        }
+        if(!oldData.getNationality().equals(newData.getNationality())){
+            oldData.setNationality(newData.getNationality());
+        }
+        if(!oldData.getPhoneNumber().equals(newData.getPhoneNumber())){
+            oldData.setPhoneNumber(newData.getPhoneNumber());
+        }
+        return oldData;
+    }
     public Guest toEntity(GuestDTO guestDTO){
         Guest guest = new Guest();
         guest.setFirstName(guestDTO.getFirstName());
@@ -77,16 +131,20 @@ public class GuestServiceImpl extends CommonService implements GuestService {
         return guest;
     }
     public GuestDTO toDTO(Guest guest){
-        GuestDTO guestDTO = new GuestDTO();
-        guestDTO.setId(guest.getId());
-        guestDTO.setFirstName(guest.getFirstName());
-        guestDTO.setLastName(guest.getLastName());
-        guestDTO.setAddress(guest.getAddress());
-        guestDTO.setBirthday(guest.getBirthday());
-        guestDTO.setEmail(guest.getEmail());
-        guestDTO.setIdCard(guest.getIdCard());
-        guestDTO.setNationality(guest.getNationality());
-        guestDTO.setPhoneNumber(guest.getPhoneNumber());
-        return guestDTO;
+        try {
+            GuestDTO guestDTO = new GuestDTO();
+            guestDTO.setId(guest.getId());
+            guestDTO.setFirstName(guest.getFirstName());
+            guestDTO.setLastName(guest.getLastName());
+            guestDTO.setAddress(guest.getAddress());
+            guestDTO.setBirthday(guest.getBirthday());
+            guestDTO.setEmail(guest.getEmail());
+            guestDTO.setIdCard(guest.getIdCard());
+            guestDTO.setNationality(guest.getNationality());
+            guestDTO.setPhoneNumber(guest.getPhoneNumber());
+            return guestDTO;
+        }catch (Exception e){
+            return null;
+        }
     }
 }

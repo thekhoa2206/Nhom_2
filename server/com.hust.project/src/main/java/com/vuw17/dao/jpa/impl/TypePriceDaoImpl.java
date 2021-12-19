@@ -26,4 +26,14 @@ public class TypePriceDaoImpl implements TypePriceDao {
             return null;
         }
     }
+
+    @Override
+    public TypePrice findById(int id) {
+        String sql = "SELECT * FROM type_price WHERE id = ?";
+        try{
+            return (TypePrice) entityManager.createNativeQuery(sql,TypePrice.class).setParameter(1,id).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

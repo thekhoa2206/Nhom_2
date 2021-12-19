@@ -9,6 +9,10 @@ public interface OccupiedRoomDao {
     List<OccupiedRoom> findOccupiedRooms();
     //Lay ra theo room id
     OccupiedRoom findByRoomId(int roomId);
-    //Lay ra theo id va status = chua check out
-    OccupiedRoom findByIdAndStatus(int id);
+    //Lay ra theo id va status da check out
+    OccupiedRoom findAvailableRoomById(int id);
+    //Update status va check out time khi check out thanh cong
+    boolean updateStatusAndCheckOutTime(int id,int status,long checkOutTime);
+    //lay ra danh sach phong da duoc thue bang bill id
+    List<OccupiedRoom> findOccupiedRoomsByBillId(int billId);
 }

@@ -9,7 +9,9 @@ import com.vuw17.dto.base.DiaryDTO;
 import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.dto.room.RoomDTOResponse;
+import com.vuw17.dto.room.RoomUpdateDTO;
 import com.vuw17.dto.service.ServiceUsedDTOResponse;
+import com.vuw17.dto.typeprice.PriceDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.*;
 import com.vuw17.services.CommonService;
@@ -17,10 +19,8 @@ import com.vuw17.services.GenericService;
 import com.vuw17.services.GuestService;
 import com.vuw17.services.RoomService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import sun.rmi.runtime.Log;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +35,11 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private final BaseServiceImpl baseService;
     private final GuestService guestService;
     private final HostedAtDao hostedAtDao;
+    private final RoomPriceDao roomPriceDao;
+    private final TypePriceDao typePriceDao;
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
 
-    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao, RoomPriceDao roomPriceDao, TypePriceDao typePriceDao) {
         super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao, baseService);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
@@ -48,6 +50,8 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         this.baseService = baseService;
         this.guestService = guestService;
         this.hostedAtDao = hostedAtDao;
+        this.roomPriceDao = roomPriceDao;
+        this.typePriceDao = typePriceDao;
     }
 
     @Override
@@ -77,19 +81,18 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     }
 
     @Override
-    public boolean updateOne(RoomDTO roomDTO, UserDTOResponse userDTOResponse) {
-        int id = roomDTO.getId();
-        String message = checkInput(roomDTO);
-        if(id > 0 && findById(id) != null && message == null){
-            boolean checkUpdated = roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
-            if(checkUpdated){
-                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE,id,ConstantVariableCommon.table_room);
-                diaryDTO.setUserId(userDTOResponse.getId());
-                baseService.saveDiary(diaryDTO);
-                return true;
-            }
-        }
-        return false;
+    public RoomDTOResponse updateOne(RoomUpdateDTO roomUpdateDTO, UserDTOResponse userDTOResponse) {
+//        RoomDTOResponse roomDTOResponse = findById(roomUpdateDTO.getId());
+//        if(roomDTOResponse != null){
+//            boolean checkUpdated = roomDao.updateOne(toEntity(updateData(findById(id), roomDTO)));
+//            if(checkUpdated){
+//                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE,id,ConstantVariableCommon.table_room);
+//                diaryDTO.setUserId(userDTOResponse.getId());
+//                baseService.saveDiary(diaryDTO);
+//                return true;
+//            }
+//        }
+        return null;
 
     }
 
@@ -98,9 +101,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         RoomDTOResponse roomDTOResponse = findById(id);
         if (roomDTOResponse != null) {
             if (roomDao.deleteOne(id)) {
-                DiaryDTO diaryDTO = checkDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_room);
-                diaryDTO.setUserId(userDTOResponse.getId());
-                baseService.saveDiary(diaryDTO);
+                saveDiary(ConstantVariableCommon.TYPE_ACTION_DELETE, id, ConstantVariableCommon.table_room,userDTOResponse.getId());
                 return true;
             }
         }
@@ -134,18 +135,22 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         }
         return roomDTOResponses;
     }
-    public RoomDTO updateData(RoomDTOResponse r1, RoomDTO newData){
-        RoomDTO oldData = toDTO(r1);
+    public RoomUpdateDTO updateData(RoomUpdateDTO oldData,RoomUpdateDTO newData){
+        if(!oldData.getRoomDTO().getName().equals(newData.getRoomDTO().getName())){
+            oldData.getRoomDTO().setName(newData.getRoomDTO().getName());
+        }
+        if(findByTypeRoomId(newData.getRoomDTO().getTypeRoomId()) != null && oldData.getRoomDTO().getTypeRoomId() != newData.getRoomDTO().getTypeRoomId()){
+            oldData.getRoomDTO().setTypeRoomId(newData.getRoomDTO().getTypeRoomId());
+        }
+        if(!oldData.getRoomDTO().getNote().equals(newData.getRoomDTO().getNote())) {
+            oldData.getRoomDTO().setNote(newData.getRoomDTO().getNote());
+        }
 
-        if (StringUtils.hasText(newData.getName())) {
-            oldData.setName(newData.getName());
-        }
-        if (StringUtils.hasText(newData.getNote())) {
-            oldData.setNote(newData.getNote());
-        }
-        if(typeRoomDao.findById(newData.getTypeRoomId()) != null && newData.getTypeRoomId() != oldData.getTypeRoomId()){
-            oldData.setTypeRoomId(newData.getTypeRoomId());
-        }
+        //Price
+//        List<PriceDTO> priceDTOS = oldData.getPrices();
+//        for(int i = 0;i < priceDTOS.size();i++){
+//            priceDTOS.get(i).
+//        }
         return oldData;
     }
     public Room toEntity(RoomDTO roomDTO) {
@@ -195,26 +200,14 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
             roomDTOResponse.setDeposit(occupiedRoom.getDeposit());
 
             //set list services used
-            List<ServiceUsedDTOResponse> serviceUsedDTOResponses = new ArrayList<>();
-            List<ServiceUsed> servicesUsed = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoom.getId());
-            for (int i = 0; i < servicesUsed.size(); i++) {
-                ServiceUsed serviceUsed = servicesUsed.get(i);
-                com.vuw17.entities.Service service = serviceDao.findById(serviceUsed.getServiceId());
-                ServiceUsedDTOResponse serviceUsedDTOResponse = setServiceUsedDTOResponse(serviceUsed, service);
-                serviceUsedDTOResponses.add(serviceUsedDTOResponse);
-            }
+            roomDTOResponse.setServicesUsed(getServiceUsedDTOResponses(occupiedRoom.getId()));
 
-            roomDTOResponse.setServicesUsed(serviceUsedDTOResponses);
+        //set list guests
+        roomDTOResponse.setGuests(getGuests(occupiedRoom.getId()));
 
-        //set list guest
-        List<GuestDTO> guestDTOS = new ArrayList<>();
-        List<HostedAt> hostedAts = hostedAtDao.findByOccupiedRoomId(occupiedRoom.getId());
+        //set list prices
+        roomDTOResponse.setPrices(getPrices(room));
 
-        for(int i = 0;i < hostedAts.size();i++){
-            guestDTOS.add(guestService.findById(hostedAts.get(i).getGuestId()));
-        }
-
-        roomDTOResponse.setGuests(guestDTOS);
         }catch (NullPointerException e){
             Log.getLog("Null",e.getMessage(),true);
         }
@@ -228,5 +221,41 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         serviceUsedDTOResponse.setPrice(service.getPrice());
         serviceUsedDTOResponse.setQuantity(serviceUsed.getQuantity());
         return serviceUsedDTOResponse;
+    }
+    //lay list Service Used thong qua occupiedRoomId
+    public List<ServiceUsedDTOResponse> getServiceUsedDTOResponses(int occupiedRoomId){
+        List<ServiceUsedDTOResponse> serviceUsedDTOResponses = new ArrayList<>();
+        List<ServiceUsed> servicesUsed = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoomId);
+        for (int i = 0; i < servicesUsed.size(); i++) {
+            ServiceUsed serviceUsed = servicesUsed.get(i);
+            com.vuw17.entities.Service service = serviceDao.findById(serviceUsed.getServiceId());
+            ServiceUsedDTOResponse serviceUsedDTOResponse = setServiceUsedDTOResponse(serviceUsed, service);
+            serviceUsedDTOResponses.add(serviceUsedDTOResponse);
+        }
+        return serviceUsedDTOResponses;
+    }
+    //lay list guest thong qua occupiedRoomId
+    public List<GuestDTO> getGuests(int occupiedRoomId){
+        List<GuestDTO> guestDTOS = new ArrayList<>();
+        List<HostedAt> hostedAts = hostedAtDao.findByOccupiedRoomId(occupiedRoomId);
+
+        for(int i = 0;i < hostedAts.size();i++){
+            guestDTOS.add(guestService.findById(hostedAts.get(i).getGuestId()));
+        }
+        return guestDTOS;
+    }
+    //lay list price cua phong nao do,thong qua room object
+    public List<PriceDTO> getPrices(Room room){
+        List<PriceDTO> prices = new ArrayList<>();
+        int typeRoomId = room.getTypeRoomId();
+        List<RoomPrice> roomPrices = roomPriceDao.findByTypeRoomId(typeRoomId);
+        for(int i = 0;i < roomPrices.size();i++){
+            PriceDTO priceDTO = new PriceDTO();
+            priceDTO.setPrice(roomPrices.get(i).getPrice());
+            priceDTO.setTypePriceId(roomPrices.get(i).getTypePriceId());
+            priceDTO.setTypePriceName(typePriceDao.findById(roomPrices.get(i).getTypePriceId()).getName());
+            prices.add(priceDTO);
+        }
+        return prices;
     }
 }

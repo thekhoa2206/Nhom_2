@@ -72,14 +72,16 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
             //Kiểm tra khách đã check out chưa ?
             for(int i = 0;i < guestIds.size();i++){
-                if(!checkGuestCheckedOut(guestIds.get(i))){
+                if(checkedOut(guestIds.get(i))){
                     return 0;
                 }
             }
 
             int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
-            if (occupiedRoomId > 0) {
+            boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(),ConstantVariableCommon.STATUS_ROOM_2);
+            if (occupiedRoomId > 0 && checkUpdate) {
                 saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
+                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
                 insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
                 insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
                 return occupiedRoomId;
@@ -91,11 +93,8 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
     @Override
     public boolean isOccupied(int roomId) {
-        List<OccupiedRoom> occupiedRooms = occupiedRoomDao.findOccupiedRooms();
-        for (int i = 0; i < occupiedRooms.size(); i++) {
-            if (occupiedRooms.get(i).getRoomId() == roomId) {
-                return true;
-            }
+        if(roomDao.findById(roomId).getStatus() == 2){
+            return true;
         }
         return false;
     }
@@ -154,7 +153,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         if (guestIds != null && guestIds.size() > 0) {
             for (int i = 0; i < guestIds.size(); i++) {
                 int guestId = guestIds.get(i);
-                if (guestDao.findById(guestId) != null && checkGuestCheckedOut(guestId)) {
+                if (guestDao.findById(guestId) != null && checkedOut(guestId)) {
                     HostedAt hostedAt = new HostedAt();
                     hostedAt.setGuestId(guestId);
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
@@ -180,14 +179,15 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         return null;
 
     }
-    //Kiem tra xem khach này đã check out chưa thông qua guest id
-    public boolean checkGuestCheckedOut(int guestId){
+    //Kiem tra xem khach này đã check out thanh cong roi thông qua guest id
+    public boolean checkedOut(int guestId){
         //Tìm xem thằng guestId này ở phòng nào ? và phòng đó đã check out chưa
         List<HostedAt> hostedAts = hostedAtDao.findByGuestId(guestId);
         for(int i = 0;i < hostedAts.size();i++){
-            OccupiedRoom occupiedRoom = occupiedRoomDao.findByIdAndStatus(hostedAts.get(i).getOccupiedRoomId());
-            return occupiedRoom != null ? false : true;
+            //Neu != null thi phong da check out roi
+            OccupiedRoom occupiedRoom = occupiedRoomDao.findAvailableRoomById(hostedAts.get(i).getOccupiedRoomId());
+            return occupiedRoom != null ? true : false;
         }
-        return true;
+        return false;
     }
 }

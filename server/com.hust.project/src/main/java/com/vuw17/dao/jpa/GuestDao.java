@@ -22,5 +22,8 @@ public interface GuestDao {
     List<Guest> findAll();
     //Search Guest by keyword : phone number,id card
     List<Guest> findByKeyword(String keyword);
-    
+    //Update thong tin cua Guest
+    boolean update(Guest guest);
+    //Xoa thong tin cua Guest
+    boolean delete(int id);
 }

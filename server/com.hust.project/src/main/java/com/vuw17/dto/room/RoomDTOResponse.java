@@ -5,6 +5,7 @@ import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.dto.product.ProductResponseDTO;
 import com.vuw17.dto.reservation.ReservationDTO;
 import com.vuw17.dto.service.ServiceUsedDTOResponse;
+import com.vuw17.dto.typeprice.PriceDTO;
 import com.vuw17.entities.Guest;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,6 @@ public class RoomDTOResponse extends BaseDTO {
     private BigDecimal deposit;
     private List<ServiceUsedDTOResponse> servicesUsed;
     private List<GuestDTO> guests;
+    private List<PriceDTO> prices;
 
 }

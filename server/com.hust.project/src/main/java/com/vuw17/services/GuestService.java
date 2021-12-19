@@ -1,5 +1,6 @@
 package com.vuw17.services;
 
+import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 
@@ -14,4 +15,8 @@ public interface GuestService {
     List<GuestDTO> findByKeyword(String keyword);
     //Tim theo id
     GuestDTO findById(int id);
+    //Update Thong tin cua khach
+    GuestDTO update(GuestDTO guestDTO,UserDTOResponse userDTOResponse);
+    //Xoa thong tin cua khach
+    UpdateResponse delete(int id, UserDTOResponse userDTOResponse);
 }
