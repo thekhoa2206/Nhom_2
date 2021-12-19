@@ -8,7 +8,9 @@ import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dto.reservation.*;
 import com.vuw17.entities.Guest;
 import com.vuw17.entities.Reservation;;
+import com.vuw17.entities.RoomReservation;
 import com.vuw17.repositories.ReservationRepository;
+import com.vuw17.repositories.RoomReservationRepository;
 import com.vuw17.services.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +27,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final GuestDao guestDao;
     private final RoomDao roomDao;
+    private final RoomReservationRepository roomReservationRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class.toString());
 
-    public ReservationServiceImpl(ReservationDao reservationDao, ReservationRepository reservationRepository, GuestDao guestDao, RoomDao roomDao) {
+    public ReservationServiceImpl(ReservationDao reservationDao, ReservationRepository reservationRepository, GuestDao guestDao, RoomDao roomDao, RoomReservationRepository roomReservationRepository) {
         this.reservationDao = reservationDao;
         this.reservationRepository = reservationRepository;
         this.guestDao = guestDao;
         this.roomDao = roomDao;
+        this.roomReservationRepository = roomReservationRepository;
     }
 
     // Hàm lấy danh sách và lọc theo keyword và trạng thái của đơn đặt phòng
@@ -120,6 +124,18 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void chooseRoom(ReservationRoomDTORequest reservationRoomDTORequest){
-
+        RoomReservation roomReservation = new RoomReservation();
+        roomReservation.setReservationId(reservationRoomDTORequest.getReservationId());
+        roomReservation.setRoomId(reservationRoomDTORequest.getRoomId());
+        roomReservation.setStatus(ConstantVariableCommon.STATUS_ROOM_RESERVATION_1);
+        saveRoomReservation(roomReservation);
+    }
+    @Transactional(rollbackOn = Exception.class)
+    public void saveRoomReservation(RoomReservation roomReservation){
+        try{
+            roomReservationRepository.save(roomReservation);
+        }catch (Exception e){
+            LOGGER.error("ERROR || Lỗi không lưu được phòng đặt");
+        }
     }
 }

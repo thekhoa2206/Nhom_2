@@ -16,9 +16,8 @@ public class ConstantVariableCommon {
     public static final int STATUS_ROOM_4 = 4; // trạng thái phòng đang sửa
 
     // Biến cố định của room reservation
-    public static final int STATUS_ROOM_RESERVATION_1 = 1; // trạng thái đặt phòng: đang chờ xác nhận
-    public static final int STATUS_ROOM_RESERVATION_2 = 2; // trạng thái đặt phòng: đã đặt
-    public static final int STATUS_ROOM_RESERVATION_3 = 3; // trạng thái đặt phòng: đã hủy
+    public static final int STATUS_ROOM_RESERVATION_1 = 1; // trạng thái đặt phòng: đặt phòng thành công
+    public static final int STATUS_ROOM_RESERVATION_2 = 2; // trạng thái đặt phòng: đã hủy
 
     // Biến cố định của product
     public static final int STATUS_PRODUCT_1 = 1; // trạng thái sản phẩm: đang bán
