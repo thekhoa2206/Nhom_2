@@ -263,6 +263,32 @@ INSERT INTO `reservation` VALUES (1,'Đã đặt cọc 50% đến muộn 15p',16
 UNLOCK TABLES;
 
 --
+-- Table structure for table `reservation_room`
+--
+
+DROP TABLE IF EXISTS `reservation_room`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reservation_room` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `room_id` int DEFAULT NULL,
+  `reservation_id` int DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservation_room`
+--
+
+LOCK TABLES `reservation_room` WRITE;
+/*!40000 ALTER TABLE `reservation_room` DISABLE KEYS */;
+INSERT INTO `reservation_room` VALUES (1,1,1,1),(2,2,1,1),(3,3,2,1),(4,4,3,1);
+/*!40000 ALTER TABLE `reservation_room` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `role`
 --
 
@@ -631,7 +657,7 @@ CREATE TABLE `user` (
   `id_card` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -640,7 +666,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','$2a$10$vRT4McPsDuHNTNbGl.Qq5OX8nNjK29rLidPXKRI34JDglNGCJGbhm','Quản trị viên','Hà nội','admin@gmail.com','091932332',1,0,'8178321313',1),(2,'nguyenvana','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn a','Hà nội','nguyenvana@gmail.com','091828313',1,1000000,'8178321313',1),(3,'nguyenvanb','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn B','Hà nội','nguyevnanb','091283713',1,1000000,'2838131333',1);
+INSERT INTO `user` VALUES (1,'admin','$2a$12$Qy..CGiliVmp8bnnKqGfSO1UuDBEgWPgrSd0zp2L3d8uaVNWUADAW','Quản trị viên','Hải Phòng','admin1@gmail.com','0919323324',1,0,'8178321313',1),(2,'nguyenvana','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn a','Hà nội','nguyenvana@gmail.com','091828313',1,1000000,'8178321313',1),(3,'nguyenvanb','$2a$10$HN0ypHdaqaknm5RSSgZEMe9hN1gOwYuQtml7FnbaF0uKIOCbBPsyC','Nguyễn văn B','Hà nội','nguyevnanb','091283713',1,1000000,'2838131333',1),(4,'nguyenthic','$2a$10$tINer8Ll7vQBHPxY3b5q.eEj51Mv5usBBF53yi6EMWHRne.xon/9i','Nguyễn Thị C','Hà nội','nguyenthic@gmail.com','0987712222',1,100000,'0128182122',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -667,7 +693,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-INSERT INTO `user_role` VALUES (1,1),(2,1),(2,2),(2,3);
+INSERT INTO `user_role` VALUES (1,1),(2,2),(2,3),(2,4);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -688,4 +714,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-12 11:36:34
+-- Dump completed on 2021-12-19 16:17:23
