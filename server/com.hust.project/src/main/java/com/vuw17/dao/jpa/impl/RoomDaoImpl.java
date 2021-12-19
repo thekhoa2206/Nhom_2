@@ -84,4 +84,15 @@ public class RoomDaoImpl implements RoomDao {
         String sql = "SELECT * FROM room WHERE type_room_id = ?";
         return entityManager.createNativeQuery(sql,Room.class).setParameter(1,typeRoomId).getResultList();
     }
+
+    @Override
+    public boolean updateStatus(int id, int status) {
+        String sql = "UPDATE room SET status = ? WHERE id = ?";
+        try{
+            entityManager.createNativeQuery(sql).setParameter(1,status).setParameter(2,id).executeUpdate();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.vuw17.dto.InsertResponse;
 import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.room.RoomDTO;
 import com.vuw17.dto.room.RoomDTOResponse;
+import com.vuw17.dto.room.RoomUpdateDTO;
 import com.vuw17.services.RoomService;
 import com.vuw17.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -41,10 +42,11 @@ public class RoomController extends BaseController {
         return ResponseEntity.ok(roomService.findById(id));
     }
 
-    @PutMapping()
-    public ResponseEntity<UpdateResponse> updateRoom(@Valid @RequestBody RoomDTO roomDTO,HttpServletRequest request) {
-        return ResponseEntity.ok(new UpdateResponse(roomService.updateOne(roomDTO,getUserDTOResponse(request))));
-    }
+//    @PutMapping()
+//    public ResponseEntity<UpdateResponse> updateRoom(@Valid @RequestBody RoomUpdateDTO roomUpdateDTO, HttpServletRequest request) {
+////        return ResponseEntity.ok(new UpdateResponse(roomService.updateOne(roomUpdateDTO,getUserDTOResponse(request))));
+//        return null;
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<UpdateResponse> deleteRoom(@PathVariable int id,HttpServletRequest request) {

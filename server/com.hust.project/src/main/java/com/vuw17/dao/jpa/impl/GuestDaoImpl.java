@@ -27,7 +27,7 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public Guest findById(int id) {
-        String sql = "SELECT * FROM guest WHERE id = ?";
+        String sql = "SELECT * FROM guest WHERE status = 1 AND id = ?";
         try{
             return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,id).getSingleResult();
         }catch (Exception e){
@@ -37,7 +37,7 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public Guest findByIdCard(String idCard) {
-        String sql = "SELECT * FROM guest WHERE id_card = ?";
+        String sql = "SELECT * FROM guest WHERE status = 1 AND id_card = ?";
         try{
             return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,idCard).getSingleResult();
         }catch (Exception e){
@@ -47,7 +47,7 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public Guest findByPhoneNumber(String phoneNumber) {
-        String sql = "SELECT * FROM guest WHERE phone_number = ?";
+        String sql = "SELECT * FROM guest WHERE status = 1 AND phone_number = ?";
         try{
             return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,phoneNumber).getSingleResult();
         }catch (Exception e){
@@ -57,7 +57,7 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public List<Guest> findAll() {
-        String sql = "SELECT * FROM guest";
+        String sql = "SELECT * FROM guest WHERE status = 1";
         try{
             return entityManager.createNativeQuery(sql,Guest.class).getResultList();
         }catch (Exception e){
@@ -67,11 +67,33 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public List<Guest> findByKeyword(String keyword) {
-        String sql = "SELECT * FROM guest WHERE phone_number LIKE '%"+keyword+"%' OR "+"id_card LIKE '%"+keyword+"%'";
+        String sql = "SELECT * FROM guest WHERE status = 1 AND phone_number LIKE '%"+keyword+"%' OR "+"id_card LIKE '%"+keyword+"%'";
         try{
             return entityManager.createNativeQuery(sql,Guest.class).getResultList();
         }catch (Exception e){
             return null;
+        }
+    }
+
+    @Override
+    public boolean update(Guest guest) {
+        String sql = "UPDATE guest SET first_name = ?,last_name = ?,birthday = ?,nationality = ?,address = ?,phone_number = ?,email = ?,id_card = ? WHERE id = ?";
+        try{
+            entityManager.createNativeQuery(sql).setParameter(1,guest.getFirstName()).setParameter(2,guest.getLastName()).setParameter(3,guest.getBirthday()).setParameter(4,guest.getNationality()).setParameter(5,guest.getAddress()).setParameter(6,guest.getPhoneNumber()).setParameter(7,guest.getEmail()).setParameter(8,guest.getIdCard()).setParameter(9,guest.getId()).executeUpdate();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        String sql = "UPDATE guest SET status = 2 WHERE id = ?";
+        try{
+            entityManager.createNativeQuery(sql).setParameter(1,id).executeUpdate();
+            return true;
+        }catch (Exception e){
+            return false;
         }
     }
 }

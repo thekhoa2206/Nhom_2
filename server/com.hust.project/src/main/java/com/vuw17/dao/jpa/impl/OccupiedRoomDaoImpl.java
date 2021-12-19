@@ -41,12 +41,34 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
     }
 
     @Override
-    public OccupiedRoom findByIdAndStatus(int id) {
+    public OccupiedRoom findAvailableRoomById(int id) {
         String sql = "SELECT * FROM occupied_room WHERE id = ? AND status = 2";
         try{
             return (OccupiedRoom) entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,id).getSingleResult();
         }catch (Exception e) {
             return new OccupiedRoom();
+        }
+    }
+
+
+    @Override
+    public boolean updateStatusAndCheckOutTime(int id,int status, long checkOutTime) {
+        String sql = "UPDATE occupied_room SET status = ?,check_out_time = ? WHERE id = ?";
+        try{
+            entityManager.createNativeQuery(sql).setParameter(1,status).setParameter(2,checkOutTime).setParameter(3,id).executeUpdate();
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<OccupiedRoom> findOccupiedRoomsByBillId(int billId) {
+        String sql = "SELECT * FROM occupied_room WHERE bill_id = ? AND status = 2 ";
+        try{
+            return entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,billId).getResultList();
+        }catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 }

@@ -2,6 +2,7 @@ package com.vuw17.controllers.admin;
 
 import com.vuw17.controllers.BaseController;
 import com.vuw17.dto.InsertResponse;
+import com.vuw17.dto.UpdateResponse;
 import com.vuw17.dto.guest.GuestDTO;
 import com.vuw17.services.GuestService;
 import com.vuw17.services.UserService;
@@ -39,6 +40,16 @@ public class GuestController extends BaseController {
     @GetMapping("/searching")
     public ResponseEntity<List<GuestDTO>> getAllGuestsByKeyword(@RequestParam("keyword") String keyword){
         return ResponseEntity.ok(guestService.findByKeyword(keyword));
+    }
+    //OK
+    @PutMapping()
+    public ResponseEntity<GuestDTO> getAllGuestsByKeyword(@Valid @RequestBody GuestDTO guestDTO, HttpServletRequest request){
+        return ResponseEntity.ok(guestService.update(guestDTO,getUserDTOResponse(request)));
+    }
+    //OK
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UpdateResponse> updateGuest(@PathVariable int id, HttpServletRequest request){
+        return ResponseEntity.ok(guestService.delete(id,getUserDTOResponse(request)));
     }
 
 }

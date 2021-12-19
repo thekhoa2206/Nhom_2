@@ -23,4 +23,6 @@ public interface RoomDao {
     Room findByName(String name);
     //Lay list room theo type_room id
     List<Room> findByTypeRoomId(int typeRoomId);
+    //Sua thong tin status cua room
+    boolean updateStatus(int id,int status);
 }
