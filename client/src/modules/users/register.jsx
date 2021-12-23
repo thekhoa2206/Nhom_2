@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { useGetAllUsers } from '../../services/users/user.service';
+import { useGetAllRoles } from '../../services/auth/auth.service';
 import Loading from '../../common-components/Loading';
 import { useSelector } from "react-redux";
 import { uniqueId } from 'lodash';
@@ -17,6 +18,7 @@ function Register(props) {
     const userList = useSelector((state) => state.userReducer.userList);
     const { usersList, isOpenModalAdd, isOpenModalEdit, user } = state
     const { getAllUsers, isLoading } = useGetAllUsers()
+    const { getAllRoles } = useGetAllRoles()
     function initState() {
         return {
             user: {},
@@ -26,7 +28,8 @@ function Register(props) {
         }
     }
     useEffect(() => {
-        getAllUsers()
+        getAllUsers();
+        getAllRoles();
     }, [])
 
 
