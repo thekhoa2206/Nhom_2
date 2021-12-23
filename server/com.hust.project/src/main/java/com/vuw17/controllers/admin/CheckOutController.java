@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import org.springframework.web.bind.annotation.*;
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/admin/check-out")
 public class CheckOutController extends BaseController {

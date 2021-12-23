@@ -85,6 +85,7 @@ function Register(props) {
             ...state,
             isOpenModalAdd: !isOpenModalAdd
         })
+        console.log(state);
     }
     const openModalEditUser = () => {
         setState({
