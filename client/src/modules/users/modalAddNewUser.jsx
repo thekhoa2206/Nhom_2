@@ -18,6 +18,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { useCreateUser } from '../../services/users/user.service';
 import { useHistory } from 'react-router'
 
+
 function ModalAddNewUser(props) {
     const history = useHistory()
     const { open } = props;
@@ -25,6 +26,7 @@ function ModalAddNewUser(props) {
     const { name, dob, roles } = state
 
     const { createUser } = useCreateUser()
+
     const handleAddUser = (event) => {
         let data = {
             address: state.address,

@@ -57,7 +57,7 @@ export function useLogout() {
 export function useGetAllRoles() {
 	const dispatch = useDispatch();
 	const getAllRoles = () => {
-		axios.get('api/roles')
+		axios.get('api/users/roles')
 			.then(res => {
 				dispatch({ type: 'GET_ALL_ROLES', payload: { data: res.data } })
 			}).catch(err => {

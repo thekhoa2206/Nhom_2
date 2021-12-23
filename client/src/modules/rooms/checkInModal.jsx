@@ -30,16 +30,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
+import Autocomplete from '@mui/material/Autocomplete';
+import { useSelector } from "react-redux";
 
 function CheckInModal(props) {
     const { open, id } = props;
+    const guestList = useSelector((state) => state.guestReducer.guestList);
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
         isOpenModalAddGuest: false,
-        servicesUsed: []
+        servicesUsed: [],
+        serviceTotal: 0,
     })
-    const { isOpenModalAddGuest, guests, servicesUsed } = state
+
+    const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal } = state
     const columns = [
         {
             field: " ",
@@ -62,7 +67,14 @@ function CheckInModal(props) {
                 );
             }
         },
-        { field: 'name', headerName: 'Họ Và Tên', width: 200 },
+        {
+            field: 'name',
+            headerName: 'Họ Và Tên',
+            width: 200,
+            valueGetter: (params) =>
+                `${params.getValue(params.id, 'firstName') || ''} ${params.getValue(params.id, 'lastName') || ''
+                }`,
+        },
         {
             field: 'dob',
             headerName: 'Ngày sinh',
@@ -126,6 +138,7 @@ function CheckInModal(props) {
     const handleAddItem = (event, cellValues) => {
         let idArr = servicesUsed.map(a => a.id)
         let rowId = cellValues.row.id
+        let newServiceTotal = 0;
         //nếu đã có sp thì +1
         if (idArr.includes(rowId)) {
             let item = servicesUsed.find(x => x.id === rowId)
@@ -140,9 +153,14 @@ function CheckInModal(props) {
             newServicesUsed.sort(function (a, b) {
                 return a.id - b.id || a.name.localeCompare(b.name);
             });
+            for (const item of newServicesUsed) {
+                console.log("newServiceTotal", newServiceTotal)
+                newServiceTotal += item.quantity * item.price
+            }
             setState({
                 ...state,
-                servicesUsed: newServicesUsed
+                servicesUsed: newServicesUsed,
+                serviceTotal: newServiceTotal
             })
         }
         //chưa có thì thêm mới vào
@@ -153,13 +171,54 @@ function CheckInModal(props) {
                 quantity: 1,
                 price: cellValues.row.price
             }
+            let newServicesUsed = [...state.servicesUsed, newItem]
+            for (const item of newServicesUsed) {
+                newServiceTotal += item.quantity * item.price
+            }
             setState({
                 ...state,
-                servicesUsed: [...state.servicesUsed, newItem]
+                servicesUsed: newServicesUsed,
+                serviceTotal: newServiceTotal
             })
         }
     };
-    console.log("state", state)
+    const handleDeleteItem = (value) => {
+        let itemId = value.id
+        let newServiceTotal = 0;
+        if (value.quantity > 1) {
+            console.log("1")
+            let item = servicesUsed.find(x => x.id === itemId)
+            let updatedItem = {
+                ...item,
+                quantity: item.quantity - 1
+            }
+            let newServicesUsed = servicesUsed.filter(function (item) {
+                return item.id != itemId;
+            });
+            newServicesUsed.push(updatedItem)
+            newServicesUsed.sort(function (a, b) {
+                return a.id - b.id || a.name.localeCompare(b.name);
+            });
+            for (const item of newServicesUsed) {
+                newServiceTotal += item.quantity * item.price
+            }
+            setState({
+                ...state,
+                servicesUsed: newServicesUsed,
+                serviceTotal: newServiceTotal
+            })
+        } else {
+            let newServicesUsed = servicesUsed.filter(service => service.id !== itemId)
+            for (const item of newServicesUsed) {
+                newServiceTotal += item.quantity * item.price
+            }
+            setState({
+                ...state,
+                servicesUsed: newServicesUsed,
+                serviceTotal: newServiceTotal
+            })
+        }
+    }
     const handleSelectionChange = (selection) => {
         setSelectedRows(selection);
     };
@@ -186,8 +245,12 @@ function CheckInModal(props) {
     const onChangeSelect = (event) => {
         console.log(event.target.value);
     };
-
-    console.log("guests ", guests)
+    const onChangeSearch = (event, value) => {
+        setState({
+            ...state,
+            guests: value
+        })
+    }
     // const servicesUsed = [
     //     {
     //         id: 1,
@@ -202,7 +265,11 @@ function CheckInModal(props) {
     //         price: 10000
     //     },
     // ]
-
+    const defaultProps = {
+        options: guestList,
+        getOptionLabel: (option) => option.lastName + " " + option.firstName
+    }
+    console.log("state", state)
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg' >
@@ -212,23 +279,35 @@ function CheckInModal(props) {
                     <Grid item xs={6}>
                         <Grid container spacing={2}>
                             <Grid item xs={4} alignSelf="center">
-                                <Button variant="contained" color="primary" onClick={handleOpenModalAddGuestInfo}>
+                                <Button variant="contained" color="primary" onClick={() => handleOpenModalAddGuestInfo()}>
                                     Thêm mới khách
                                 </Button>
                             </Grid>
                             <Grid item xs={8}>
-                                <TextField
-                                    fullWidth
-                                    label="Tìm khách hàng..."
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment>
-                                                <IconButton>
-                                                    <SearchIcon style={{ fill: "#2196f3" }} />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
+                                <Autocomplete
+                                    {...defaultProps}
+                                    disableClearable
+                                    multiple
+                                    value={guests}
+                                    filterSelectedOptions
+                                    renderTags={() => null}
+                                    onChange={onChangeSearch}
+                                    renderInput={(params) =>
+                                        <TextField
+                                            {...params}
+                                            // fullWidth
+                                            label="Tìm khách hàng..."
+                                        // InputProps={{
+                                        //     endAdornment: (
+                                        //         <InputAdornment position="end">
+                                        //             <IconButton disabled>
+                                        //                 <SearchIcon style={{ fill: "#2196f3" }} />
+                                        //             </IconButton>
+                                        //         </InputAdornment>
+                                        //     )
+                                        // }}
+                                        />
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -247,7 +326,7 @@ function CheckInModal(props) {
 
                             />
                             {selectedRows.length > 0 &&
-                                <IconButton size="small" onClick={handleDelete}>
+                                <IconButton size="small" onClick={() => handleDelete()}>
                                     <DeleteIcon style={{ fill: "red" }} />
                                 </IconButton>
                             }
@@ -274,7 +353,7 @@ function CheckInModal(props) {
                                             id="datetime-local"
                                             label="Giờ ra dự kiến"
                                             type="datetime-local"
-                                            defaultValue="2017-05-24T10:30"
+                                            defaultValue={dayjs().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
                                             fullWidth
                                             shrink="true"
                                         />
@@ -359,7 +438,7 @@ function CheckInModal(props) {
                         <Paper variant="outlined">
                             <Box>
                                 <Table aria-label="caption table">
-                                    {/* <caption>Dịch vụ sử dụng</caption> */}
+                                    {/* Dịch vụ sử dụng */}
                                     <TableHead>
                                         <TableRow>
                                             <TableCell></TableCell>
@@ -372,7 +451,7 @@ function CheckInModal(props) {
                                         {servicesUsed?.length ? servicesUsed.map((row) => (
                                             <TableRow key={row.id}>
                                                 <TableCell align="right">
-                                                    <IconButton size="small" onClick={handleDelete}>
+                                                    <IconButton size="small" onClick={() => handleDeleteItem(row)}>
                                                         <RemoveCircleOutlineIcon style={{ fill: "red" }} />
                                                     </IconButton>
                                                 </TableCell>
@@ -391,7 +470,7 @@ function CheckInModal(props) {
                                         <TableRow>
                                             <TableCell rowSpan={3} />
                                             <TableCell colSpan={2}>Tổng dịch vụ</TableCell>
-                                            <TableCell align="right">100.000</TableCell>
+                                            <TableCell align="right">{serviceTotal}</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
@@ -427,8 +506,8 @@ function CheckInModal(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="primary" onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" color="primary" onClick={handleSubmit}>Subscribe</Button>
+                <Button variant="outlined" color="primary" onClick={() => handleClose()}>Đóng</Button>
+                <Button variant="contained" color="primary" onClick={() => handleSubmit()}>Nhận phòng</Button>
             </DialogActions>
         </Dialog >
     )

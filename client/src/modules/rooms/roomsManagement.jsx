@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import ReadyRoom from './readyRoom';
 import OccupiedRoom from './occupiedRoom';
@@ -7,11 +7,17 @@ import { Slider, Box } from '@mui/material';
 import OutOfServiceRoom from './outOfServiceRoom';
 import { useGetLyric2 } from '../../utils/apiCalls';
 import Loading from '../../common-components/Loading';
+import Autocomplete from '@mui/material/Autocomplete';
+import { useGetAllGuests } from '../../services/guests/guest.service'
 
 function RoomManagement(props) {
     const [zoom, setZoom] = useState({
         width: 230, height: 170
     })
+    const { getAllGuests } = useGetAllGuests()
+    useEffect(() => {
+        getAllGuests()
+    }, [])
     let arr = [{ id: 1, status: 'occupied' }, { id: 2, status: 'ready' }, { id: 3, status: 'dirty' }, { id: 4, status: 'out-of-service' }, { id: 5, status: 'ready' }]
     function valuetext(value) {
         return `${value}%`;
