@@ -20,6 +20,7 @@ public class StartWebServer {
         System.out.println(Common.GeneratePassword("admin"));
 //        LocalDate localDate = LocalDate.now();
 //        localDate.plusDays(5);
+        System.out.println(System.currentTimeMillis());
         System.out.println(System.currentTimeMillis() + (86400000 * 2));
     }
 }

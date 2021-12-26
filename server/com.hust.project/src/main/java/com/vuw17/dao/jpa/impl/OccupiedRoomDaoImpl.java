@@ -71,4 +71,14 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
             return new ArrayList<>();
         }
     }
+
+    @Override
+    public OccupiedRoom findById(int id) {
+        String sql = "SELECT * FROM occupied_room WHERE id = ?";
+        try{
+            return (OccupiedRoom) entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,id).getSingleResult();
+        }catch (Exception e) {
+            return new OccupiedRoom();
+        }
+    }
 }

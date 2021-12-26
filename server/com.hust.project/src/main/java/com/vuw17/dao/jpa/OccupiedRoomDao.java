@@ -15,4 +15,6 @@ public interface OccupiedRoomDao {
     boolean updateStatusAndCheckOutTime(int id,int status,long checkOutTime);
     //lay ra danh sach phong da duoc thue bang bill id
     List<OccupiedRoom> findOccupiedRoomsByBillId(int billId);
+    //Lay ra theo occupied id
+    OccupiedRoom findById(int id);
 }

@@ -10,6 +10,6 @@ public class OccupiedRoomDAOImpl extends BaseDAO<OccupiedRoom> implements Occupi
     @Override
     public int insertOne(OccupiedRoom occupiedRoom) {
         String sql = "INSERT INTO occupied_room(check_in_time,check_out_time,status,deposit,room_id,bill_id) VALUES(?,?,?,?,?,?)";
-        return insertOne(sql,System.currentTimeMillis(),occupiedRoom.getCheckOutTime(), ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1,occupiedRoom.getDeposit(),occupiedRoom.getRoomId(),occupiedRoom.getBillId());
+        return insertOne(sql,occupiedRoom.getCheckInTime(),occupiedRoom.getCheckOutTime(), ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1,occupiedRoom.getDeposit(),occupiedRoom.getRoomId(),occupiedRoom.getBillId());
     }
 }
