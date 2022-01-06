@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import ReadyRoom from './readyRoom';
 import OccupiedRoom from './occupiedRoom';
@@ -9,14 +10,18 @@ import { useGetLyric2 } from '../../utils/apiCalls';
 import Loading from '../../common-components/Loading';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useGetAllGuests } from '../../services/guests/guest.service'
+import { useGetAllRooms } from "../../services/rooms/room.service";
 
 function RoomManagement(props) {
     const [zoom, setZoom] = useState({
         width: 230, height: 170
     })
+    const roomList = useSelector((state) => state.roomReducer.roomList);
     const { getAllGuests } = useGetAllGuests()
+    const { getAllRooms } = useGetAllRooms()
     useEffect(() => {
         getAllGuests()
+        getAllRooms()
     }, [])
     let arr = [{ id: 1, status: 'occupied' }, { id: 2, status: 'ready' }, { id: 3, status: 'dirty' }, { id: 4, status: 'out-of-service' }, { id: 5, status: 'ready' }]
     function valuetext(value) {
