@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -16,26 +14,20 @@ import { v4 as uuidv4 } from 'uuid';
 function ModalAddGuestInfo(props) {
     const { open } = props;
     const [state, setState] = useState({ nationality: "Viet Nam" })
-    const { firstName, lastName, dob } = state
+    const { name, dob } = state
     const handleAddGuest = (event) => {
         let data = {
             id: uuidv4(),
-            firstName: firstName,
-            lastName: lastName,
+            name: name,
             dob: dob
         }
         props.handleAddGuest(data)
     }
-    const handleFirstNameChange = (e) => {
+    const handleNameChange = (e) => {
+
         setState({
             ...state,
-            firstName: e.target.value
-        })
-    }
-    const handleLastNameChange = (e) => {
-        setState({
-            ...state,
-            lastName: e.target.value
+            name: e.target.value
         })
     }
     const handleDobChange = (e) => {
@@ -78,137 +70,127 @@ function ModalAddGuestInfo(props) {
     const handleClose = () => {
         props.handleClose()
     }
+    console.log("state", state)
     return (
         <Dialog open={open} onClose={handleClose} sx={{}}>
             <DialogTitle>Thêm thông tin khách</DialogTitle>
-            <DialogContent>
-                <Box pl={4}>
-                    <Grid
-                        container
-                    >
-                        {/* Tên */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleFirstNameChange}
-                                margin="normal"
-                                required
-                                id="firstName"
-                                label="Tên"
-                                name="firstName"
-                                autoComplete="firstName"
-                                autoFocus
-                            />
-                        </Grid>
-                        {/* Họ */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleLastNameChange}
-                                margin="normal"
-                                required
-                                id="lastName"
-                                label="Họ"
-                                name="lastName"
-                                autoComplete="lastName"
-                            />
-                        </Grid>
-                        {/* Ngày sinh */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleDobChange}
-                                margin="normal"
-                                required
-                                name="dob"
-                                type="date"
-                                id="dob"
-                                label="Ngày sinh"
-                                InputLabelProps={{ shrink: true }}
-                            />
-                        </Grid>
-                        {/* Số điện thoại */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handlePhoneNumberChange}
-                                margin="normal"
-                                required
-                                name="phone-number"
-                                type="number"
-                                id="phone-number"
-                                label="Số điện thoại"
-                            />
-                        </Grid>
-                        {/* Quốc tịch */}
-                        <Grid item xs={6}>
-                            <Box mt={2}>
-                                <FormControl style={{ width: 192 }}>
-                                    <InputLabel id="nationality">Quốc tịch</InputLabel>
-                                    <Select
-                                        labelId="nationality"
-                                        id="nationality"
-                                        label="Quốc tịch"
-                                        value={state.nationality}
-                                        onChange={handleChangeNationality}
-                                    >
-                                        {
-                                            countryList.map((country, index) => {
-                                                return (
-                                                    <MenuItem key={index} value={country}>{country}</MenuItem>
-                                                )
-                                            })
-                                        }
-                                    </Select>
-                                </FormControl>
-                            </Box>
-                        </Grid>
-                        {/* Số cmnd */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleIDNumberChange}
-                                margin="normal"
-                                required
-                                name="id-number"
-                                type="number"
-                                id="id-number"
-                                label="Số CMND/ Hộ chiếu"
-                            />
-                        </Grid>
-                        {/* Địa chỉ */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleAddressChange}
-                                margin="normal"
-                                required
-                                name="address"
-                                type="text"
-                                id="address"
-                                label="Địa chỉ"
-                            />
-                        </Grid>
-                        {/* Email */}
-                        <Grid item xs={6}>
-                            <TextField
-                                onChange={handleEmailChange}
-                                margin="normal"
-                                name="email"
-                                type="text"
-                                id="email"
-                                label="Email"
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Box></Box>
-                        </Grid>
-
-
-
+            <Box m={5}>
+                <Grid
+                    container
+                >
+                    {/* Họ và tên */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handleNameChange}
+                            margin="normal"
+                            required
+                            id="name"
+                            label="Họ và Tên"
+                            name="name"
+                            autoComplete="name"
+                            autoFocus
+                        />
+                    </Grid>
+                    {/* Ngày sinh */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handleDobChange}
+                            margin="normal"
+                            required
+                            name="dob"
+                            type="date"
+                            id="dob"
+                            label="Ngày sinh"
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid>
+                    {/* Số điện thoại */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handlePhoneNumberChange}
+                            margin="normal"
+                            required
+                            name="phone-number"
+                            type="number"
+                            id="phone-number"
+                            label="Số điện thoại"
+                        />
+                    </Grid>
+                    {/* Quốc tịch */}
+                    <Grid item xs={6}>
+                        <Box mt={2}>
+                            <FormControl fullWidth>
+                                <InputLabel id="nationality">Quốc tịch</InputLabel>
+                                <Select
+                                    labelId="nationality"
+                                    id="nationality"
+                                    label="Quốc tịch"
+                                    value={state.nationality}
+                                    onChange={handleChangeNationality}
+                                >
+                                    {
+                                        countryList.map((country, index) => {
+                                            return (
+                                                <MenuItem key={index} value={country}>{country}</MenuItem>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Grid>
+                    {/* Số cmnd */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handleIDNumberChange}
+                            margin="normal"
+                            required
+                            name="id-number"
+                            type="number"
+                            id="id-number"
+                            label="Số CMND/ Hộ chiếu"
+                        />
+                    </Grid>
+                    {/* Địa chỉ */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handleAddressChange}
+                            margin="normal"
+                            required
+                            name="address"
+                            type="text"
+                            id="address"
+                            label="Địa chỉ"
+                        />
+                    </Grid>
+                    {/* Email */}
+                    <Grid item xs={6}>
+                        <TextField
+                            onChange={handleEmailChange}
+                            margin="normal"
+                            name="email"
+                            type="text"
+                            id="email"
+                            label="Email"
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box></Box>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Box></Box>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button variant="outlined" color="primary" onClick={handleClose}>Đóng</Button>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button variant="contained" color="primary" onClick={handleAddGuest}>Thêm</Button>
                     </Grid>
 
-                </Box>
-            </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" color="primary" onClick={handleClose}>Đóng</Button>
-                <Button variant="contained" color="primary" onClick={handleAddGuest}>Thêm</Button>
-            </DialogActions>
 
+                </Grid>
+
+            </Box>
 
 
         </Dialog>

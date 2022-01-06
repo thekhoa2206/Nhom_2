@@ -32,12 +32,21 @@ function DirtyRoom(props) {
                                 <BedIcon fontSize='large' style={{ fill: "white", alignContent: 'center', margin: 0, position: 'absolute', top: '40%' }} />
                             </Grid>
                             <Grid item xs={9}>
-                                <Typography color="white" gutterBottom variant="h5" component="div">
-                                    10{id}
-                                </Typography>
-                                <Typography color="white" variant="body2" >
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                                </Typography>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <BedIcon fontSize='large' style={{ fill: "white", alignContent: 'center', margin: 0, position: 'absolute', top: '40%' }} />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography color="white" gutterBottom variant="h5" component="div">
+                                            10{id}
+                                        </Typography>
+                                        <Typography color="white" variant="body2" >
+                                            Lizards are a widespread group of squamate reptiles, with over 6,000
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+
+
 
                             </Grid>
                         </Grid>

@@ -14,7 +14,7 @@ const useStyles = createUseStyles({
     },
     titleText:{
     },
-    contentTop:{
+    content:{
       display: 'flex'
     },
     infoPersonal:{
@@ -23,10 +23,6 @@ const useStyles = createUseStyles({
     },
     infoReservation:{
       width: 280,
-      marginLeft: 20,
-    },
-    note: {
-      marginTop: 50,
       marginLeft: 20,
     }
 

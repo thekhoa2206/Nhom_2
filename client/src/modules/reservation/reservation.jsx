@@ -9,7 +9,6 @@ import Loading from '../../common-components/Loading';
 import useStyles from "./reservation.styles";
 import ReservationService from '../../services/reservation/reservation';
 import DialogDetailReservation from './DialogDetailReservation/DialogDetailReservation';
-import ModalAddNewReservation from './modalAddNewReservation/modalAddNewReservation'
 
 function Reservation(props) {
     const classes = useStyles();
@@ -28,7 +27,6 @@ function Reservation(props) {
         keyword: ""
     });
     const [showDetailReservation, setShowDetailReservation] = useState(false);
-    const [showAddNewReservation, setShowAddNewReservation] = useState(false);
     const [reservationChoose, setReservationChoose] = useState({
         id: 0,
         nameCustomer: "",
@@ -140,26 +138,14 @@ function Reservation(props) {
         console.log("show")
         event.stopPropagation();
     };
-    const openDetailReservation = () => {
-        setShowDetailReservation(false)
-    }
-    const openAddNewReservation = () =>{
-        setShowAddNewReservation(false);
-    }
-    const showModalAddNew = () =>{
-        setShowAddNewReservation(true);
-    }
     return (
         <React.Fragment>
             <React.Fragment>
-                <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd} onClick={showModalAddNew}>
+                <Button sx={{ mb: 3 }} variant="contained" className={classes.buttonAdd}>
                     Đặt phòng
                 </Button>
                 <Box>
-                    <DialogDetailReservation open={showDetailReservation} reservationChoose={reservationChoose} handleClose={openDetailReservation}/>
-                </Box>
-                <Box>
-                    <ModalAddNewReservation open={showAddNewReservation} handleClose={openAddNewReservation}/>
+                    <DialogDetailReservation open={showDetailReservation} reservationChoose={reservationChoose} />
                 </Box>
                 <DataGrid
                     autoHeight

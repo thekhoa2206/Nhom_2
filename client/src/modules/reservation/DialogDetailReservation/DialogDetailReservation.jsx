@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import ReservationService from '../../../services/reservation/reservation';
 import useStyles from './DialogDetailReservation.styles';
 import Loading from '../../../common-components/Loading';
-import Error from '../../../common-components/Error.js'
 
 function DialogDetailReservation(props) {
     const { open, reservationChoose } = props
@@ -37,39 +36,33 @@ function DialogDetailReservation(props) {
         }
         getListRevenue();
     }, [reservationChoose])
-        
-    const handleClose = () => {
-        props.handleClose()
-    }
+    
     return (
-        <Dialog open={open} fullWidth={true}  onClose={handleClose}>
+        <Dialog open={open} fullWidth={true}  >
             {isLoading === true ? (
                 <Box>
-                    {error === true ? (
+                    {error === false ? (
                     <Box className={classes.iframe}>
                         <Box className={classes.title}>
                             <Typography className={classes.titleText} variant="h4">Chi tiết đơn đặt phòng</Typography>
                         </Box>
-                        <Box className={classes.contentTop}>
+                        <Box className={classes.content}>
                             <Box className={classes.infoPersonal}>
                                 <Typography>Tên khách: {reservationDetail.nameCustomer}</Typography>
                                 <Typography>Số điện thoại: {reservationDetail.phoneCustomer}</Typography>
-                                <Typography>Số phòng đặt: {reservationDetail.numberRoom}</Typography>
+                                <Table size='medium'>
+                                    <TableHead></TableHead>
+                                </Table>
                             </Box>
                             <Box className={classes.infoReservation}>
                                 <Typography>Ngày đến: {reservationDetail.fromDate}</Typography>
                                 <Typography>Ngày đi: {reservationDetail.toDate}</Typography>
-                                <Typography>Trạng thái: {reservationDetail.status}</Typography>
                             </Box>
-                        </Box>
-                        <Box className={classes.note}>
-                                <Typography>Ghi chú:</Typography>
-                                <Typography>{reservationDetail.note}</Typography>
                         </Box>
                     </Box>
                     ): (
                         <Box className={classes.iframe}>
-                            <Error/>
+                            <span>Loading fail</span>
                         </Box>
                     )}
                 </Box>
