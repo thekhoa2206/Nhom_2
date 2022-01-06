@@ -26,11 +26,14 @@ export default function ProtectedRoute(props) {
     if (isLoading) {
         return <Loading />
     }
-
-    if (!userRole?.some(r => roles?.includes(r))) {
-        // role not authorised so redirect to home page
-        return <Redirect to='/home' />
+    console.log("userRole", userRole)
+    if (userRole) {
+        if (!userRole.some(r => roles?.includes(r))) {
+            // role not authorised so redirect to home page
+            return <Redirect to='/home' />
+        }
     }
+
 
     return (<Route {...rest} render={(props) => (<Layout><Component {...props} /></Layout>)} />)
 

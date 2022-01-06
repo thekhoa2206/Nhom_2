@@ -21,7 +21,7 @@ function CustomNestedList(props) {
         setOpen(!open);
     };
 
-    if (!userRole.some(r => roles?.includes(r))) {
+    if (!userRole?.some(r => roles?.includes(r))) {
         return <div></div>
     } else {
         return (
