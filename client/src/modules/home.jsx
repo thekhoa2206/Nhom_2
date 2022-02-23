@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
-function Home(props) {
+import * as React from 'react';
+import Dashboard from './dashboard/Dashboard';
+
+export default function Home() {
     return (
-        <React.Fragment>
-            Home page
-
-        </React.Fragment>
-
-    );
+        <Dashboard />
+    )
 }
-
-export default Home;

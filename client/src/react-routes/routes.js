@@ -8,7 +8,8 @@ import AuthRoute from './authRoute';
 import Statistics from '../modules/statistics/statistics';
 import Register from '../modules/users/register';
 import RoomManagement from '../modules/rooms/roomsManagement';
-import Statistics2 from '../modules/statistics/statistics2';
+import BillManagement from '../modules/statistics/billManagement';
+import DetailStats from '../modules/statistics/detailStats';
 import Reservation from '../modules/reservation/reservation'
 function Routes(props) {
     return (
@@ -50,13 +51,19 @@ function Routes(props) {
             <ProtectedRoute
                 path="/statistics2"
                 exact
-                component={Statistics2}
-                roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+                component={DetailStats}
+                roles={['ROLE_ADMIN']}
             />
             <ProtectedRoute
                 path="/rooms"
                 exact
                 component={RoomManagement}
+                roles={['ROLE_ADMIN', 'ROLE_STAFF']}
+            />
+             <ProtectedRoute
+                path="/bills"
+                exact
+                component={BillManagement}
                 roles={['ROLE_ADMIN', 'ROLE_STAFF']}
             />
             <Route

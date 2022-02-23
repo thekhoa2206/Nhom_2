@@ -9,9 +9,15 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import BedIcon from '@mui/icons-material/Bed';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import HailIcon from '@mui/icons-material/Hail';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
+import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
+import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 
 function ReadyRoom(props) {
-    const { id } = props
+    const { room } = props
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
@@ -35,23 +41,42 @@ function ReadyRoom(props) {
     console.log("abc")
     return (
         <React.Fragment>
-            <CheckInModal open={open} id={id} handleSubmit={handleSubmit} handleClose={handleClose} />
+            <CheckInModal open={open} room={room} handleSubmit={handleSubmit} handleClose={handleClose} />
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
                     <CardContent style={{ backgroundColor: "green" }} sx={props.styleZoom}>
+
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
-                                <BedIcon fontSize='large' style={{ fill: "white", alignContent: 'center', margin: 0, position: 'absolute', top: '40%' }} />
+                                <BedIcon fontSize='large' style={{ fill: "white" }} />
                             </Grid>
-                            <Grid item xs={9}>
-                                <Typography color="white" gutterBottom variant="h5" component="div">
-                                    10{id}
+                            <Grid item xs={6}>
+                                <Typography align="center" fontSize="28px" fontWeight="bold" color="white" gutterBottom variant="h5" component="div">
+                                    {room.roomName}
                                 </Typography>
-                                <Typography color="white" variant="body2" >
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Typography align="center" fontSize="12px" color="white" variant="h5" component="div">
+                                    Phòng
                                 </Typography>
+                                <Typography align="center" fontSize="12px" color="white" variant="h5" component="div">
+                                    {room.typeRoomName}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography fontSize="17px" color="white" variant="h6" align="center" >
+                                    Sẵn sàng đón khách
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} align="center">
+                                <Typography fontWeight="bold" display="inline" color="white" variant="h6"  >
+                                    09:04
+                                </Typography>
+                                <Typography margin="9px" fontSize="14px" display="inline" color="white" variant="h6" >
+                                    31/12/2021
+                                </Typography>
+                            </Grid>
 
-                            </Grid>
                         </Grid>
                     </CardContent>
 
@@ -90,22 +115,22 @@ function ReadyRoom(props) {
                 transformOrigin={{ horizontal: "right", vertical: "center" }}
             >
                 <MenuItem onClick={handleClickOpen}>
-                    <HotelIcon /> <Typography variant="h7">Khách thuê phòng</Typography>
+                    <HailIcon /> <Typography variant="h7">Khách thuê phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /><Typography variant="h7">Trả phòng</Typography>
+                    <LogoutIcon /><Typography variant="h7">Trả phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
+                    <LocalCafeOutlinedIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /> <Typography variant="h7">Đổi phòng</Typography>
+                    <ChangeCircleOutlinedIcon /> <Typography variant="h7">Đổi phòng</Typography>
                 </MenuItem>
                 <MenuItem>
-                    <HotelIcon /><Typography variant="h7">Dọn phòng</Typography>
+                    <CleaningServicesOutlinedIcon /><Typography variant="h7">Dọn phòng</Typography>
                 </MenuItem>
                 <MenuItem>
-                    <HotelIcon /><Typography variant="h7">Sửa phòng</Typography>
+                    <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
                 </MenuItem>
             </Menu>
 

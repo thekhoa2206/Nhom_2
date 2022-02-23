@@ -15,6 +15,10 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 import CustomListItem from "./customListItem"
 import CustomNestedList from "./customNestedList"
@@ -29,7 +33,7 @@ function Sidebar(props) {
         <Drawer variant="permanent" open={props.open}>
             <DrawerHeader>
                 <Avatar sx={{ width: 32, height: 32, marginRight: "20px", marginLeft: "10px" }}>L</Avatar>
-                <Typography sx={{ marginRight: "auto" }}>Brand</Typography>
+                <Typography sx={{ marginRight: "auto" }}>Brand Hotel</Typography>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
@@ -38,36 +42,52 @@ function Sidebar(props) {
             <List>
                 <CustomListItem
                     to={"/home"}
-                    primary={"Home"}
+                    primary={"Trang chủ"}
                     icon={<HomeIcon />}
                     roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
                 <CustomListItem
-                    to={"/register"}
-                    primary={"Register"}
-                    icon={<VpnKeyIcon />}
-                    roles={["ROLE_ADMIN"]}
+                    to={"/rooms"}
+                    primary={"Sơ đồ phòng"}
+                    icon={<HotelIcon />}
+                    roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
                 <CustomListItem
                     to={"/reservation"}
-                    primary={"Đặt phòng"}
+                    primary={"Danh sách đặt phòng"}
                     icon={<CalendarTodayIcon />}
                     roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
+                {/* <CustomListItem
+                    to={"/register"}
+                    primary={"Quản lí người dùng"}
+                    icon={<VpnKeyIcon />}
+                    roles={["ROLE_ADMIN", "ROLE_STAFF"]}
+                /> */}
                 <CustomNestedList
-                    primaryFather={"Statistics"}
+                    primaryFather={"Cấu hình"}
+                    iconFather={<SettingsIcon />}
+                    roles={["ROLE_ADMIN"]}
+                    kids={[
+                        { to: "/register", primary: "Người dùng", icon: <VpnKeyIcon /> },
+                        { to: "/hotel-settings", primary: "Thông tin phòng", icon: <RoomPreferencesIcon /> }
+                    ]}
+
+                />
+                <CustomNestedList
+                    primaryFather={"Thống kê"}
                     iconFather={<QueryStatsIcon />}
                     roles={["ROLE_ADMIN"]}
                     kids={[
-                        { to: "/statistics", primary: "statistics 1", icon: <EqualizerIcon /> },
-                        { to: "/statistics2", primary: "statistics 2", icon: <EqualizerIcon /> }
+                        { to: "/statistics", primary: "Doanh Thu", icon: <EqualizerIcon /> },
+                        { to: "/statistics2", primary: "Chi tiết thống kê", icon: <DashboardIcon /> }
                     ]}
 
                 />
                 <CustomListItem
-                    to={"/rooms"}
-                    primary={"Rooms"}
-                    icon={<HotelIcon />}
+                    to={"/bills"}
+                    primary={"Hóa đơn "}
+                    icon={<ReceiptLongIcon />}
                     roles={["ROLE_ADMIN", "ROLE_STAFF"]}
                 />
 
