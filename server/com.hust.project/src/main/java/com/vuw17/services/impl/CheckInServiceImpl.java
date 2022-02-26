@@ -55,26 +55,30 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
         List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
         //Insert occupied_room -> insert service_used -> insert hosted_at
-        if (checkinRequest.getCheckOutTime() > System.currentTimeMillis() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
-            if(checkinRequest.getBillId() <= 0){
+        int billId = -1;
+        if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
+            if(checkinRequest.getBillId() == 0){
+                System.out.println("HEHEHEHEHEH");
                 //Create a Bill object
-                int billId = billDAO.insertOne(new Bill(new BigDecimal(0),new BigDecimal(0),"",checkinRequest.getDeposit(),false));
+                 billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
                if(billId > 0){
                    checkinRequest.setBillId(billId);
                    saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
                }
             }
-
+            System.out.println("BillId = "+billId);
             //create a object OccupiedRoom to insert into table occupied_room
             OccupiedRoom occupiedRoom = new OccupiedRoom();
             occupiedRoom.setCheckOutTime(checkinRequest.getCheckOutTime());
             occupiedRoom.setDeposit(checkinRequest.getDeposit());
+
             occupiedRoom.setRoomId(checkinRequest.getRoomId());
-            occupiedRoom.setBillId(checkinRequest.getBillId());
+            occupiedRoom.setBillId(billId);
+            occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
 
             //Kiểm tra khách đã check out chưa ?
             for(int i = 0;i < guestIds.size();i++){
-                if(checkedOut(guestIds.get(i))){
+                if(!checkedOut(guestIds.get(i))){
                     return 0;
                 }
             }
@@ -95,7 +99,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
     @Override
     public boolean isOccupied(int roomId) {
-        if(roomDao.findById(roomId).getStatus() == 2){
+        if(roomDao.findById(roomId).getStatus() == ConstantVariableCommon.STATUS_ROOM_2){
             return true;
         }
         return false;
@@ -153,11 +157,14 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     //    insert hosted_at
     public int insertHostedAt(List<Integer> guestIds, int occupiedRoomId, UserDTOResponse userDTOResponse) {
         if (guestIds != null && guestIds.size() > 0) {
+            System.out.println(1111111);
             for (int i = 0; i < guestIds.size(); i++) {
+                System.out.println(222222222);
                 int guestId = guestIds.get(i);
                 if (guestDao.findById(guestId) != null && checkedOut(guestId)) {
                     HostedAt hostedAt = new HostedAt();
                     hostedAt.setGuestId(guestId);
+                    System.out.println(333333333);
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
 
                     int hostedAtId = hostedAtDAO.insertOne(hostedAt);
@@ -185,10 +192,15 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     public boolean checkedOut(int guestId){
         //Tìm xem thằng guestId này ở phòng nào ? và phòng đó đã check out chưa
         List<HostedAt> hostedAts = hostedAtDao.findByGuestId(guestId);
+        if(hostedAts.size() == 0){
+            return true;
+        }
         for(int i = 0;i < hostedAts.size();i++){
             //Neu != null thi phong da check out roi
-            OccupiedRoom occupiedRoom = occupiedRoomDao.findAvailableRoomById(hostedAts.get(i).getOccupiedRoomId());
-            return occupiedRoom != null ? true : false;
+            OccupiedRoom occupiedRoom = occupiedRoomDao.findById(hostedAts.get(i).getOccupiedRoomId());
+            if(occupiedRoom.getCheckOutTime() < System.currentTimeMillis()){
+                return true;
+            }
         }
         return false;
     }

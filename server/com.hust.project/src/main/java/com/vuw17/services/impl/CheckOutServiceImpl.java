@@ -34,26 +34,22 @@ public class CheckOutServiceImpl extends CommonService implements CheckOutServic
     //update check out time
     @Override
     public boolean checkOut(CheckOutRequest checkOutRequest, UserDTOResponse userDTOResponse) {
-        List<Integer> roomIds = checkOutRequest.getRoomIds();
+        int roomId = checkOutRequest.getRoomId();
         //kiem tra xem cac phong nay da check out chua,neu roi (tuc la isOccupied == false) thi return null
-        for (int i = 0; i < roomIds.size(); i++) {
-            if (!isOccupied(roomIds.get(i))) {
+
+            if (!isOccupied(roomId)) {
                 return false;
             }
-        }
-        //kiem tra xem co cung bill id khong ?
-        boolean checkSameBillId = isTheSameBill(roomIds);
-        //Khi id cac phong truyen len deu chua check out
-        if(checkSameBillId){
-            updateDiaryWhenCheckedOut(roomIds,userDTOResponse);
-            return true;
-        }
 
-        return false;
+        //kiem tra xem co cung bill id khong ?
+//        boolean checkSameBillId = isTheSameBill(roomIds);
+        //Khi id cac phong truyen len deu chua check out
+//        if(checkSameBillId){
+            updateDiaryWhenCheckedOut(roomId,userDTOResponse);
+            return true;
+//       }
     }
-    public void updateDiaryWhenCheckedOut(List<Integer> roomIds,UserDTOResponse userDTOResponse){
-        for (int i = 0; i < roomIds.size(); i++) {
-            int roomId = roomIds.get(i);
+    public void updateDiaryWhenCheckedOut(int roomId,UserDTOResponse userDTOResponse){
             OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
             boolean checkUpdate = occupiedRoomDao.updateStatusAndCheckOutTime(occupiedRoom.getId(),ConstantVariableCommon.STATUS_OCCUPIED_ROOM_2, System.currentTimeMillis());
             boolean checkUpdateRoom = roomDao.updateStatus(roomId,ConstantVariableCommon.STATUS_ROOM_1);
@@ -62,7 +58,7 @@ public class CheckOutServiceImpl extends CommonService implements CheckOutServic
                 saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, occupiedRoom.getId(),ConstantVariableCommon.table_occupied_room,userDTOResponse.getId());
                 saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, roomId,ConstantVariableCommon.table_room,userDTOResponse.getId());
             }
-        }
+
     }
 
     public boolean isOccupied(int roomId) {
