@@ -14,22 +14,18 @@ import SearchIcon from "@material-ui/icons/Search";
 import { useSelector } from "react-redux";
 import GuestService from '../../../services/guest/guest.service';
 import { toast } from "../../../utils/snackbarUtils"
+import { Autocomplete } from '@mui/material';
 
 function ModalAddNewReservation(props) {
     const { open, handleClose } = props
-    const [guestList, setGuestList] = useState([
-        {
-            address: "",
-            birthday: 0,
-            email: "",
-            firstName: "",
-            id: 0,
-            idCard: "",
-            lastName: "",
-            nationality: "",
-            phoneNumber: ""
-          }
-    ]) 
+    const guestList = useSelector((state) => state.guestReducer.guestList);
+    const [state, setState] = useState({
+        guests: [],
+        isOpenModalAddGuest: false,
+        servicesUsed: [],
+        serviceTotal: 0,
+    })
+    const { guests } = state
     const [filtersGuest, setFiltersGuest] = useState({
         keyword: "0",
     });
@@ -39,28 +35,6 @@ function ModalAddNewReservation(props) {
     }
     const handleAddUser = () =>{
 
-    }
-    const showListCustomer = () =>{
-        GuestService.getListGuest(filtersGuest).then((res) => {
-            console.log(res)
-           setFiltersGuest(
-            res.data.map((item) => {
-                return {
-                    address: item.address,
-                    birthday: item.birthday,
-                    email: item.email,
-                    firstName: item.firstName,
-                    id: item.id,
-                    idCard: item.idCard,
-                    lastName: item.lastName,
-                    nationality: item.nationality,
-                    phoneNumber: item.phoneNumber
-                }
-            })
-           ) 
-        }).catch((err)=>{
-            toast.error("Lấy danh sách khách hàng thất bại")
-        }) 
     }
 
     const handleChangeNote = () =>{
@@ -75,25 +49,45 @@ function ModalAddNewReservation(props) {
     const handleChangeNumberRoom = () =>{
 
     }
-
+    const defaultProps = {
+        options: guestList,
+        getOptionLabel: (option) => option.lastName + " " + option.firstName
+    }
+    const onChangeSearch = (event, value) => {
+        setState({
+            ...state,
+            guests: value
+        })
+    }
     return (
         <Dialog open={open} fullWidth={true}  onClose={handleClose} maxWidth='md'>
             <DialogTitle align="center">THÊM MỚI ĐƠN ĐẶT PHÒNG </DialogTitle>
             <DialogContent>
                 <Grid item xs={12} pl={3} >
-                    <TextField style={{marginTop: 5}}
-                        fullWidth
-                        label="Tìm khách hàng..."
-                        onClick={showListCustomer}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment>
-                                    <IconButton>
-                                        <SearchIcon style={{ fill: "#2196f3" }} />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
+                        <Autocomplete
+                            {...defaultProps}
+                            disableClearable
+                            multiple
+                            value={guests}
+                            filterSelectedOptions
+                            renderTags={() => null}
+                            onChange={onChangeSearch}
+                            renderInput={(params) =>
+                                <TextField
+                                    {...params}
+                                    // fullWidth
+                                    label="Tìm khách hàng..."
+                                // InputProps={{
+                                //     endAdornment: (
+                                //         <InputAdornment position="end">
+                                //             <IconButton disabled>
+                                //                 <SearchIcon style={{ fill: "#2196f3" }} />
+                                //             </IconButton>
+                                //         </InputAdornment>
+                                //     )
+                                // }}
+                                />
+                            }
                         />
                 </Grid>
                 <Box onSubmit={handleSubmit} xs={8}>
