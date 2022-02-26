@@ -12,6 +12,7 @@ import com.vuw17.entities.HostedAt;
 import com.vuw17.entities.OccupiedRoom;
 import com.vuw17.entities.ServiceUsed;
 import com.vuw17.repositories.BillRepository;
+import com.vuw17.repositories.OccupiedRoomRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CheckInService;
 import com.vuw17.services.CommonService;
@@ -35,8 +36,9 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private final HostedAtDao hostedAtDao;
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckInServiceImpl.class.toString());
     private final BillRepository billRepository;
+    private final OccupiedRoomRepository occupiedRoomRepository;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
@@ -49,6 +51,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.billDAO = billDAO;
         this.hostedAtDao = hostedAtDao;
         this.billRepository = billRepository;
+        this.occupiedRoomRepository = occupiedRoomRepository;
     }
 
     @Override
@@ -87,18 +90,20 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                 }
             }
 
-            int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
+            //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
+            OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
+            int occupiedRoomId = occupiedRoomRes.getRoomId();
             boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(),ConstantVariableCommon.STATUS_ROOM_2);
             if (occupiedRoomId > 0 && checkUpdate) {
-                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
-                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
+//                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
+  //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
                 insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
                 insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
                 return occupiedRoomId;
             }
 
         }
-        return 0;
+        return billId;
     }
 
     @Override
