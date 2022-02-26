@@ -19,14 +19,14 @@ public class CheckInRequest{
     private long checkOutTime;
     @Min(value = 1,message = "Thoi gian phai > 0")
     private long checkInTime;
-    @Min(value = 1,message = "Tien coc phai > 0")
+    @Min(value = 0,message = "Tiền cọc phai lớn hơn hoặc bằng 0")
     private BigDecimal deposit;
-    @Min(value = 1,message = "Ma phong phai > 0")
+
     private int roomId;
     private int billId;
-    @Min(value = 1,message = "Tien giam tru phai > 0")
+
     private BigDecimal reducedFee;
-    @Min(value = 1,message = "Tien phu phi phai > 0")
+
     private BigDecimal additionalFee;
 
 

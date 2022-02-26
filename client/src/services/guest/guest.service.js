@@ -8,6 +8,9 @@ class GuestService{
         const paramsString = queryString.stringify(filtersGuest);
         return axios.get(GUEST_API_URL + `/searching?${paramsString}`, filtersGuest);
     };
+    static async  postListGuest(newGuest){
+        return axios.post(GUEST_API_URL , newGuest);
+    };
     
 }
 export default GuestService;

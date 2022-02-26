@@ -21,7 +21,7 @@ public class GuestDTO extends BaseDTO {
     @NotEmpty(message = "Last name khong duoc de trong")
     private String lastName;
 
-    @Min(value = 1,message = "Birthday phai lon hon 0")
+//    @Min(value = 1,message = "Birthday phai lon hon 0")
     private long birthday;
 
     @NotEmpty(message = "Nationality khong duoc de trong")
@@ -39,7 +39,7 @@ public class GuestDTO extends BaseDTO {
     @Email(message = "Email sai dinh dang")
     private String email;
 
-    @NotEmpty(message = "ID Card khong duoc de trong")
-    @Size(min = 12,max = 12,message = "The can cuoc phai dung 12 so")
+//    @NotEmpty(message = "ID Card khong duoc de trong")
+//    @Size(min = 12,max = 12,message = "The can cuoc phai dung 12 so")
     private String idCard;
 }

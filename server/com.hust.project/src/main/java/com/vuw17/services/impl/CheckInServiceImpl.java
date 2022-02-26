@@ -11,6 +11,7 @@ import com.vuw17.entities.Bill;
 import com.vuw17.entities.HostedAt;
 import com.vuw17.entities.OccupiedRoom;
 import com.vuw17.entities.ServiceUsed;
+import com.vuw17.repositories.BillRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CheckInService;
 import com.vuw17.services.CommonService;
@@ -18,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -34,8 +34,9 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private final BillDAO billDAO;
     private final HostedAtDao hostedAtDao;
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckInServiceImpl.class.toString());
+    private final BillRepository billRepository;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
@@ -47,6 +48,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.roomDao = roomDao;
         this.billDAO = billDAO;
         this.hostedAtDao = hostedAtDao;
+        this.billRepository = billRepository;
     }
 
     @Override
@@ -60,10 +62,12 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             if(checkinRequest.getBillId() == 0){
                 System.out.println("HEHEHEHEHEH");
                 //Create a Bill object
-                 billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
+                 //billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
+                Bill bill =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
+                billId = bill.getId();
                if(billId > 0){
                    checkinRequest.setBillId(billId);
-                   saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
+                   //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
                }
             }
             System.out.println("BillId = "+billId);
