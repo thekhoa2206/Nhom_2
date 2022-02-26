@@ -12,6 +12,7 @@ import com.vuw17.entities.HostedAt;
 import com.vuw17.entities.OccupiedRoom;
 import com.vuw17.entities.ServiceUsed;
 import com.vuw17.repositories.BillRepository;
+import com.vuw17.repositories.HostedAtRepository;
 import com.vuw17.repositories.OccupiedRoomRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CheckInService;
@@ -37,8 +38,9 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckInServiceImpl.class.toString());
     private final BillRepository billRepository;
     private final OccupiedRoomRepository occupiedRoomRepository;
+    private final HostedAtRepository hostedAtRepository;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository, HostedAtRepository hostedAtRepository) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
@@ -52,56 +54,63 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.hostedAtDao = hostedAtDao;
         this.billRepository = billRepository;
         this.occupiedRoomRepository = occupiedRoomRepository;
+        this.hostedAtRepository = hostedAtRepository;
     }
 
     @Override
-    public int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) {
-        List<Integer> guestIds = checkinRequest.getGuestIds();
-
-        List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
-        //Insert occupied_room -> insert service_used -> insert hosted_at
+    public int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception {
         int billId = -1;
-        if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
-            if(checkinRequest.getBillId() == 0){
-                System.out.println("HEHEHEHEHEH");
-                //Create a Bill object
-                 //billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
-                Bill bill =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
-                billId = bill.getId();
-               if(billId > 0){
-                   checkinRequest.setBillId(billId);
-                   //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
-               }
-            }
-            System.out.println("BillId = "+billId);
-            //create a object OccupiedRoom to insert into table occupied_room
-            OccupiedRoom occupiedRoom = new OccupiedRoom();
-            occupiedRoom.setCheckOutTime(checkinRequest.getCheckOutTime());
-            occupiedRoom.setDeposit(checkinRequest.getDeposit());
+        try{
+            List<Integer> guestIds = checkinRequest.getGuestIds();
 
-            occupiedRoom.setRoomId(checkinRequest.getRoomId());
-            occupiedRoom.setBillId(billId);
-            occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
-
-            //Kiểm tra khách đã check out chưa ?
-            for(int i = 0;i < guestIds.size();i++){
-                if(!checkedOut(guestIds.get(i))){
-                    return 0;
+            List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
+            //Insert occupied_room -> insert service_used -> insert hosted_at
+            if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
+                if(checkinRequest.getBillId() == 0){
+                    System.out.println("HEHEHEHEHEH");
+                    //Create a Bill object
+                    //billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
+                    Bill bill =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
+                    billId = bill.getId();
+                    if(billId > 0){
+                        checkinRequest.setBillId(billId);
+                        //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
+                    }
                 }
-            }
+                System.out.println("BillId = "+billId);
+                //create a object OccupiedRoom to insert into table occupied_room
+                OccupiedRoom occupiedRoom = new OccupiedRoom();
+                occupiedRoom.setCheckOutTime(checkinRequest.getCheckOutTime());
+                occupiedRoom.setDeposit(checkinRequest.getDeposit());
 
-            //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
-            OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
-            int occupiedRoomId = occupiedRoomRes.getRoomId();
-            boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(),ConstantVariableCommon.STATUS_ROOM_2);
-            if (occupiedRoomId > 0 && checkUpdate) {
+                occupiedRoom.setRoomId(checkinRequest.getRoomId());
+                occupiedRoom.setBillId(billId);
+                occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
+
+                //Kiểm tra khách đã check out chưa ?
+                for(int i = 0;i < guestIds.size();i++){
+                    if(!checkedOut(guestIds.get(i))){
+                        return 0;
+                    }
+                }
+
+                //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
+                OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
+                int occupiedRoomId = occupiedRoomRes.getRoomId();
+                boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(),ConstantVariableCommon.STATUS_ROOM_2);
+                if (occupiedRoomId > 0 && checkUpdate) {
 //                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
-  //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
-                insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
-                insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
-                return occupiedRoomId;
+                    //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
+                    insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
+                    insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
+                    return occupiedRoomId;
+                }
+
             }
 
+            if(billId <= 0 ) throw new Exception("Có lỗi xảy ra");
+        } catch (Exception e){
+            throw new Exception("Có lỗi xảy ra!");
         }
         return billId;
     }
@@ -176,9 +185,10 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                     System.out.println(333333333);
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
 
-                    int hostedAtId = hostedAtDAO.insertOne(hostedAt);
+                    //int hostedAtId = hostedAtDAO.insertOne(hostedAt);
+                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
                     if (hostedAtId > 0) {
-                        saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
+                        //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
                         return hostedAtId;
                     }
                 }

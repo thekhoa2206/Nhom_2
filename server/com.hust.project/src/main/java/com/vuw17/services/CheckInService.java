@@ -7,7 +7,7 @@ import com.vuw17.dto.user.UserDTOResponse;
 
 public interface CheckInService {
     //Check in
-    int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse);
+    int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception;
     //Kiem tra xem phong nay co khach hay ko ?
     boolean isOccupied(int roomId);
     //Them service neu theo nhu cau cua khach

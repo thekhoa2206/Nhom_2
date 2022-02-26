@@ -27,7 +27,7 @@ public class CheckInController extends BaseController {
     }
     //OK
     @PostMapping
-    public ResponseEntity<InsertResponse> checkIn(@Valid @RequestBody CheckInRequest checkInRequest, HttpServletRequest request){
+    public ResponseEntity<InsertResponse> checkIn(@Valid @RequestBody CheckInRequest checkInRequest, HttpServletRequest request) throws Exception {
         return ResponseEntity.ok(new InsertResponse(checkInService.checkIn(checkInRequest,getUserDTOResponse(request))));
     }
     //API them service theo nhu cau cua khach theo phong
