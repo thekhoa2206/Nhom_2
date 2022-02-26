@@ -87,12 +87,12 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                 occupiedRoom.setBillId(billId);
                 occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
 
-                //Kiểm tra khách đã check out chưa ?
-                for(int i = 0;i < guestIds.size();i++){
-                    if(!checkedOut(guestIds.get(i))){
-                        return 0;
-                    }
-                }
+//                //Kiểm tra khách đã check out chưa ?
+//                for(int i = 0;i < guestIds.size();i++){
+//                    if(!checkedOut(guestIds.get(i))){
+//                        return 0;
+//                    }
+//                }
 
                 //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
                 OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
