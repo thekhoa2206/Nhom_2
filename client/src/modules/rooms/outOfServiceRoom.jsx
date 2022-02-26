@@ -8,12 +8,19 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import BuildIcon from '@mui/icons-material/Build';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import HailIcon from '@mui/icons-material/Hail';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
+import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
+import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
+import { useFixRoom } from '../../services/rooms/room.service';
 
 function OutOfServiceRoom(props) {
-    const { id } = props
+    const { room } = props
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-
+    const { fixRoom } = useFixRoom()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -21,26 +28,46 @@ function OutOfServiceRoom(props) {
         setAnchorEl(null);
     };
     const handleRepairRoom = () => {
+        fixRoom(room)
     };
     return (
         <React.Fragment>
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
-                    <CardContent style={{ backgroundColor: "blue" }} sx={props.styleZoom}>
+                    <CardContent style={{ backgroundColor: "#1769aa" }} sx={props.styleZoom}>
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
-                                <BuildIcon fontSize='large' style={{ fill: "white", alignContent: 'center', margin: 0, position: 'absolute', top: '40%' }} />
+                                <BuildIcon fontSize='large' style={{ fill: "white" }} />
                             </Grid>
-                            <Grid item xs={9}>
-                                <Typography color="white" gutterBottom variant="h5" component="div">
-                                    10{id}
+                            <Grid item xs={6}>
+                                <Typography align="center" fontSize="28px" fontWeight="bold" color="white" gutterBottom variant="h5" component="div">
+                                    {room.roomName}
                                 </Typography>
-                                <Typography color="white" variant="body2" >
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Typography align="center" fontSize="12px" color="white" variant="h5" component="div">
+                                    Phòng
                                 </Typography>
+                                <Typography align="center" fontSize="12px" color="white" variant="h5" component="div">
+                                    {room.typeRoomName}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography fontSize="17px" color="white" variant="h6" align="center" >
+                                    Phòng đang sửa chữa
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} align="center">
+                                <Typography fontWeight="bold" display="inline" color="white" variant="h6"  >
+                                    09:05
+                                </Typography>
+                                <Typography margin="9px" fontSize="14px" display="inline" color="white" variant="h6" >
+                                    31/12/2021
+                                </Typography>
+                            </Grid>
 
-                            </Grid>
                         </Grid>
+
                     </CardContent>
 
                 </CardActionArea>
@@ -78,22 +105,22 @@ function OutOfServiceRoom(props) {
                 transformOrigin={{ horizontal: "right", vertical: "center" }}
             >
                 <MenuItem disabled>
-                    <HotelIcon /> <Typography variant="h7">Khách thuê phòng</Typography>
+                    <HailIcon /> <Typography variant="h7">Khách thuê phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /><Typography variant="h7">Trả phòng</Typography>
+                    <LogoutIcon /><Typography variant="h7">Trả phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
+                    <LocalCafeOutlinedIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
                 </MenuItem>
                 <MenuItem disabled>
-                    <HotelIcon /> <Typography variant="h7">Đổi phòng</Typography>
+                    <ChangeCircleOutlinedIcon /> <Typography variant="h7">Đổi phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled >
-                    <HotelIcon /><Typography variant="h7">Dọn phòng</Typography>
+                    <CleaningServicesOutlinedIcon /><Typography variant="h7">Dọn phòng</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleRepairRoom}>
-                    <HotelIcon /><Typography variant="h7"> Kết thúc sửa phòng</Typography>
+                    <ConstructionOutlinedIcon /><Typography variant="h7"> Kết thúc sửa phòng</Typography>
                 </MenuItem>
             </Menu>
 

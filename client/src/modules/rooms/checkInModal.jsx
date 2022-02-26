@@ -32,10 +32,12 @@ import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from "react-redux";
+import { useCheckIn } from '../../services/rooms/room.service';
 
 function CheckInModal(props) {
-    const { open, id } = props;
+    const { open, room } = props;
     const guestList = useSelector((state) => state.guestReducer.guestList);
+    const { checkIn } = useCheckIn()
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
@@ -76,11 +78,12 @@ function CheckInModal(props) {
                 }`,
         },
         {
-            field: 'dob',
+            field: 'birthday',
             headerName: 'Ngày sinh',
             headerAlign: 'center',
             type: 'date',
             width: 200,
+            // valueGetter: (params) => dayjs(params.getValue(params.id, 'birthday')).format("DD-MM-YYYY")
         },
     ];
     const servicesColumn = [
@@ -101,7 +104,7 @@ function CheckInModal(props) {
                             handleAddItem(event, cellValues);
                         }}
                     >
-                        <ControlPointIcon style={{ fill: "#2196f3" }} />
+                        <ControlPointIcon style={{ fill: "#1769aa" }} />
                     </IconButton>
                 );
             }
@@ -125,6 +128,7 @@ function CheckInModal(props) {
     }
     const handleSubmit = () => {
         props.handleSubmit()
+        checkIn(room)
     }
     const handleClick = (event, cellValues) => {
         alert(cellValues.row.name);
@@ -269,11 +273,10 @@ function CheckInModal(props) {
         options: guestList,
         getOptionLabel: (option) => option.lastName + " " + option.firstName
     }
-    console.log("state", state)
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg' >
-            <DialogTitle align="center">Phòng {id}</DialogTitle>
+            <DialogTitle align="center">Phòng {room.roomName}</DialogTitle>
             <DialogContent>
                 <Grid container rowSpacing={4} spacing={2}>
                     <Grid item xs={6}>
@@ -298,10 +301,10 @@ function CheckInModal(props) {
                                             // fullWidth
                                             label="Tìm khách hàng..."
                                         // InputProps={{
-                                        //     endAdornment: (
-                                        //         <InputAdornment position="end">
+                                        //     startAdornment: (
+                                        //         <InputAdornment position="start">
                                         //             <IconButton disabled>
-                                        //                 <SearchIcon style={{ fill: "#2196f3" }} />
+                                        //                 <SearchIcon style={{ fill: "#1769aa" }} />
                                         //             </IconButton>
                                         //         </InputAdornment>
                                         //     )
@@ -479,29 +482,46 @@ function CheckInModal(props) {
 
                     </Grid>
                     <Grid item xs={4}>
-                        <Paper variant="outlined">
-                            <Box p={4}>
-                                <Grid container>
-                                    <Grid item xs={3}></Grid>
-                                    <Grid item xs={9}>
+                        <Grid container >
+                            <Grid item xs={12} pb={2}>
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    label="Ghi chú"
+                                    multiline
+                                    rows={2}
+                                    defaultValue="Ghi chú"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Paper variant="outlined">
+                                    <Box pl={4} pb={2} pt={2}>
                                         <Grid container>
-                                            <Grid item xs={6}>
-                                                <Typography>Tiền phòng: </Typography>
-                                                <Typography>Tiền dịch vụ: </Typography>
-                                                <Typography>Tổng tạm tính: </Typography>
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <Typography textAlign="right">0.000đ</Typography>
-                                                <Typography textAlign="right">20.000đ</Typography>
-                                                <Typography textAlign="right">20.000đ</Typography>
+                                            <Grid item xs={2}></Grid>
+                                            <Grid item xs={10}>
+                                                <Grid container>
+                                                    <Grid item xs={6}>
+                                                        <Typography>Tiền phòng: </Typography>
+                                                        <Typography>Tiền dịch vụ: </Typography>
+                                                        <Typography>Đặt trước: </Typography>
+                                                        <Typography fontWeight="bold">Tổng thanh toán: </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={5}>
+                                                        <Typography textAlign="right">0.000đ</Typography>
+                                                        <Typography textAlign="right">{serviceTotal}đ</Typography>
+                                                        <Typography textAlign="right">0.000đ</Typography>
+                                                        <Typography textAlign="right" fontWeight="bold">{serviceTotal}đ</Typography>
+                                                    </Grid>
+                                                </Grid>
+
                                             </Grid>
                                         </Grid>
 
-                                    </Grid>
-                                </Grid>
+                                    </Box>
+                                </Paper>
+                            </Grid>
 
-                            </Box>
-                        </Paper>
+                        </Grid>
                     </Grid>
                 </Grid>
             </DialogContent>

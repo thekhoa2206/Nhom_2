@@ -17,4 +17,6 @@ public interface OccupiedRoomDao {
     List<OccupiedRoom> findOccupiedRoomsByBillId(int billId);
     //Lay ra theo occupied id
     OccupiedRoom findById(int id);
+    //Lay ra theo bill id
+    OccupiedRoom findByBillId(int billId);
 }

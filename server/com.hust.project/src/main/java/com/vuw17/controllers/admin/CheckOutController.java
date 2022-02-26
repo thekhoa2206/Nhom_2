@@ -26,9 +26,10 @@ public class CheckOutController extends BaseController {
         this.checkOutService = checkOutService;
         this.roomService = roomService;
     }
-    @PutMapping
+    @PostMapping
     public ResponseEntity<Boolean> checkOut(@Valid @RequestBody CheckOutRequest checkOutRequest, HttpServletRequest request){
         return ResponseEntity.ok(checkOutService.checkOut(checkOutRequest,getUserDTOResponse(request)));
 
     }
+
 }
