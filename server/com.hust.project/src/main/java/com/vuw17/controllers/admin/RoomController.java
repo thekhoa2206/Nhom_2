@@ -58,5 +58,13 @@ public class RoomController extends BaseController {
     public ResponseEntity<List<RoomDTOResponse>> getRoomsByTypeRoomId(@PathVariable int typeRoomId){
         return ResponseEntity.ok(roomService.findByTypeRoomId(typeRoomId));
     }
+
+    //APi dọn phòng, sửa phòng
+    @GetMapping("/status")
+    public ResponseEntity<Void> cleanRoom(@RequestParam int id, @RequestParam String typeAction){
+        roomService.changeStatusRoom(id, typeAction);
+        return ResponseEntity.ok().build();
+    }
+
 }
 

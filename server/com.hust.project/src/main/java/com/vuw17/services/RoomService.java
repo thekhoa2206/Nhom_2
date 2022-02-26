@@ -24,4 +24,7 @@ public interface RoomService {
     RoomDTOResponse findByName(String name);
     //Lay room theo type_room id
     List<RoomDTOResponse> findByTypeRoomId(int typeRoomId);
+
+    // thay đổi trnajg thái phòng
+    void changeStatusRoom(int roomId, String typeAction);
 }
