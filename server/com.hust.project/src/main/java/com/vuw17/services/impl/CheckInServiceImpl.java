@@ -83,7 +83,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             //if (roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
                 //Create a Bill object
 //                billId = billDAO.insertOne(new Bill(new BigDecimal(0), new BigDecimal(0), "", checkinRequest.getDeposit(), false));
-                    billId =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee() ,"",checkinRequest.getDeposit(),false)).getId();
+                    billId =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee() ,"",checkinRequest.getDeposit(),false, ConstantVariableCommon.STATUS_BILL_1)).getId();
                 if (billId > 0) {
 
                     ////saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
@@ -100,12 +100,12 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             occupiedRoom.setCheckInTime(checkInTime);
             occupiedRoom.setStatus(ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1);
 
-                //Kiểm tra khách đã check out chưa ?
-                for(int i = 0;i < guestIds.size();i++){
-                    if(!checkedOut(guestIds.get(i))){
-                        throw new Exception("Khach chua check out");
-                    }
-                }
+//                //Kiểm tra khách đã check out chưa ?
+//                for(int i = 0;i < guestIds.size();i++){
+//                    if(!checkedOut(guestIds.get(i))){
+//                        throw new Exception("Khach chua check out");
+//                    }
+//                }
 
             //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
             OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);

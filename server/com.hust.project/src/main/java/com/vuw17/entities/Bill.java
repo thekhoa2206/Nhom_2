@@ -16,12 +16,13 @@ public class Bill extends BaseEntity{
     public Bill(){
 
     }
-    public Bill(BigDecimal reducedFee,BigDecimal additionalFee,String note,BigDecimal moneyPaid,boolean paymentMethod){
+    public Bill(BigDecimal reducedFee,BigDecimal additionalFee,String note,BigDecimal moneyPaid,boolean paymentMethod, int status){
         this.reducedFee = reducedFee;
         this.additionalFee = additionalFee;
         this.note = note;
         this.moneyPaid = moneyPaid;
         this.paymentMethod = paymentMethod;
+        this.status = status;
 
 
     }
