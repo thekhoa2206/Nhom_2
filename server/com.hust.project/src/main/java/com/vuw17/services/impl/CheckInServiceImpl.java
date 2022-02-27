@@ -65,7 +65,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
             List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
             //Insert occupied_room -> insert service_used -> insert hosted_at
-            if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime() && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
+            if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime()) {
                 if(checkinRequest.getBillId() == 0){
                     System.out.println("HEHEHEHEHEH");
                     //Create a Bill object
@@ -174,6 +174,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
     //    insert hosted_at
     public int insertHostedAt(List<Integer> guestIds, int occupiedRoomId, UserDTOResponse userDTOResponse) {
+
         if (guestIds != null && guestIds.size() > 0) {
             System.out.println(1111111);
             for (int i = 0; i < guestIds.size(); i++) {
