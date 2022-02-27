@@ -33,7 +33,7 @@ function Header(props) {
         logoutUser()
     }
     return (
-        <AppBar style={{ background: 'grey' }} position="fixed" open={open}>
+        <AppBar style={{ background: '#33A0FF' }} position="fixed" open={open}>
             <Toolbar>
                 <IconButton
                     color="inherit"

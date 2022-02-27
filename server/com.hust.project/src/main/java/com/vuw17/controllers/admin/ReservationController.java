@@ -66,4 +66,11 @@ public class ReservationController {
         return ResponseEntity.ok().build();
     }
 
+    //API xem thông tin chi tiết đặt phòng
+    @GetMapping("/room")
+    public ResponseEntity<Void> detail(@Valid @RequestBody ReservationRoomDTORequest reservationRoomDTORequest){
+        reservationService.chooseRoom(reservationRoomDTORequest);
+        return ResponseEntity.ok().build();
+    }
+
 }

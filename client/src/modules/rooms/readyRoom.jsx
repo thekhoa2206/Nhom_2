@@ -15,10 +15,12 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
+import BookRoomModal from './bookRoomModal';
 
 function ReadyRoom(props) {
     const { room } = props
     const [open, setOpen] = useState(false);
+    const [openReservation, setOpenReservation] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
 
@@ -37,11 +39,20 @@ function ReadyRoom(props) {
     const handleSubmit = () => {
         setOpen(false);
     };
-
+    const handleSubmitReservation = () => {
+        setOpenReservation(false);
+    }
+    const handleClickOpenReservation = () => {
+        setOpenReservation(true);
+    };
+    const handleCloseReservation = () => {
+        setOpenReservation(false);
+    };
     console.log("abc")
     return (
         <React.Fragment>
             <CheckInModal open={open} room={room} handleSubmit={handleSubmit} handleClose={handleClose} />
+            <BookRoomModal open={openReservation} room={room} handleSubmit={handleSubmitReservation} handleClose={handleCloseReservation} />
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
                     <CardContent style={{ backgroundColor: "green" }} sx={props.styleZoom}>
@@ -131,6 +142,9 @@ function ReadyRoom(props) {
                 </MenuItem>
                 <MenuItem>
                     <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleClickOpenReservation}>
+                    <ConstructionOutlinedIcon /><Typography variant="h7">Đặt phòng</Typography>
                 </MenuItem>
             </Menu>
 
