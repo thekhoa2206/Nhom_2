@@ -66,3 +66,15 @@ export function useGetAllRoles() {
 	}
 	return { getAllRoles }
 }
+export function useGetAllServices() {
+	const dispatch = useDispatch();
+	const getAllServices = () => {
+		axios.get('api/admin/services')
+			.then(res => {
+				dispatch({ type: 'GET_ALL_SERVICES', payload: { data: res.data } })
+			}).catch(err => {
+				toast.error("Lấy danh sách dịch vụ thất bại")
+			})
+	}
+	return { getAllServices }
+}

@@ -20,13 +20,16 @@ import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOu
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import EditInfoRoomModal from './editInfoRoomModal';
+import { useUpdateServices } from "../../services/rooms/room.service";
 
 function OccupiedRoom(props) {
     const { room } = props
     const [open, setOpen] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-
+    const { updateServices } = useUpdateServices()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -36,17 +39,27 @@ function OccupiedRoom(props) {
     const handleClickOpen = () => {
         setOpen(true);
     };
+    const handleClickOpenModalUpdate = () => {
+        setOpenModalUpdate(true);
+    };
     const handleClose = () => {
         setOpen(false);
     };
+    const handleCloseModalUpdate = () => {
+        setOpenModalUpdate(false);
+    };
     const handleSubmit = () => {
         setOpen(false);
+    };
+    const handleSubmitModalUpdate = (data) => {
+        updateServices(data)
     };
 
     console.log("abc")
     return (
         <React.Fragment>
             <CheckOutModal open={open} room={room} handleSubmit={handleSubmit} handleClose={handleClose} />
+            <EditInfoRoomModal open={openModalUpdate} room={room} handleSubmit={handleSubmitModalUpdate} handleClose={handleCloseModalUpdate} />
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
                     <CardContent style={{ backgroundColor: "red" }} sx={props.styleZoom}>
@@ -181,7 +194,7 @@ function OccupiedRoom(props) {
                 <MenuItem onClick={handleClickOpen}>
                     <LogoutIcon /><Typography variant="h9">Trả phòng</Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleClickOpenModalUpdate}>
                     <LocalCafeOutlinedIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
                 </MenuItem>
                 <MenuItem >

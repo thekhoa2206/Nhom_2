@@ -21,11 +21,12 @@ export function useGetAllRooms() {
 }
 export function useCheckIn() {
     const dispatch = useDispatch();
-    const checkIn = async (data, FEdata) => {
+    const checkIn = async (data) => {
         await axios
         .post("/api/admin/check-in", data)
         .then(res => {
-            dispatch({ type: 'CHECK_IN', payload: {FEdata, code: 2} })
+            console.log("Res.data", res)
+            dispatch({ type: 'CHECK_IN', payload: {data: res.data.checkInResponse, code: 2} })
             toast.success("Nhận phòng thành công")
         })
         .catch((err) => {
@@ -92,4 +93,18 @@ export function useFixRoom() {
             })  
     }
     return { fixRoom }
+}
+
+export function useUpdateServices() {
+	const dispatch = useDispatch();
+	const updateServices = (data) => {
+		axios.post('api/admin/services', data )
+			.then(res => {
+				dispatch({ type: 'UPDATE_SERVICES', payload: { data: res.data } })
+				toast.error("Cập nhật dịch vụ thành công")
+			}).catch(err => {
+				toast.error("Cập nhật dịch vụ thất bại")
+			})
+	}
+	return { updateServices }
 }
