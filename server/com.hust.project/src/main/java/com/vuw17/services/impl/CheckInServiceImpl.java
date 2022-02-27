@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -57,67 +58,63 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.hostedAtRepository = hostedAtRepository;
     }
 
+
     @Override
     public int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception {
         int billId = -1;
-        try{
+        try {
             List<Integer> guestIds = checkinRequest.getGuestIds();
 
             List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
+            long checkInTime = System.currentTimeMillis();
             //Insert occupied_room -> insert service_used -> insert hosted_at
-            if (checkinRequest.getCheckOutTime() > checkinRequest.getCheckInTime()) {
-                if(checkinRequest.getBillId() == 0){
-                    System.out.println("HEHEHEHEHEH");
-                    //Create a Bill object
-                    //billId = billDAO.insertOne(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
-                    Bill bill =  billRepository.save(new Bill(checkinRequest.getReducedFee(),checkinRequest.getAdditionalFee(),"",checkinRequest.getDeposit(),false));
-                    billId = bill.getId();
-                    if(billId > 0){
-                        checkinRequest.setBillId(billId);
-                        //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
-                    }
+            if (checkinRequest.getCheckOutTime() > checkInTime && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
+                //Create a Bill object
+//                billId = billDAO.insertOne(new Bill(new BigDecimal(0), new BigDecimal(0), "", checkinRequest.getDeposit(), false));
+                    billId =  billRepository.save(new Bill(new BigDecimal(0), new BigDecimal(0),"",checkinRequest.getDeposit(),false)).getId();
+                if (billId > 0) {
+
+                    ////saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
                 }
-                System.out.println("BillId = "+billId);
-                //create a object OccupiedRoom to insert into table occupied_room
-                OccupiedRoom occupiedRoom = new OccupiedRoom();
-                occupiedRoom.setCheckOutTime(checkinRequest.getCheckOutTime());
-                occupiedRoom.setDeposit(checkinRequest.getDeposit());
+            }
+            System.out.println("BillId = " + billId);
+            //create a object OccupiedRoom to insert into table occupied_room
+            OccupiedRoom occupiedRoom = new OccupiedRoom();
+            occupiedRoom.setCheckOutTime(checkinRequest.getCheckOutTime());
+            occupiedRoom.setDeposit(checkinRequest.getDeposit());
 
-                occupiedRoom.setRoomId(checkinRequest.getRoomId());
-                occupiedRoom.setBillId(billId);
-                occupiedRoom.setCheckInTime(checkinRequest.getCheckInTime());
+            occupiedRoom.setRoomId(checkinRequest.getRoomId());
+            occupiedRoom.setBillId(billId);
+            occupiedRoom.setCheckInTime(checkInTime);
+            occupiedRoom.setStatus(ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1);
 
-//                //Kiểm tra khách đã check out chưa ?
-//                for(int i = 0;i < guestIds.size();i++){
-//                    if(!checkedOut(guestIds.get(i))){
-//                        return 0;
-//                    }
-//                }
-
-                //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
-                OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
-                int occupiedRoomId = occupiedRoomRes.getRoomId();
-                boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(),ConstantVariableCommon.STATUS_ROOM_2);
-                if (occupiedRoomId > 0 && checkUpdate) {
-//                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
-                    //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
-                    insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
-                    insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
-                    return occupiedRoomId;
+            //Kiểm tra khách đã check out chưa ?
+            for(int i = 0;i < guestIds.size();i++){
+                if(!checkedOut(guestIds.get(i))){
+                    return 0;
                 }
-
             }
 
-            if(billId <= 0 ) throw new Exception("Có lỗi xảy ra");
-        } catch (Exception e){
-            throw new Exception("Có lỗi xảy ra!");
+            //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
+            OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
+            int occupiedRoomId = occupiedRoomRes.getId();
+            boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(), ConstantVariableCommon.STATUS_ROOM_2);
+            if (occupiedRoomId > 0 && checkUpdate) {
+//                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
+                //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
+                insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
+                insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
+                return occupiedRoomId;
+            }
+        }catch (Exception e){
+            System.out.println("Check in failed = "+e.getMessage());
         }
-        return billId;
+        return 0;
     }
 
     @Override
     public boolean isOccupied(int roomId) {
-        if(roomDao.findById(roomId).getStatus() == ConstantVariableCommon.STATUS_ROOM_2){
+        if (roomDao.findById(roomId).getStatus() == ConstantVariableCommon.STATUS_ROOM_2) {
             return true;
         }
         return false;
@@ -174,7 +171,6 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
     //    insert hosted_at
     public int insertHostedAt(List<Integer> guestIds, int occupiedRoomId, UserDTOResponse userDTOResponse) {
-
         if (guestIds != null && guestIds.size() > 0) {
             System.out.println(1111111);
             for (int i = 0; i < guestIds.size(); i++) {
@@ -186,10 +182,10 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                     System.out.println(333333333);
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
 
-                    //int hostedAtId = hostedAtDAO.insertOne(hostedAt);
-                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
+                    int hostedAtId = hostedAtDAO.insertOne(hostedAt);
+//                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
                     if (hostedAtId > 0) {
-                        //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
+                        saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
                         return hostedAtId;
                     }
                 }

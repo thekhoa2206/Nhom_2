@@ -35,7 +35,7 @@ function ModalAddNewUser(props) {
             name: state.name,
             password: state.username,
             phone: state.phone,
-            roles: state.roles,
+            roleIds: state.roles,
             salaryDay: 0,
             sex: state.gender,
             username: state.username
@@ -167,7 +167,6 @@ function ModalAddNewUser(props) {
                                     >
                                         <MenuItem key={1} value={1}>Quản trị viên</MenuItem>
                                         <MenuItem key={2} value={2}>Nhân viên lễ tân</MenuItem>
-                                        <MenuItem key={3} value={3}>Nhân viên dọn phòng</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>

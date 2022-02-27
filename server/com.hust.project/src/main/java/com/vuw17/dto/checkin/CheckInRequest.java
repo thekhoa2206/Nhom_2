@@ -16,15 +16,9 @@ public class CheckInRequest{
     private List<Integer> guestIds;
     private List<ServiceUsedDTORequest> servicesUsed;
     private long checkOutTime;
-    private long checkInTime;
     private BigDecimal deposit;
 
     private int roomId;
-    private int billId;
-
-    private BigDecimal reducedFee;
-
-    private BigDecimal additionalFee;
 
 
 

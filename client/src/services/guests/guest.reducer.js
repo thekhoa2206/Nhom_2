@@ -11,6 +11,12 @@ const guestReducer = (state = initState, action) => {
                 guestList: action.payload.data,
                 isLoading: false
             }
+        case 'CREATE_GUEST':
+            return {
+                ...state,
+                guestList: [...state?.guestList, action.payload.data],
+                isLoading: false
+            }
         default:
             return state
     }

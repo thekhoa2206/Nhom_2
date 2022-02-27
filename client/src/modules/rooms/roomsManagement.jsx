@@ -10,8 +10,8 @@ import OutOfServiceRoom from './outOfServiceRoom';
 import { useGetLyric2 } from '../../utils/apiCalls';
 import Loading from '../../common-components/Loading';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useGetAllGuests } from '../../services/guests/guest.service'
 import { useGetAllRooms } from "../../services/rooms/room.service";
+import { useGetAllGuests } from '../../services/guests/guest.service'
 import BedIcon from '@mui/icons-material/Bed';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -40,8 +40,8 @@ function RoomManagement(props) {
         })
     }, [JSON.stringify(roomList)])
     const { rooms } = state
-    const { getAllGuests } = useGetAllGuests()
     const { getAllRooms } = useGetAllRooms()
+    const { getAllGuests } = useGetAllGuests()
     useEffect(() => {
         getAllGuests()
         getAllRooms()
