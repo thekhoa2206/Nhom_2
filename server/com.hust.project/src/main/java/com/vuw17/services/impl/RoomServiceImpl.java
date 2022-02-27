@@ -215,7 +215,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
                 //Tim loai phong
                 TypeRoom typeRoom = typeRoomDao.findById(room.getTypeRoomId());
                 //Lay gia tien cua loai phong do
-                RoomPrice roomPrice = roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoom.getId(), typeRoom.getId());
+                RoomPrice roomPrice = roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoom.getId(), 3);
                 BigDecimal priceOfRoom = roomPrice.getPrice();
                 //Tinh thoi gian thue phong
                 BigDecimal countTheTime = new BigDecimal(Math.ceil(((occupiedRoom.getCheckOutTime() - occupiedRoom.getCheckInTime())/86400000) + 1));
