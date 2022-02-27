@@ -138,7 +138,7 @@ function OccupiedRoom(props) {
                                         Tiền phòng:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        {numberWithCommas(room.sumOfPrices)}đ
+                                        {numberWithCommas(room?.sumOfPrices ? room.sumOfPrices : 0)}đ
                                     </span>
                                 </div>
                                 <div style={{

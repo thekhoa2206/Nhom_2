@@ -29,7 +29,9 @@ function EditInfoRoomModal(props) {
     const { servicesUsed, serviceTotal } = state
     function calculateSum(data) {
         let sum = 0;
-        data.forEach((e) => { sum += e.quantity * e.price })
+        if (data?.length) {
+            data.forEach((e) => { sum += e.quantity * e.price })
+        }
         return sum
     }
     const servicesColumn = [

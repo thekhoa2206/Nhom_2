@@ -55,7 +55,9 @@ function CheckOutModal(props) {
     })
     function calculateSum(data) {
         let sum = 0;
-        data.forEach((e) => { sum += e.quantity * e.price })
+        if (data?.length) {
+            data.forEach((e) => { sum += e.quantity * e.price })
+        }
         return sum
     }
     const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal, deposit, checkInTime, checkOutTime, additionalFee, reducedFee, roomPrice } = state
@@ -580,7 +582,7 @@ function CheckOutModal(props) {
                                                         <Typography fontWeight="bold">Tổng thanh toán: </Typography>
                                                     </Grid>
                                                     <Grid item xs={5}>
-                                                        <Typography textAlign="right">{numberWithCommas(roomPrice)}đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(roomPrice ? roomPrice : 0)}đ</Typography>
                                                         <Typography textAlign="right">{numberWithCommas(serviceTotal)}đ</Typography>
                                                         <Typography textAlign="right">-{numberWithCommas(deposit)}đ</Typography>
                                                         <Typography textAlign="right">-{numberWithCommas(reducedFee)}đ</Typography>
