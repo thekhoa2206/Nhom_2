@@ -36,4 +36,14 @@ public class TypePriceDaoImpl implements TypePriceDao {
             return null;
         }
     }
+
+    @Override
+    public TypePrice findByIdRoom(int id){
+        String sql = "SELECT * FROM type_price WHERE type_room_id = ?";
+        try{
+            return (TypePrice) entityManager.createNativeQuery(sql,TypePrice.class).setParameter(1,id).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

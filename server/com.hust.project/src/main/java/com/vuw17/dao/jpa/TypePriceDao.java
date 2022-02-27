@@ -8,5 +8,5 @@ public interface TypePriceDao {
     TypePrice findByName(String name);
     //Lay TypePrice theo id
     TypePrice findById(int id);
-
+    TypePrice findByIdRoom(int id);
 }
