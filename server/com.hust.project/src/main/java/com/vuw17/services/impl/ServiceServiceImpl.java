@@ -51,6 +51,7 @@ public class ServiceServiceImpl extends CommonService implements ServiceService 
         for(int i = 0;i < services.size();i++){
             com.vuw17.entities.Service service = services.get(i);
             ServiceDTOResponse serviceDTOResponse = new ServiceDTOResponse();
+            serviceDTOResponse.setId(service.getId());
             serviceDTOResponse.setName(service.getName());
             serviceDTOResponse.setNote(service.getNote());
             serviceDTOResponse.setStatus(service.getStatus());
