@@ -22,6 +22,7 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import EditInfoRoomModal from './editInfoRoomModal';
 import { useUpdateServices } from "../../services/rooms/room.service";
+import dayjs from 'dayjs';
 
 function OccupiedRoom(props) {
     const { room } = props
@@ -54,6 +55,13 @@ function OccupiedRoom(props) {
     const handleSubmitModalUpdate = (data) => {
         updateServices(data)
     };
+    const convertMinsToHrsMins = (minutes) => {
+        var h = Math.floor(minutes / 60);
+        var m = minutes % 60;
+        // h = h < 10 ? '0' + h : h;
+        // m = m < 10 ? '0' + m : m;
+        return h + ' giờ ' + m + " phút";
+    }
 
     console.log("abc")
     return (
@@ -91,10 +99,10 @@ function OccupiedRoom(props) {
                                         Check-in:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        07:05
+                                        {dayjs(room.checkInTime).hour()}:{dayjs(room.checkInTime).minute()}
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        31/12/21
+                                        {dayjs(room.checkInTime).format('DD/MM/YY')}
                                     </span>
                                 </div>
 
@@ -107,8 +115,8 @@ function OccupiedRoom(props) {
                                     <span style={{ color: "white", fontSize: "13px", paddingRight: "5px" }} >
                                         Thời lượng:
                                     </span>
-                                    <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        2h10p
+                                    <span style={{ color: "white", fontSize: "14px", paddingRight: "5px", fontWeight: "bold" }} >
+                                        {convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute"))}
                                     </span>
                                 </div>
                                 <div style={{

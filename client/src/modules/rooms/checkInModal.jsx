@@ -139,8 +139,6 @@ function CheckInModal(props) {
         let guestIds = guests?.map(s => s.id) || []
         let servicesData = servicesUsed?.map(s => ({ serviceId: s.id, quantity: s.quantity, paid: true })) || []
         let data = {
-            billId: 0,
-            checkInTime: dayjs(checkInTime).valueOf(),
             checkOutTime: dayjs(checkOutTime).valueOf(),
             deposit,
             additionalFee,
