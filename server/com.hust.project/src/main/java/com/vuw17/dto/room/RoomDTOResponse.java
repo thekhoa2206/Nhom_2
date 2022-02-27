@@ -26,6 +26,6 @@ public class RoomDTOResponse extends BaseDTO {
     private BigDecimal deposit;
     private List<ServiceUsedDTOResponse> servicesUsed;
     private List<GuestDTO> guests;
-    private List<PriceDTO> prices;
+    private BigDecimal sumOfPrices;
 
 }

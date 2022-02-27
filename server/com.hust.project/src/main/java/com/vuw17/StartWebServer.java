@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,11 @@ public class StartWebServer {
 //        LocalDate localDate = LocalDate.now();
 //        localDate.plusDays(5);
         System.out.println(System.currentTimeMillis());
-        System.out.println(System.currentTimeMillis() + (86400000 * 2));
+        System.out.println(System.currentTimeMillis() + (80400000 * 2));
+        System.out.println("=========================================");
+        System.out.println("Real = "+(double)86400001/86400000);
+        BigDecimal tinhTien = new BigDecimal(Math.ceil((86400001/86400000) + 1));
+        System.out.println("Fake = "+tinhTien);
+
     }
 }
