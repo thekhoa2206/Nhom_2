@@ -4,6 +4,7 @@ import com.vuw17.common.ConstantVariableCommon;
 import com.vuw17.dao.jdbc.*;
 import com.vuw17.dao.jpa.*;
 import com.vuw17.dto.checkin.CheckInRequest;
+import com.vuw17.dto.checkin.CheckInResponse;
 import com.vuw17.dto.checkin.InsertServiceRequest;
 import com.vuw17.dto.service.ServiceUsedDTORequest;
 import com.vuw17.dto.user.UserDTOResponse;
@@ -17,6 +18,7 @@ import com.vuw17.repositories.OccupiedRoomRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CheckInService;
 import com.vuw17.services.CommonService;
+import com.vuw17.services.RoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,8 +42,10 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private final BillRepository billRepository;
     private final OccupiedRoomRepository occupiedRoomRepository;
     private final HostedAtRepository hostedAtRepository;
+    private final RoomServiceImpl roomService;
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository, HostedAtRepository hostedAtRepository) {
+
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository, HostedAtRepository hostedAtRepository,RoomServiceImpl roomService) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
@@ -56,11 +60,12 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.billRepository = billRepository;
         this.occupiedRoomRepository = occupiedRoomRepository;
         this.hostedAtRepository = hostedAtRepository;
+        this.roomService = roomService;
     }
 
 
-    @Override
-    public int checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception {
+@Override
+    public CheckInResponse checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception {
         int billId = -1;
         try {
             List<Integer> guestIds = checkinRequest.getGuestIds();
@@ -88,12 +93,13 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             occupiedRoom.setCheckInTime(checkInTime);
             occupiedRoom.setStatus(ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1);
 
-            //Kiểm tra khách đã check out chưa ?
-            for(int i = 0;i < guestIds.size();i++){
-                if(!checkedOut(guestIds.get(i))){
-                    return 0;
+                //Kiểm tra khách đã check out chưa ?
+                for(int i = 0;i < guestIds.size();i++){
+                    if(!checkedOut(guestIds.get(i))){
+                        throw new Exception("Khach chua check out");
+                    }
                 }
-            }
+            
 
             //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
             OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
@@ -104,13 +110,14 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                 //              saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, checkinRequest.getRoomId(), ConstantVariableCommon.table_room, userDTOResponse.getId());
                 insertServicesUsed(servicesUsed, occupiedRoomId, userDTOResponse);
                 insertHostedAt(guestIds, occupiedRoomId, userDTOResponse);
-                return occupiedRoomId;
+                return new CheckInResponse(roomService.convertToRoomDTOResponse(roomDao.findById(occupiedRoom.getRoomId())));
             }
         }catch (Exception e){
             System.out.println("Check in failed = "+e.getMessage());
         }
-        return 0;
-    }
+
+        return null;
+}
 
     @Override
     public boolean isOccupied(int roomId) {

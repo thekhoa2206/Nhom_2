@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,6 +196,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         roomDTOResponse.setStatus(room.getStatus());
         //lay type room id de set type room name cho object response
         roomDTOResponse.setTypeRoomName(typeRoomDao.findById(room.getTypeRoomId()).getName());
+        System.out.println("HEHEHEHHEHE");
         try {
 
 
@@ -202,15 +205,26 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
             roomDTOResponse.setCheckInTime(occupiedRoom.getCheckInTime());
             roomDTOResponse.setCheckOutTime(occupiedRoom.getCheckOutTime());
             roomDTOResponse.setDeposit(occupiedRoom.getDeposit());
+            //Tim loai phong
+            TypeRoom typeRoom = typeRoomDao.findById(room.getTypeRoomId());
+            //Lay gia tien cua loai phong do
+            RoomPrice roomPrice = roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoom.getId(), 3);
+            BigDecimal priceOfRoom = roomPrice.getPrice();
+            //Tinh thoi gian thue phong
+            BigDecimal countTheTime = new BigDecimal(Math.ceil(((occupiedRoom.getCheckOutTime() - occupiedRoom.getCheckInTime())/86400000) + 1));
+            //Tinh tien
+            BigDecimal tinhTien = countTheTime.multiply(priceOfRoom);
+
+//            System.out.println("Count the time = "+countTheTime);
+//            System.out.println("Tien = "+tinhTien);
+            roomDTOResponse.setSumOfPrices(tinhTien);
 
             //set list services used
             roomDTOResponse.setServicesUsed(getServiceUsedDTOResponses(occupiedRoom.getId()));
 
-        //set list guests
-        roomDTOResponse.setGuests(getGuests(occupiedRoom.getId()));
+            //set list guests
+            roomDTOResponse.setGuests(getGuests(occupiedRoom.getId()));
 
-        //set list prices
-        roomDTOResponse.setPrices(getPrices(room));
 
         }catch (NullPointerException e){
             LOGGER.error("Null",e.getMessage(),true);
