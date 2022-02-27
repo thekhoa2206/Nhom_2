@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ReservationRoomDTORequest {
-    @NotNull(message = "Id Phòng không được để trống")
     private int roomId;
     private int reservationId;
 }

@@ -27,4 +27,6 @@ public interface ReservationService {
 
     //Hàm đặt phòng cho khách
     void chooseRoom(ReservationRoomDTORequest reservationRoomDTORequest);
+
+    void reservation(ReservationRoomDTORequest reservationRoomDTORequest) throws Exception;
 }

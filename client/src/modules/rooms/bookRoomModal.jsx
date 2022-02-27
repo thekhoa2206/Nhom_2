@@ -32,7 +32,7 @@ import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from "react-redux";
-import { useCheckIn, useGetAllRooms } from '../../services/rooms/room.service';
+import { useBookRoom, useCheckIn, useGetAllRooms, useUpdateReservation } from '../../services/rooms/room.service';
 import { useCreateGuest } from '../../services/guests/guest.service';
 import ReservationService from '../../services/reservation/reservation';
 
@@ -42,6 +42,8 @@ function BookRoomModal(props) {
     const { checkIn } = useCheckIn()
     const { createGuest } = useCreateGuest()
     const { getAllRooms } = useGetAllRooms()
+    const { bookRoom } = useBookRoom()
+    const { bookReservation } = useUpdateReservation()
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
@@ -141,7 +143,10 @@ function BookRoomModal(props) {
 
     }
     const handleClick = (event, cellValues) => {
-        alert(cellValues.row.name);
+        let reservationRoomDTORequest = {roomId: room.id, reservationId: cellValues.row.id}
+        bookReservation(reservationRoomDTORequest);
+        bookRoom(room);
+        props.handleClose()
     };
     const handleCellClick = (param, event) => {
         event.stopPropagation();
@@ -190,7 +195,7 @@ function BookRoomModal(props) {
                             handleClick(event, cellValues);
                         }}
                     >
-                        <EditIcon style={{ fill: "orange" }} />
+                        <Button>Chọn</Button>
                     </IconButton>
                 );
             }
@@ -254,14 +259,12 @@ function BookRoomModal(props) {
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
-                    onCellClick={(param) => handleCellClick(param)}
                     onRowClick={handleRowClick}
                 />
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="primary" onClick={() => handleClose()}>Đóng</Button>
-                <Button variant="contained" color="primary" onClick={() => handleSubmit()}>Nhận phòng</Button>
             </DialogActions>
         </Dialog >
     )

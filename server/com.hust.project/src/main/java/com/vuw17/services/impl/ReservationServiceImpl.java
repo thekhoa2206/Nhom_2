@@ -8,8 +8,10 @@ import com.vuw17.dao.jpa.RoomDao;
 import com.vuw17.dto.reservation.*;
 import com.vuw17.entities.Guest;
 import com.vuw17.entities.Reservation;;
+import com.vuw17.entities.Room;
 import com.vuw17.entities.RoomReservation;
 import com.vuw17.repositories.ReservationRepository;
+import com.vuw17.repositories.RoomRepository;
 import com.vuw17.repositories.RoomReservationRepository;
 import com.vuw17.services.ReservationService;
 import org.slf4j.Logger;
@@ -29,13 +31,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomDao roomDao;
     private final RoomReservationRepository roomReservationRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class.toString());
+    private final RoomRepository roomRepository;
 
-    public ReservationServiceImpl(ReservationDao reservationDao, ReservationRepository reservationRepository, GuestDao guestDao, RoomDao roomDao, RoomReservationRepository roomReservationRepository) {
+    public ReservationServiceImpl(ReservationDao reservationDao, ReservationRepository reservationRepository, GuestDao guestDao, RoomDao roomDao, RoomReservationRepository roomReservationRepository, RoomRepository roomRepository) {
         this.reservationDao = reservationDao;
         this.reservationRepository = reservationRepository;
         this.guestDao = guestDao;
         this.roomDao = roomDao;
         this.roomReservationRepository = roomReservationRepository;
+        this.roomRepository = roomRepository;
     }
 
     // Hàm lấy danh sách và lọc theo keyword và trạng thái của đơn đặt phòng
@@ -136,6 +140,25 @@ public class ReservationServiceImpl implements ReservationService {
             roomReservationRepository.save(roomReservation);
         }catch (Exception e){
             LOGGER.error("ERROR || Lỗi không lưu được phòng đặt");
+        }
+    }
+
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void reservation(ReservationRoomDTORequest reservationRoomDTORequest) throws Exception {
+
+        RoomReservation roomReservation = new RoomReservation();
+        roomReservation.setReservationId(reservationRoomDTORequest.getReservationId());
+        roomReservation.setRoomId(reservationRoomDTORequest.getRoomId());
+        roomReservation.setStatus(ConstantVariableCommon.STATUS_RESERVATION_1);
+        try{
+            roomReservationRepository.save(roomReservation);
+            Reservation reservation = reservationDao.findReservationById(roomReservation.getReservationId());
+            reservation.setStatus(ConstantVariableCommon.STATUS_RESERVATION_2);
+            reservationRepository.save(reservation);
+        }catch (Exception e){
+            throw new Exception("Không đặt được phòng");
         }
     }
 }

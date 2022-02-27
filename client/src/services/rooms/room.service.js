@@ -114,10 +114,23 @@ export function useUpdateServices() {
 		axios.post('api/admin/services', data )
 			.then(res => {
 				dispatch({ type: 'UPDATE_SERVICES', payload: { data: res.data } })
-				toast.error("Cập nhật dịch vụ thành công")
+				toast.success("Cập nhật dịch vụ thành công")
 			}).catch(err => {
 				toast.error("Cập nhật dịch vụ thất bại")
 			})
 	}
 	return { updateServices }
+}
+export function useUpdateReservation() {
+	const dispatch = useDispatch();
+	const bookReservation = (reservationRoomDTORequest) => {
+		axios.post('api/admin/reservations/room_reservation', reservationRoomDTORequest )
+			.then(res => {
+				dispatch({ type: 'BOOK_ROOM_RESERVATION', payload: { reservationRoomDTORequest: res.data } })
+				toast.success("Đặt phòng thành công")
+			}).catch(err => {
+				toast.error("Đặt phòng thất bại")
+			})
+	}
+	return { bookReservation }
 }

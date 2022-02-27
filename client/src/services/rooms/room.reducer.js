@@ -73,6 +73,20 @@ const roomReducer = (state = initState, action) => {
                 ...state,
                 roomList: roomsList,
             };
+            case 'BOOK_ROOM':
+                const updatedRoom3 = {...action.payload.room, status: action.payload.code};
+                debugger
+                const updatedRooms3 = state.roomList.map((room) => {
+                    if (room.id === updatedRoom3.id) {
+                        return updatedRoom3;
+                    }
+                    return room;
+                });
+                return {
+                    ...state,
+                    roomList: updatedRooms3,
+                };
+                
         default:
             return state
     }

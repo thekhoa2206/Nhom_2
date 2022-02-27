@@ -15,12 +15,12 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
-import { useCheckIn, useCheckOut } from '../../services/rooms/room.service';
+import { useCheckIn, useCheckOut, useReadyRoom } from '../../services/rooms/room.service';
 function BookRoom(props) {
     const { room } = props
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-    const { checkOut } = useCheckOut()
+    const { readyRoom } = useReadyRoom()
     const { checkIn } = useCheckIn()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
@@ -32,7 +32,7 @@ function BookRoom(props) {
         checkIn(room)
     };
     const handleCancelRoom = () => {
-        checkOut(room)
+        readyRoom(room)
     };
     return (
         <React.Fragment>

@@ -5,7 +5,7 @@ public class ConstantVariableCommon {
 
     // biến cố định của Reservation
     public static final int STATUS_RESERVATION_1 = 1; // trạng thái đã đặt phòng
-    public static final int STATUS_RESERVATION_2 = 2; // trạng thái đã nhận phòng
+    public static final int STATUS_RESERVATION_2 = 2; // trạng thái đã đặt
     public static final int STATUS_RESERVATION_3 = 3; // trạng thái đã hoàn thành
     public static final int STATUS_RESERVATION_4 = 4; // trạng thái đã hủy
 
@@ -155,7 +155,7 @@ public class ConstantVariableCommon {
 
     public static String changeIntToStringReservationStatus(int status){
         if(status == STATUS_RESERVATION_1) return "Chờ nhận phòng";
-        else if(status == STATUS_RESERVATION_2) return "Đã nhận phòng";
+        else if(status == STATUS_RESERVATION_2) return "Đã đặt";
         else if(status == STATUS_RESERVATION_3) return "Hoàn thành";
         else return "Đã hủy";
     }

@@ -243,7 +243,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     }
     public ServiceUsedDTOResponse setServiceUsedDTOResponse(ServiceUsed serviceUsed, com.vuw17.entities.Service service){
         ServiceUsedDTOResponse serviceUsedDTOResponse = new ServiceUsedDTOResponse();
-        serviceUsedDTOResponse.setId(serviceUsed.getId());
+        serviceUsedDTOResponse.setId(service.getId());
         serviceUsedDTOResponse.setName(service.getName());
         serviceUsedDTOResponse.setPaid(serviceUsed.isPaid());
         serviceUsedDTOResponse.setPrice(service.getPrice());
@@ -298,8 +298,8 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         }else if(typeAction.compareTo("ready") == 0){
             room.setStatus(ConstantVariableCommon.STATUS_ROOM_1);
         }else if(typeAction.compareTo("book") == 0){
-            room.setStatus(ConstantVariableCommon.STATUS_ROOM_5);
-        }
+        room.setStatus(ConstantVariableCommon.STATUS_ROOM_5);
+    }
         try{
             roomRepository.save(room);
         }catch (Exception e){

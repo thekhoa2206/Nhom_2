@@ -11,6 +11,9 @@ class ReservationService{
     static async  getReservationById(id){
         return axios.get(RESERVATION_API_URL_1 +`/${id}`);
     };
+    static async  reservation(roomResevationId){
+        return axios.post(RESERVATION_API_URL_1 +`/room_reservation`, roomResevationId);
+    };
     
 }
 export default ReservationService;

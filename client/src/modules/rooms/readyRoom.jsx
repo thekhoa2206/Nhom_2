@@ -61,7 +61,7 @@ function ReadyRoom(props) {
     return (
         <React.Fragment>
             <CheckInModal open={open} room={room} handleSubmit={handleSubmit} handleClose={handleClose} />
-            <BookRoomModal open={openReservation} room={room} handleSubmit={handleSubmitReservation} handleClose={handleCloseReservation} />
+            <BookRoomModal open={openReservation} room={room} handleSubmit={handleSubmitReservation} handleClose={handleCloseReservation}/>
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
                     <CardContent style={{ backgroundColor: "green" }} sx={props.styleZoom}>
