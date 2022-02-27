@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ServiceDTOResponse {
+    private int id;
     private String name;
     private String note;
     private int status;
