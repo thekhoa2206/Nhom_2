@@ -87,6 +87,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             occupiedRoom.setRoomId(checkinRequest.getRoomId());
             occupiedRoom.setBillId(billId);
             occupiedRoom.setCheckInTime(checkInTime);
+            occupiedRoom.setStatus(ConstantVariableCommon.STATUS_OCCUPIED_ROOM_1);
 
                 //Kiểm tra khách đã check out chưa ?
                 for(int i = 0;i < guestIds.size();i++){
