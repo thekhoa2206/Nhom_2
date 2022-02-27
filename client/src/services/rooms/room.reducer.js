@@ -61,19 +61,7 @@ const roomReducer = (state = initState, action) => {
                 ...state,
                 roomList: updatedRooms2,
             };
-        case 'UPDATE_SERVICES': 
-            const serviceUsed = action.payload.data.serviceUsed
-            const roomsList = state.roomList.map((room) => {
-                if (room.id === action.payload.data.id) {
-                    return {...action.payload.data, serviceUsed: serviceUsed };
-                }
-                return room;
-            });
-            return {
-                ...state,
-                roomList: roomsList,
-            };
-            case 'BOOK_ROOM':
+        case 'BOOK_ROOM':
                 const updatedRoom3 = {...action.payload.room, status: action.payload.code};
                 debugger
                 const updatedRooms3 = state.roomList.map((room) => {
@@ -86,6 +74,18 @@ const roomReducer = (state = initState, action) => {
                     ...state,
                     roomList: updatedRooms3,
                 };
+        case 'UPDATE_SERVICES': 
+            const serviceUsed = action.payload.data.serviceUsed
+            const roomsList = state.roomList.map((room) => {
+                if (room.id === action.payload.data.id) {
+                    return {...action.payload.data, serviceUsed: serviceUsed };
+                }
+                return room;
+            });
+            return {
+                ...state,
+                roomList: roomsList,
+            };
                 
         default:
             return state
