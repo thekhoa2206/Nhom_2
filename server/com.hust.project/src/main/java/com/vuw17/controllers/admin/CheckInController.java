@@ -3,6 +3,7 @@ package com.vuw17.controllers.admin;
 import com.vuw17.controllers.BaseController;
 import com.vuw17.dto.InsertResponse;
 import com.vuw17.dto.checkin.CheckInRequest;
+import com.vuw17.dto.checkin.CheckInResponse;
 import com.vuw17.dto.checkin.InsertServiceRequest;
 import com.vuw17.dto.room.RoomDTOResponse;
 import com.vuw17.services.CheckInService;
@@ -27,8 +28,8 @@ public class CheckInController extends BaseController {
     }
     //OK
     @PostMapping
-    public ResponseEntity<InsertResponse> checkIn(@Valid @RequestBody CheckInRequest checkInRequest, HttpServletRequest request) throws Exception {
-        return ResponseEntity.ok(new InsertResponse(checkInService.checkIn(checkInRequest,getUserDTOResponse(request))));
+    public ResponseEntity<CheckInResponse> checkIn(@Valid @RequestBody CheckInRequest checkInRequest, HttpServletRequest request) throws Exception {
+        return ResponseEntity.ok(checkInService.checkIn(checkInRequest,getUserDTOResponse(request)));
     }
     //API them service theo nhu cau cua khach theo phong
 
