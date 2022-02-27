@@ -15,6 +15,7 @@ import { useGetAllGuests } from '../../services/guests/guest.service'
 import BedIcon from '@mui/icons-material/Bed';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import BookRoom from './bookRoom';
 
 function RoomManagement(props) {
     const [checked, setChecked] = React.useState({
@@ -257,6 +258,7 @@ function RoomManagement(props) {
                                     {(data.status === 2 && displayOccupied === true) && <OccupiedRoom room={data} styleZoom={zoom} />}
                                     {(data.status === 3 && displayDirty === true) && <DirtyRoom room={data} styleZoom={zoom} />}
                                     {(data.status === 4 && displayOos === true) && <OutOfServiceRoom room={data} styleZoom={zoom} />}
+                                    {(data.status === 5 && displayOos === true) && <BookRoom room={data} styleZoom={zoom} />}
                                 </Grid>
                             </React.Fragment>
                         )

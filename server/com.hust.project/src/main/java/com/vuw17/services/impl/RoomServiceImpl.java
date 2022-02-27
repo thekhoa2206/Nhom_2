@@ -273,6 +273,8 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
             room.setStatus(ConstantVariableCommon.STATUS_ROOM_4);
         }else if(typeAction.compareTo("ready") == 0){
             room.setStatus(ConstantVariableCommon.STATUS_ROOM_1);
+        }else if(typeAction.compareTo("book") == 0){
+            room.setStatus(ConstantVariableCommon.STATUS_ROOM_5);
         }
         try{
             roomRepository.save(room);
