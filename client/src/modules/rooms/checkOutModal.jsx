@@ -31,29 +31,34 @@ import TableRow from '@mui/material/TableRow';
 import * as dayjs from 'dayjs'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from "react-redux";
-import { useCheckIn, useGetAllRooms } from '../../services/rooms/room.service';
+import { useCheckOut, useGetAllRooms } from '../../services/rooms/room.service';
 import { useCreateGuest } from '../../services/guests/guest.service';
 
 function CheckOutModal(props) {
     const { open, room } = props;
     const guestList = useSelector((state) => state.guestReducer.guestList);
     const services = useSelector((state) => state.authReducer.services);
-    const { checkIn } = useCheckIn()
+    const { checkOut } = useCheckOut()
     const { createGuest } = useCreateGuest()
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
+        roomPrice: room.sumOfPrices,
         guests: room.guests ? room.guests : [],
         isOpenModalAddGuest: false,
         servicesUsed: room.servicesUsed,
-        serviceTotal: 0,
+        serviceTotal: calculateSum(room.servicesUsed),
         deposit: room.deposit ? room.deposit : 0,
         additionalFee: room.additionalFee ? room.additionalFee : 0,
         reducedFee: room.reducedFee ? room.reducedFee : 0,
         checkInTime: dayjs(room.checkInTime).format('YYYY-MM-DDTHH:mm'),
         checkOutTime: dayjs().format('YYYY-MM-DDTHH:mm')
     })
-
-    const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal, deposit, checkInTime, checkOutTime, additionalFee, reducedFee } = state
+    function calculateSum(data) {
+        let sum = 0;
+        data.forEach((e) => { sum += e.quantity * e.price })
+        return sum
+    }
+    const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal, deposit, checkInTime, checkOutTime, additionalFee, reducedFee, roomPrice } = state
     const columns = [
         {
             field: " ",
@@ -148,7 +153,7 @@ function CheckOutModal(props) {
             servicesUsed: servicesData
         }
         console.log("data", data)
-        checkIn(data)
+        checkOut(room)
 
     }
     const handleClick = (event, cellValues) => {
@@ -449,6 +454,8 @@ function CheckOutModal(props) {
                                             id="deposit"
                                             label="Đặt trước"
                                             onChange={handleChangeDeposit}
+                                            value={deposit}
+                                            shrink="true"
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -463,6 +470,8 @@ function CheckOutModal(props) {
                                             id="reduced-fee"
                                             label="Giảm trừ"
                                             onChange={handleChangeReducedFee}
+                                            value={reducedFee}
+                                            shrink="true"
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -477,6 +486,8 @@ function CheckOutModal(props) {
                                             id="additional-fee"
                                             label="Phụ thu"
                                             onChange={handleChangeAdditionalFee}
+                                            value={additionalFee}
+                                            shrink="true"
                                         />
                                     </Grid>
                                 </Grid>
@@ -569,12 +580,12 @@ function CheckOutModal(props) {
                                                         <Typography fontWeight="bold">Tổng thanh toán: </Typography>
                                                     </Grid>
                                                     <Grid item xs={5}>
-                                                        <Typography textAlign="right">0.000đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(roomPrice)}đ</Typography>
                                                         <Typography textAlign="right">{numberWithCommas(serviceTotal)}đ</Typography>
-                                                        <Typography textAlign="right">{numberWithCommas(deposit)}đ</Typography>
-                                                        <Typography textAlign="right">{numberWithCommas(reducedFee)}đ</Typography>
+                                                        <Typography textAlign="right">-{numberWithCommas(deposit)}đ</Typography>
+                                                        <Typography textAlign="right">-{numberWithCommas(reducedFee)}đ</Typography>
                                                         <Typography textAlign="right">{numberWithCommas(additionalFee)}đ</Typography>
-                                                        <Typography textAlign="right" fontWeight="bold">{numberWithCommas(serviceTotal - deposit + additionalFee - reducedFee)}đ</Typography>
+                                                        <Typography textAlign="right" fontWeight="bold">{numberWithCommas(roomPrice + serviceTotal - deposit + additionalFee - reducedFee)}đ</Typography>
                                                     </Grid>
                                                 </Grid>
 
@@ -591,7 +602,7 @@ function CheckOutModal(props) {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" color="primary" onClick={() => handleClose()}>Đóng</Button>
-                <Button variant="contained" color="primary" onClick={() => handleSubmit()}>Nhận phòng</Button>
+                <Button variant="contained" color="primary" onClick={() => handleSubmit()}>Trả phòng</Button>
             </DialogActions>
         </Dialog >
     )

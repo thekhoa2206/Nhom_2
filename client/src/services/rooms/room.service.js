@@ -41,9 +41,9 @@ export function useCheckOut() {
     
     const checkOut = async (room) => {
         await axios
-        .post("/", room)
+        .post("/api/admin/check-out", {roomId: room.id})
         .then(res => {
-            dispatch({ type: 'CHECK_OUT', payload: { data: {...res.data, id: room.id, roomName: room.roomName, typeRoomName: room.typeRoomName, floor: room.floor} } })
+            dispatch({ type: 'CHECK_OUT', payload: { data: { id: room.id, roomName: room.roomName, typeRoomName: room.typeRoomName, status: 3, checkInTime: null, checkOutTime: null, deposit: null, servicesUsed: null, guests: null, sumOfPrices: null, additionalFee: null, reducedFee: null} } })
             toast.success("Trả phòng thành công")
         })
         .catch((err) => {
@@ -99,7 +99,7 @@ export function useBookRoom() {
     const bookRoom = (room) => {
         axios.get('api/admin/rooms/status', {params: {id: room.id, typeAction: 'book' } })
             .then(res => {
-                dispatch({ type: 'BOOK_ROOM', payload: { code: 1, room } })
+                dispatch({ type: 'BOOK_ROOM', payload: { code: 5, room } })
                 toast.success("Phòng đã được đặt")   
             }).catch(err => {
                 toast.error(err)

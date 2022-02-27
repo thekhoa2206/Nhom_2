@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import { Grid, IconButton } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
@@ -29,6 +29,13 @@ function OccupiedRoom(props) {
     const [open, setOpen] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [timer, setTimer] = useState(convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute")));
+
+    useEffect(() => {
+        const timerId = setInterval(() => setTimer(convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute"))), 60000);
+
+        return () => clearInterval(timerId);
+    });
     const openAnchor = Boolean(anchorEl);
     const { updateServices } = useUpdateServices()
     const handleClickAnchor = (event) => {
@@ -55,14 +62,16 @@ function OccupiedRoom(props) {
     const handleSubmitModalUpdate = (data) => {
         updateServices(data)
     };
-    const convertMinsToHrsMins = (minutes) => {
+    function convertMinsToHrsMins(minutes) {
         var h = Math.floor(minutes / 60);
         var m = minutes % 60;
         // h = h < 10 ? '0' + h : h;
         // m = m < 10 ? '0' + m : m;
         return h + ' giờ ' + m + " phút";
     }
-
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     console.log("abc")
     return (
         <React.Fragment>
@@ -116,7 +125,7 @@ function OccupiedRoom(props) {
                                         Thời lượng:
                                     </span>
                                     <span style={{ color: "white", fontSize: "14px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        {convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute"))}
+                                        {timer}
                                     </span>
                                 </div>
                                 <div style={{
@@ -126,10 +135,10 @@ function OccupiedRoom(props) {
                                 }}>
                                     <AttachMoneyIcon fontSize='small' style={{ fill: "white", paddingRight: "5px" }} />
                                     <span style={{ color: "white", fontSize: "13px", paddingRight: "5px" }} >
-                                        Tổng tiền:
+                                        Tiền phòng:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        220.000đ
+                                        {numberWithCommas(room.sumOfPrices)}đ
                                     </span>
                                 </div>
                                 <div style={{
@@ -142,7 +151,7 @@ function OccupiedRoom(props) {
                                         Đặt trước:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        0đ
+                                        {numberWithCommas(room.deposit)}đ
                                     </span>
                                 </div>
                                 <div style={{
@@ -152,10 +161,10 @@ function OccupiedRoom(props) {
                                 }}>
                                     <PriceCheckIcon fontSize='small' style={{ fill: "white", paddingRight: "5px" }} />
                                     <span style={{ color: "white", fontSize: "13px", paddingRight: "5px" }} >
-                                        Còn thu:
+                                        Tổng tiền:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        210.000đ
+                                        {numberWithCommas(room.sumOfPrices + room.additionalFee - room.deposit - room.reducedFee)}đ
                                     </span>
                                 </div>
                             </Grid>

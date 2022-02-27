@@ -24,9 +24,14 @@ function EditInfoRoomModal(props) {
     const services = useSelector((state) => state.authReducer.services);
     const [state, setState] = useState({
         servicesUsed: room.servicesUsed ? room.servicesUsed : [],
-        serviceTotal: 0,
+        serviceTotal: calculateSum(room.servicesUsed),
     })
     const { servicesUsed, serviceTotal } = state
+    function calculateSum(data) {
+        let sum = 0;
+        data.forEach((e) => { sum += e.quantity * e.price })
+        return sum
+    }
     const servicesColumn = [
         {
             flex: 1,
@@ -66,9 +71,12 @@ function EditInfoRoomModal(props) {
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
     const handleAddItem = (event, cellValues) => {
         let idArr = servicesUsed.map(a => a.id)
+        console.log(idArr)
         let rowId = cellValues.row.id
+        console.log(rowId)
         let newServiceTotal = 0;
         //nếu đã có sp thì +1
         if (idArr.includes(rowId)) {

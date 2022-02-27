@@ -327,7 +327,6 @@ function CheckInModal(props) {
         options: guestList,
         getOptionLabel: (option) => option.lastName + " " + option.firstName
     }
-    console.log("state", state)
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg' >
             <DialogTitle align="center">Phòng {room.roomName}</DialogTitle>
@@ -426,11 +425,11 @@ function CheckInModal(props) {
                                                     labelId="type-price"
                                                     id="type-price"
                                                     label="Hình thức nghỉ"
-                                                    value={"Ngày đêm"}
+                                                    value={"Ngày thường"}
                                                     onChange={onChangeSelect}
                                                 >
-                                                    <MenuItem key={1} value={"Đêm"}>Ngày thường</MenuItem>
-                                                    <MenuItem key={2} value={"Ngày đêm"}>Ngày lễ</MenuItem>
+                                                    <MenuItem key={1} value={"Ngày thường"}>Ngày thường</MenuItem>
+                                                    <MenuItem key={2} value={"Ngày lễ"}>Ngày lễ</MenuItem>
                                                     {/* <MenuItem key={3} value={"Tuần"}>Tuần</MenuItem>
                                                     <MenuItem key={4} value={"Tháng"}>Tháng</MenuItem> */}
                                                 </Select>
@@ -571,8 +570,8 @@ function CheckInModal(props) {
                                                     <Grid item xs={5}>
                                                         <Typography textAlign="right">0.000đ</Typography>
                                                         <Typography textAlign="right">{numberWithCommas(serviceTotal)}đ</Typography>
-                                                        <Typography textAlign="right">{numberWithCommas(deposit)}đ</Typography>
-                                                        <Typography textAlign="right">{numberWithCommas(reducedFee)}đ</Typography>
+                                                        <Typography textAlign="right">-{numberWithCommas(deposit)}đ</Typography>
+                                                        <Typography textAlign="right">-{numberWithCommas(reducedFee)}đ</Typography>
                                                         <Typography textAlign="right">{numberWithCommas(additionalFee)}đ</Typography>
                                                         <Typography textAlign="right" fontWeight="bold">{numberWithCommas(serviceTotal - deposit + additionalFee - reducedFee)}đ</Typography>
                                                     </Grid>
