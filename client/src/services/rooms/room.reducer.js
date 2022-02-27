@@ -13,7 +13,7 @@ const roomReducer = (state = initState, action) => {
                 isLoading: false
             }
         case 'CHECK_IN':
-            const updatedRoom0 = {...action.payload.FEdata, status: action.payload.code};
+            const updatedRoom0 = action.payload.data;
             const updatedRooms0 = state.roomList.map((room) => {
                 if (room.id === updatedRoom0.id) {
                     return updatedRoom0;
@@ -60,6 +60,18 @@ const roomReducer = (state = initState, action) => {
             return {
                 ...state,
                 roomList: updatedRooms2,
+            };
+        case 'UPDATE_SERVICES': 
+            const serviceUsed = action.payload.data.serviceUsed
+            const roomsList = state.roomList.map((room) => {
+                if (room.id === action.payload.data.id) {
+                    return {...action.payload.data, serviceUsed: serviceUsed };
+                }
+                return room;
+            });
+            return {
+                ...state,
+                roomList: roomsList,
             };
         default:
             return state

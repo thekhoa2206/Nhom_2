@@ -12,6 +12,7 @@ import Loading from '../../common-components/Loading';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useGetAllRooms } from "../../services/rooms/room.service";
 import { useGetAllGuests } from '../../services/guests/guest.service'
+import { useGetAllServices } from "../../services/auth/auth.service";
 import BedIcon from '@mui/icons-material/Bed';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -43,9 +44,11 @@ function RoomManagement(props) {
     const { rooms } = state
     const { getAllRooms } = useGetAllRooms()
     const { getAllGuests } = useGetAllGuests()
+    const { getAllServices } = useGetAllServices()
     useEffect(() => {
         getAllGuests()
         getAllRooms()
+        getAllServices()
     }, [])
     let arr = [{ id: 1, status: 'occupied' }, { id: 2, status: 'ready' }, { id: 3, status: 'dirty' }, { id: 4, status: 'out-of-service' }, { id: 5, status: 'ready' }]
     function valuetext(value) {

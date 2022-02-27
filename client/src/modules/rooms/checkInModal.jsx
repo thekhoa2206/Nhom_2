@@ -28,7 +28,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from "react-redux";
@@ -38,9 +37,9 @@ import { useCreateGuest } from '../../services/guests/guest.service';
 function CheckInModal(props) {
     const { open, room } = props;
     const guestList = useSelector((state) => state.guestReducer.guestList);
+    const services = useSelector((state) => state.authReducer.services);
     const { checkIn } = useCheckIn()
     const { createGuest } = useCreateGuest()
-    const { getAllRooms } = useGetAllRooms()
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
@@ -126,10 +125,9 @@ function CheckInModal(props) {
         {
             field: 'price', headerName: 'Giá tiền', width: 130, sortable: false,
             filterable: false, flex: 1,
-        },
-        {
-            field: 'stockQuantity', headerName: 'Số lượng kho', width: 150, sortable: false,
-            filterable: false, flex: 1,
+            valueGetter: (params) =>
+                `${numberWithCommas(params.row.price)}`,
+
         },
 
     ];
@@ -151,13 +149,8 @@ function CheckInModal(props) {
             roomId: room.id,
             servicesUsed: servicesData
         }
-        let FEdata = {
-            ...room,
-            checkInTime: dayjs(checkInTime).valueOf(),
-            checkOutTime: dayjs(checkOutTime).valueOf(),
-        }
-        console.log("data", data, FEdata)
-        checkIn(data, FEdata)
+        console.log("data", data)
+        checkIn(data)
 
     }
     const handleClick = (event, cellValues) => {
@@ -532,7 +525,7 @@ function CheckInModal(props) {
                                                 </TableCell>
 
                                                 <TableCell align="right">{row.quantity}</TableCell>
-                                                <TableCell align="right">{row.quantity * row.price}</TableCell>
+                                                <TableCell align="right">{numberWithCommas(row.quantity * row.price)}</TableCell>
                                             </TableRow>
                                         ))
                                             : <TableRow>
@@ -542,7 +535,7 @@ function CheckInModal(props) {
                                         <TableRow>
                                             <TableCell rowSpan={3} />
                                             <TableCell colSpan={2}>Tổng dịch vụ</TableCell>
-                                            <TableCell align="right">{serviceTotal}</TableCell>
+                                            <TableCell align="right">{numberWithCommas(serviceTotal)}</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
