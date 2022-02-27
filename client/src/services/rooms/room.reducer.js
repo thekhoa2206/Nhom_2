@@ -11,6 +11,12 @@ const roomReducer = (state = initState, action) => {
                 roomList: action.payload.data,
                 isLoading: false
             }
+        // case 'CHECK_IN':
+        //     return {
+        //         ...state,
+        //         roomList: action.payload.data,
+        //         isLoading: false
+        //     }
         default:
             return state
     }

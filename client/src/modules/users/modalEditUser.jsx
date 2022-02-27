@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { useEditUser } from '../../services/users/user.service';
 
-function ModalEditNewUser(props) {
+function ModalEditUser(props) {
     const { open, user } = props;
     console.log("props", props)
     const [state, setState] = useState({
@@ -26,6 +26,7 @@ function ModalEditNewUser(props) {
 
     useEffect(() => {
         if (user) {
+            console.log("user", user)
             setState({
                 id: user.id,
                 address: user.address,
@@ -34,9 +35,9 @@ function ModalEditNewUser(props) {
                 name: user.name,
                 phone: user.phone,
                 roleIds: user?.roles?.map(x => {
-                    if (x.nameRole == "ROLE_STAFF")
+                    if (x.name == "ROLE_STAFF")
                         return 2
-                    if (x.nameRole == "ROLE_ADMIN")
+                    if (x.name == "ROLE_ADMIN")
                         return 1
                 }),
                 salaryDay: 0,
@@ -190,7 +191,6 @@ function ModalEditNewUser(props) {
                                     >
                                         <MenuItem key={1} value={1}>Quản trị viên</MenuItem>
                                         <MenuItem key={2} value={2}>Nhân viên lễ tân</MenuItem>
-                                        <MenuItem key={3} value={3}>Nhân viên dọn phòng</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>
@@ -272,4 +272,4 @@ function ModalEditNewUser(props) {
     );
 }
 
-export default ModalEditNewUser;
+export default ModalEditUser;

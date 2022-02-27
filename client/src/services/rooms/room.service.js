@@ -23,12 +23,13 @@ export function useCheckIn() {
     const dispatch = useDispatch();
     const checkIn = async (room) => {
         await axios
-        .post("/", room)
+        .post("/api/admin/check-in", room)
         .then(res => {
-            dispatch({ type: 'CHECK_IN', payload: { data: {...res.data, id: room.id, roomName: room.roomName, typeRoomName: room.typeRoomName, floor: room.floor} } })
+            // dispatch({ type: 'CHECK_IN', payload: { data: {...res.data, id: room.id, roomName: room.roomName, typeRoomName: room.typeRoomName, floor: room.floor} } })
             toast.success("Nhận phòng thành công")
         })
         .catch((err) => {
+            console.log("err", err)
             toast.error("Nhận phòng không thành công")
         });
     }

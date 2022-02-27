@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, Typography } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -32,21 +32,29 @@ import { services } from '../../utils/constants';
 import * as dayjs from 'dayjs'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from "react-redux";
-import { useCheckIn } from '../../services/rooms/room.service';
+import { useCheckIn, useGetAllRooms } from '../../services/rooms/room.service';
+import { useCreateGuest } from '../../services/guests/guest.service';
 
 function CheckInModal(props) {
     const { open, room } = props;
     const guestList = useSelector((state) => state.guestReducer.guestList);
     const { checkIn } = useCheckIn()
+    const { createGuest } = useCreateGuest()
+    const { getAllRooms } = useGetAllRooms()
     const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         guests: [],
         isOpenModalAddGuest: false,
         servicesUsed: [],
         serviceTotal: 0,
+        deposit: 0,
+        additionalFee: 0,
+        reducedFee: 0,
+        checkInTime: dayjs().format('YYYY-MM-DDTHH:mm'),
+        checkOutTime: dayjs().add(1, 'days').format('YYYY-MM-DDTHH:mm')
     })
 
-    const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal } = state
+    const { isOpenModalAddGuest, guests, servicesUsed, serviceTotal, deposit, checkInTime, checkOutTime, additionalFee, reducedFee } = state
     const columns = [
         {
             field: " ",
@@ -72,18 +80,20 @@ function CheckInModal(props) {
         {
             field: 'name',
             headerName: 'Họ Và Tên',
+            headerAlign: 'center',
+            align: "center",
             width: 200,
             valueGetter: (params) =>
-                `${params.getValue(params.id, 'firstName') || ''} ${params.getValue(params.id, 'lastName') || ''
-                }`,
+                `${params.row.firstName + " " + params.row.lastName}`,
         },
         {
             field: 'birthday',
             headerName: 'Ngày sinh',
             headerAlign: 'center',
-            type: 'date',
+            align: "center",
             width: 200,
-            // valueGetter: (params) => dayjs(params.getValue(params.id, 'birthday')).format("DD-MM-YYYY")
+            valueGetter: (params) =>
+                `${dayjs(params.row.birthday).format('DD/MM/YYYY')}`,
         },
     ];
     const servicesColumn = [
@@ -128,7 +138,23 @@ function CheckInModal(props) {
     }
     const handleSubmit = () => {
         props.handleSubmit()
-        checkIn(room)
+        let guestIds = guests?.map(s => s.id) || []
+        let servicesData = servicesUsed?.map(s => ({ serviceId: s.id, quantity: s.quantity, paid: true })) || []
+        let data = {
+            billId: 0,
+            checkInTime: dayjs(checkInTime).valueOf(),
+            checkOutTime: dayjs(checkOutTime).valueOf(),
+            deposit,
+            additionalFee,
+            reducedFee,
+            guestIds,
+            roomId: room.id,
+            servicesUsed: servicesData
+        }
+        console.log("data", data)
+        checkIn(data)
+        getAllRooms()
+
     }
     const handleClick = (event, cellValues) => {
         alert(cellValues.row.name);
@@ -240,20 +266,53 @@ function CheckInModal(props) {
         })
     }
     const handleAddGuest = (data) => {
+        createGuest(data)
         setState({
             ...state,
-            guests: [...guests, data],
             isOpenModalAddGuest: false
+        })
+    }
+    const handleChangeCheckOutTime = (event) => {
+        setState({
+            ...state,
+            checkOutTime: event.target.value
+        })
+    }
+    const handleChangeCheckInTime = (event) => {
+        setState({
+            ...state,
+            checkOutTime: event.target.value
         })
     }
     const onChangeSelect = (event) => {
         console.log(event.target.value);
     };
+    const handleChangeDeposit = (event) => {
+        setState({
+            ...state,
+            deposit: parseInt(event.target.value)
+        })
+    }
+    const handleChangeAdditionalFee = (event) => {
+        setState({
+            ...state,
+            additionalFee: parseInt(event.target.value)
+        })
+    }
+    const handleChangeReducedFee = (event) => {
+        setState({
+            ...state,
+            reducedFee: parseInt(event.target.value)
+        })
+    }
     const onChangeSearch = (event, value) => {
         setState({
             ...state,
             guests: value
         })
+    }
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     // const servicesUsed = [
     //     {
@@ -273,7 +332,7 @@ function CheckInModal(props) {
         options: guestList,
         getOptionLabel: (option) => option.lastName + " " + option.firstName
     }
-
+    console.log("state", state)
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg' >
             <DialogTitle align="center">Phòng {room.roomName}</DialogTitle>
@@ -346,9 +405,11 @@ function CheckInModal(props) {
                                             id="datetime-local"
                                             label="Giờ vào"
                                             type="datetime-local"
-                                            defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
+                                            defaultValue={checkInTime}
                                             fullWidth
                                             shrink="true"
+                                            disabled
+                                            onChange={handleChangeCheckInTime}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -356,9 +417,10 @@ function CheckInModal(props) {
                                             id="datetime-local"
                                             label="Giờ ra dự kiến"
                                             type="datetime-local"
-                                            defaultValue={dayjs().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
+                                            defaultValue={checkOutTime}
                                             fullWidth
                                             shrink="true"
+                                            onChange={handleChangeCheckOutTime}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -372,10 +434,10 @@ function CheckInModal(props) {
                                                     value={"Ngày đêm"}
                                                     onChange={onChangeSelect}
                                                 >
-                                                    <MenuItem key={1} value={"Đêm"}>Đêm</MenuItem>
-                                                    <MenuItem key={2} value={"Ngày đêm"}>Ngày đêm</MenuItem>
-                                                    <MenuItem key={3} value={"Tuần"}>Tuần</MenuItem>
-                                                    <MenuItem key={4} value={"Tháng"}>Tháng</MenuItem>
+                                                    <MenuItem key={1} value={"Đêm"}>Ngày thường</MenuItem>
+                                                    <MenuItem key={2} value={"Ngày đêm"}>Ngày lễ</MenuItem>
+                                                    {/* <MenuItem key={3} value={"Tuần"}>Tuần</MenuItem>
+                                                    <MenuItem key={4} value={"Tháng"}>Tháng</MenuItem> */}
                                                 </Select>
                                             </FormControl>
                                         </Box>
@@ -391,6 +453,7 @@ function CheckInModal(props) {
                                             type="number"
                                             id="deposit"
                                             label="Đặt trước"
+                                            onChange={handleChangeDeposit}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -404,6 +467,7 @@ function CheckInModal(props) {
                                             type="number"
                                             id="reduced-fee"
                                             label="Giảm trừ"
+                                            onChange={handleChangeReducedFee}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -417,6 +481,7 @@ function CheckInModal(props) {
                                             type="number"
                                             id="additional-fee"
                                             label="Phụ thu"
+                                            onChange={handleChangeAdditionalFee}
                                         />
                                     </Grid>
                                 </Grid>
@@ -483,7 +548,7 @@ function CheckInModal(props) {
                     </Grid>
                     <Grid item xs={4}>
                         <Grid container >
-                            <Grid item xs={12} pb={2}>
+                            {/* <Grid item xs={12} pb={2}>
                                 <TextField
                                     id="outlined-multiline-static"
                                     label="Ghi chú"
@@ -492,7 +557,7 @@ function CheckInModal(props) {
                                     defaultValue="Ghi chú"
                                     fullWidth
                                 />
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12}>
                                 <Paper variant="outlined">
                                     <Box pl={4} pb={2} pt={2}>
@@ -504,13 +569,17 @@ function CheckInModal(props) {
                                                         <Typography>Tiền phòng: </Typography>
                                                         <Typography>Tiền dịch vụ: </Typography>
                                                         <Typography>Đặt trước: </Typography>
+                                                        <Typography>Giảm trừ: </Typography>
+                                                        <Typography>Phụ thu: </Typography>
                                                         <Typography fontWeight="bold">Tổng thanh toán: </Typography>
                                                     </Grid>
                                                     <Grid item xs={5}>
                                                         <Typography textAlign="right">0.000đ</Typography>
-                                                        <Typography textAlign="right">{serviceTotal}đ</Typography>
-                                                        <Typography textAlign="right">0.000đ</Typography>
-                                                        <Typography textAlign="right" fontWeight="bold">{serviceTotal}đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(serviceTotal)}đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(deposit)}đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(reducedFee)}đ</Typography>
+                                                        <Typography textAlign="right">{numberWithCommas(additionalFee)}đ</Typography>
+                                                        <Typography textAlign="right" fontWeight="bold">{numberWithCommas(serviceTotal - deposit + additionalFee - reducedFee)}đ</Typography>
                                                     </Grid>
                                                 </Grid>
 

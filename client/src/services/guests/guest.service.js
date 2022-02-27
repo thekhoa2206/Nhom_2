@@ -20,3 +20,19 @@ export function useGetAllGuests() {
     }
     return { getAllGuests }
 }
+export function useCreateGuest() {
+    const dispatch = useDispatch();
+    const createGuest = async (data) => {
+        await axios
+        .post("/api/admin/guests", data)
+        .then(res => {
+            console.log("res", res.data)
+            dispatch({ type: 'CREATE_GUEST', payload: { data: {...data, id: res.data.id} } })
+            toast.success("Tạo mới khách thành công")
+        })
+        .catch((err) => {
+            toast.error("Tạo mới khách thất bại")
+        });
+    }
+    return { createGuest }
+}
