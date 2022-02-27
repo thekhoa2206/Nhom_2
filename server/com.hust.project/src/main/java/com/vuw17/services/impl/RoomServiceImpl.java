@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +39,12 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private final HostedAtDao hostedAtDao;
     private final RoomPriceDao roomPriceDao;
     private final TypePriceDao typePriceDao;
+    private final ServiceUsedDao serviceUsedDaoJPA;
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class.toString());
     private final RoomRepository roomRepository;
 
-    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao, RoomPriceDao roomPriceDao, TypePriceDao typePriceDao, RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao, RoomPriceDao roomPriceDao, TypePriceDao typePriceDao, ServiceUsedDao serviceUsedDaoJPA, RoomRepository roomRepository) {
         super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao, baseService);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
@@ -57,6 +57,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         this.hostedAtDao = hostedAtDao;
         this.roomPriceDao = roomPriceDao;
         this.typePriceDao = typePriceDao;
+        this.serviceUsedDaoJPA = serviceUsedDaoJPA;
         this.roomRepository = roomRepository;
     }
 
@@ -208,7 +209,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
             //Tim loai phong
             TypeRoom typeRoom = typeRoomDao.findById(room.getTypeRoomId());
             //Lay gia tien cua loai phong do
-            RoomPrice roomPrice = roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoom.getId(), 2);
+            RoomPrice roomPrice = roomPriceDao.findByTypeRoomIdAndTypePriceId(typeRoom.getId(), typeRoom.getId());
             BigDecimal priceOfRoom = roomPrice.getPrice();
             //Tinh thoi gian thue phong
             BigDecimal countTheTime = new BigDecimal(Math.ceil(((occupiedRoom.getCheckOutTime() - occupiedRoom.getCheckInTime())/86400000) + 1));
@@ -243,7 +244,7 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     //lay list Service Used thong qua occupiedRoomId
     public List<ServiceUsedDTOResponse> getServiceUsedDTOResponses(int occupiedRoomId){
         List<ServiceUsedDTOResponse> serviceUsedDTOResponses = new ArrayList<>();
-        List<ServiceUsed> servicesUsed = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoomId);
+        List<ServiceUsed> servicesUsed = serviceUsedDaoJPA.findServicesUsedByOccupiedRoomId(occupiedRoomId);
         for (int i = 0; i < servicesUsed.size(); i++) {
             ServiceUsed serviceUsed = servicesUsed.get(i);
             com.vuw17.entities.Service service = serviceDao.findById(serviceUsed.getServiceId());

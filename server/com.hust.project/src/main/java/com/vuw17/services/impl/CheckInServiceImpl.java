@@ -15,16 +15,17 @@ import com.vuw17.entities.ServiceUsed;
 import com.vuw17.repositories.BillRepository;
 import com.vuw17.repositories.HostedAtRepository;
 import com.vuw17.repositories.OccupiedRoomRepository;
+import com.vuw17.repositories.ServiceUsedRepository;
 import com.vuw17.services.BaseService;
 import com.vuw17.services.CheckInService;
 import com.vuw17.services.CommonService;
-import com.vuw17.services.RoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,9 +45,11 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     private final OccupiedRoomRepository occupiedRoomRepository;
     private final HostedAtRepository hostedAtRepository;
     private final RoomServiceImpl roomService;
+    private final ServiceUsedDao serviceUsedDaoJPA;
+    private final ServiceUsedRepository serviceUsedRepository;
 
 
-    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository, HostedAtRepository hostedAtRepository,RoomServiceImpl roomService) {
+    public CheckInServiceImpl(TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, BaseService baseService, OccupiedRoomDAO occupiedRoomDAO, OccupiedRoomDao occupiedRoomDao, ServiceUsedDAO serviceUsedDAO, ServiceUsedDao serviceUsedDao, HostedAtDAO hostedAtDAO, GuestDao guestDao, ServiceDao serviceDao, RoomDao roomDao, BillDAO billDAO, HostedAtDao hostedAtDao, BillRepository billRepository, OccupiedRoomRepository occupiedRoomRepository, HostedAtRepository hostedAtRepository, RoomServiceImpl roomService, ServiceUsedDao serviceUsedDaoJPA, ServiceUsedRepository serviceUsedRepository) {
         super(tableDiaryDAO, typeActionDAO, typeActionDao, tableDiaryDao, baseService);
         this.occupiedRoomDAO = occupiedRoomDAO;
         this.occupiedRoomDao = occupiedRoomDao;
@@ -62,6 +65,8 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
         this.occupiedRoomRepository = occupiedRoomRepository;
         this.hostedAtRepository = hostedAtRepository;
         this.roomService = roomService;
+        this.serviceUsedDaoJPA = serviceUsedDaoJPA;
+        this.serviceUsedRepository = serviceUsedRepository;
     }
 
 
@@ -101,11 +106,21 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                         throw new Exception("Khach chua check out");
                     }
                 }
-            
 
             //int occupiedRoomId = occupiedRoomDAO.insertOne(occupiedRoom);
             OccupiedRoom occupiedRoomRes = occupiedRoomRepository.save(occupiedRoom);
             int occupiedRoomId = occupiedRoomRes.getId();
+
+            List<ServiceUsed> serviceUseds = new ArrayList<>();
+            for (ServiceUsedDTORequest serviceUsed : checkinRequest.getServicesUsed()) {
+                ServiceUsed serviceUsed1 = new ServiceUsed();
+                serviceUsed1.setQuantity(serviceUsed.getQuantity());
+                serviceUsed1.setPaid(serviceUsed.isPaid());
+                serviceUsed1.setServiceId(serviceUsed.getServiceId());
+                serviceUsed1.setOccupiedRoomId(occupiedRoomId);
+                serviceUseds.add(serviceUsed1);
+            }
+            serviceUsedRepository.saveAll(serviceUseds);
             boolean checkUpdate = roomDao.updateStatus(checkinRequest.getRoomId(), ConstantVariableCommon.STATUS_ROOM_2);
             if (occupiedRoomId > 0 && checkUpdate) {
 //                saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, occupiedRoomId, ConstantVariableCommon.table_occupied_room, userDTOResponse.getId());
@@ -150,7 +165,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                 ServiceUsedDTORequest serviceUsedDTORequest = servicesUsed.get(i);
                 if (serviceDao.findById(serviceUsedDTORequest.getServiceId()) != null) {
                     //lay ra danh sach object service used request tu db by OccupiedRoomId
-                    List<ServiceUsed> serviceUsedEntities = serviceUsedDao.findServicesUsedByOccupiedRoomId(occupiedRoomId);
+                    List<ServiceUsed> serviceUsedEntities = serviceUsedDaoJPA.findServicesUsedByOccupiedRoomId(occupiedRoomId);
                     ServiceUsed serviceUsed = checkContains(serviceUsedEntities, serviceUsedDTORequest);
                     if (serviceUsed != null) {
                         //neu trung occupied room id && service id && paid thi update
@@ -179,28 +194,20 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     }
 
     //    insert hosted_at
-    public int insertHostedAt(List<Integer> guestIds, int occupiedRoomId, UserDTOResponse userDTOResponse) {
+    public void insertHostedAt(List<Integer> guestIds, int occupiedRoomId, UserDTOResponse userDTOResponse) {
         if (guestIds != null && guestIds.size() > 0) {
-            System.out.println(1111111);
             for (int i = 0; i < guestIds.size(); i++) {
-                System.out.println(222222222);
-                int guestId = guestIds.get(i);
-                if (guestDao.findById(guestId) != null && checkedOut(guestId)) {
+                if (guestDao.findById(guestIds.get(i)) != null) {
                     HostedAt hostedAt = new HostedAt();
-                    hostedAt.setGuestId(guestId);
-                    System.out.println(333333333);
+                    hostedAt.setGuestId(guestIds.get(i));
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
 
 //                    int hostedAtId = hostedAtDAO.insertOne(hostedAt);
-                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
-                    if (hostedAtId > 0) {
-  //                      saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
-                        return hostedAtId;
-                    }
+                    hostedAtRepository.save(hostedAt);
+
                 }
             }
         }
-        return 0;
     }
 
     public ServiceUsed checkContains(List<ServiceUsed> servicesUsed, ServiceUsedDTORequest serviceUsedDTORequest) {

@@ -27,7 +27,7 @@ public class GuestDaoImpl implements GuestDao {
 
     @Override
     public Guest findById(int id) {
-        String sql = "SELECT * FROM guest WHERE status = 1 AND id = ?";
+        String sql = "SELECT * FROM guest WHERE id = ?";
         try{
             return (Guest) entityManager.createNativeQuery(sql,Guest.class).setParameter(1,id).getSingleResult();
         }catch (Exception e){
