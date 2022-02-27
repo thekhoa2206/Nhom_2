@@ -12,33 +12,25 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { countryList } from '../../utils/constants';
+import * as dayjs from 'dayjs'
 import { v4 as uuidv4 } from 'uuid';
 import GuestService from '../../services/guest/guest.service';
 function ModalAddGuestInfo(props) {
     const { open } = props;
     const [state, setState] = useState({ nationality: "Viet Nam" })
-    const { firstName, lastName, dob, address, email, id,  idNumber, nationality, phoneNumber } = state
+    const { firstName, lastName, dob, address, email, id, idNumber, nationality, phoneNumber } = state
     const handleAddGuest = (event) => {
-        let request = {
+        let data = {
             address: address,
-            birthday: Date(dob).setMilliseconds,
+            birthday: dayjs(dob).valueOf(),
             email: email,
             firstName: firstName,
-            id: 0,
             idCard: idNumber,
             lastName: lastName,
             nationality: nationality,
             phoneNumber: phoneNumber
-          }
-        GuestService.postListGuest(request).then((res) =>{
-        let data = {
-            id: res.data.id,
-            firstName: firstName,
-            lastName: lastName,
-            dob: dob
         }
         props.handleAddGuest(data)
-        });
     }
     const handleFirstNameChange = (e) => {
         setState({
@@ -53,6 +45,7 @@ function ModalAddGuestInfo(props) {
         })
     }
     const handleDobChange = (e) => {
+        console.log("dob", e.target.value)
         setState({
             ...state,
             dob: e.target.value
