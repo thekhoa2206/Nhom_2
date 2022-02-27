@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -64,7 +65,8 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     }
 
 
-@Override
+    @Override
+    @Transactional(rollbackOn = Exception.class)
     public CheckInResponse checkIn(CheckInRequest checkinRequest, UserDTOResponse userDTOResponse) throws Exception {
         int billId = -1;
         try {
@@ -73,7 +75,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
             List<ServiceUsedDTORequest> servicesUsed = checkinRequest.getServicesUsed();
             long checkInTime = System.currentTimeMillis();
             //Insert occupied_room -> insert service_used -> insert hosted_at
-            if (checkinRequest.getCheckOutTime() > checkInTime && roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
+            //if (roomDao.findById(checkinRequest.getRoomId()) != null && !isOccupied(checkinRequest.getRoomId())) {
                 //Create a Bill object
 //                billId = billDAO.insertOne(new Bill(new BigDecimal(0), new BigDecimal(0), "", checkinRequest.getDeposit(), false));
                     billId =  billRepository.save(new Bill(new BigDecimal(0), new BigDecimal(0),"",checkinRequest.getDeposit(),false)).getId();
@@ -81,7 +83,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
 
                     ////saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, billId, ConstantVariableCommon.table_bill, userDTOResponse.getId());
                 }
-            }
+            //}
             System.out.println("BillId = " + billId);
             //create a object OccupiedRoom to insert into table occupied_room
             OccupiedRoom occupiedRoom = new OccupiedRoom();
@@ -189,10 +191,10 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                     System.out.println(333333333);
                     hostedAt.setOccupiedRoomId(occupiedRoomId);
 
-                    int hostedAtId = hostedAtDAO.insertOne(hostedAt);
-//                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
+//                    int hostedAtId = hostedAtDAO.insertOne(hostedAt);
+                    int hostedAtId = hostedAtRepository.save(hostedAt).getId();
                     if (hostedAtId > 0) {
-                        saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
+  //                      saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, hostedAtId, ConstantVariableCommon.table_hosted_at, userDTOResponse.getId());
                         return hostedAtId;
                     }
                 }
