@@ -17,6 +17,8 @@ public class CheckInRequest{
     private List<ServiceUsedDTORequest> servicesUsed;
     private long checkOutTime;
     private BigDecimal deposit;
+    private BigDecimal additionalFee;
+    private BigDecimal reducedFee;
 
     private int roomId;
 
