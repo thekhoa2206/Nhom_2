@@ -34,7 +34,7 @@ function ModalAddNewReservation(props) {
 
     }
     const handleAddUser = () =>{
-
+        handleClose();
     }
 
     const handleChangeNote = () =>{
@@ -58,6 +58,8 @@ function ModalAddNewReservation(props) {
             ...state,
             guests: value
         })
+        console.log(value)
+
     }
     return (
         <Dialog open={open} fullWidth={true}  onClose={handleClose} maxWidth='md'>
