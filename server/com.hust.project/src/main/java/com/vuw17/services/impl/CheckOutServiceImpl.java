@@ -52,7 +52,7 @@ public class CheckOutServiceImpl extends CommonService implements CheckOutServic
     public void updateDiaryWhenCheckedOut(int roomId,UserDTOResponse userDTOResponse){
             //ccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
             //boolean checkUpdate = occupiedRoomDao.updateStatusAndCheckOutTime(occupiedRoom.getId(),ConstantVariableCommon.STATUS_OCCUPIED_ROOM_2, System.currentTimeMillis());
-            roomDao.updateStatus(roomId,ConstantVariableCommon.STATUS_ROOM_1);
+            roomDao.updateStatus(roomId,ConstantVariableCommon.STATUS_ROOM_3);
 
 //            if (checkUpdate && checkUpdateRoom) {
 //                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, occupiedRoom.getId(),ConstantVariableCommon.table_occupied_room,userDTOResponse.getId());
