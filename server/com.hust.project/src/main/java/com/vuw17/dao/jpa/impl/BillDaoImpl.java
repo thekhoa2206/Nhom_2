@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional(rollbackOn = Exception.class)
@@ -47,5 +48,13 @@ public class BillDaoImpl implements BillDao {
         }catch (Exception e){
             return null;
         }
+    }
+
+    @Override
+    public List<Bill> findAll() {
+        String sql = "SELECT * FROM bill";
+
+        return entityManager.createNativeQuery(sql,Bill.class).getResultList();
+
     }
 }
