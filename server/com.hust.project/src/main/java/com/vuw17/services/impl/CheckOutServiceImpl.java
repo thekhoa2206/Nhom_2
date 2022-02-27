@@ -50,14 +50,14 @@ public class CheckOutServiceImpl extends CommonService implements CheckOutServic
 //       }
     }
     public void updateDiaryWhenCheckedOut(int roomId,UserDTOResponse userDTOResponse){
-            OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
-            boolean checkUpdate = occupiedRoomDao.updateStatusAndCheckOutTime(occupiedRoom.getId(),ConstantVariableCommon.STATUS_OCCUPIED_ROOM_2, System.currentTimeMillis());
-            boolean checkUpdateRoom = roomDao.updateStatus(roomId,ConstantVariableCommon.STATUS_ROOM_1);
-
-            if (checkUpdate && checkUpdateRoom) {
-                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, occupiedRoom.getId(),ConstantVariableCommon.table_occupied_room,userDTOResponse.getId());
-                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, roomId,ConstantVariableCommon.table_room,userDTOResponse.getId());
-            }
+//            OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
+//            boolean checkUpdate = occupiedRoomDao.updateStatusAndCheckOutTime(occupiedRoom.getId(),ConstantVariableCommon.STATUS_OCCUPIED_ROOM_2, System.currentTimeMillis());
+//            boolean checkUpdateRoom = roomDao.updateStatus(roomId,ConstantVariableCommon.STATUS_ROOM_1);
+//
+//            if (checkUpdate && checkUpdateRoom) {
+//                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, occupiedRoom.getId(),ConstantVariableCommon.table_occupied_room,userDTOResponse.getId());
+//                saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, roomId,ConstantVariableCommon.table_room,userDTOResponse.getId());
+//            }
 
     }
 
@@ -67,16 +67,16 @@ public class CheckOutServiceImpl extends CommonService implements CheckOutServic
         }
         return false;
     }
-    public boolean isTheSameBill(List<Integer> roomIds){
-//      Lay bill id thong qua id dau tien trong list
-        int billId =  occupiedRoomDao.findByRoomId(roomIds.get(0)).getBillId();
-        for(int i = 0;i < roomIds.size();i++){
-            OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomIds.get(i));
-            if(occupiedRoom.getBillId() != billId){
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean isTheSameBill(List<Integer> roomIds){
+////      Lay bill id thong qua id dau tien trong list
+//        int billId =  occupiedRoomDao.findByRoomId(roomIds.get(0)).getBillId();
+//        for(int i = 0;i < roomIds.size();i++){
+//            OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomIds.get(i));
+//            if(occupiedRoom.getBillId() != billId){
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
 }

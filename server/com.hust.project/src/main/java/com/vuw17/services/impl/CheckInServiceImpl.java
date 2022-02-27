@@ -148,12 +148,12 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
     @Override
     public boolean insertServicesIntoRoom(InsertServiceRequest insertServiceRequest, UserDTOResponse userDTOResponse) {
         int roomId = insertServiceRequest.getRoomId();
-        OccupiedRoom occupiedRoom = occupiedRoomDao.findByRoomId(roomId);
-        if (occupiedRoom.getStatus() == 1) {
-            int occupiedRoomId = occupiedRoom.getId();
-            insertServicesUsed(insertServiceRequest.getServices(), occupiedRoomId, userDTOResponse);
-            return true;
-        }
+        List<OccupiedRoom>  occupiedRooms = occupiedRoomDao.findByRoomId(roomId);
+            for (OccupiedRoom item: occupiedRooms) {
+                int occupiedRoomId = item.getId();
+                insertServicesUsed(insertServiceRequest.getServices(), occupiedRoomId, userDTOResponse);
+                return true;
+            }
         return false;
     }
 
@@ -171,10 +171,10 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                         //neu trung occupied room id && service id && paid thi update
                         //ko thi insert moi
                         serviceUsed.setQuantity(serviceUsed.getQuantity() + serviceUsedDTORequest.getQuantity());
-                        boolean check = serviceUsedDao.update(serviceUsed);
-                        if (check) {
-                            saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, serviceUsed.getId(), ConstantVariableCommon.table_service_used, userDTOResponse.getId());
-                        }
+//                        boolean check = serviceUsedDao.update(serviceUsed);
+//                        if (check) {
+//                            //saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, serviceUsed.getId(), ConstantVariableCommon.table_service_used, userDTOResponse.getId());
+//                        }
                     } else {
                         ServiceUsed newServiceUsed = new ServiceUsed();
                         newServiceUsed.setOccupiedRoomId(occupiedRoomId);
@@ -183,7 +183,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                         newServiceUsed.setPaid(serviceUsedDTORequest.isPaid());
                         int serviceUsedId = serviceUsedDAO.insertOne(newServiceUsed);
                         if (serviceUsedId > 0) {
-                            saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, serviceUsedId, ConstantVariableCommon.table_service_used, userDTOResponse.getId());
+                            //saveDiary(ConstantVariableCommon.TYPE_ACTION_CREATE, serviceUsedId, ConstantVariableCommon.table_service_used, userDTOResponse.getId());
                         }
                     }
                 }

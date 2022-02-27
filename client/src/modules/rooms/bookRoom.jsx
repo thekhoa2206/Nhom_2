@@ -38,7 +38,7 @@ function BookRoom(props) {
         <React.Fragment>
             <Card sx={props.styleZoom}>
                 <CardActionArea onClick={handleClickAnchor}>
-                    <CardContent style={{ backgroundColor: "blue" }} sx={props.styleZoom}>
+                    <CardContent style={{ backgroundColor: "purple" }} sx={props.styleZoom}>
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
                                 <BedIcon fontSize='large' style={{ fill: "white" }} />

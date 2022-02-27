@@ -31,12 +31,12 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
     }
 
     @Override
-    public OccupiedRoom findByRoomId(int roomId) {
+    public List<OccupiedRoom> findByRoomId(int roomId) {
         String sql = "SELECT * FROM occupied_room WHERE room_id = ? AND status = 1";
         try{
-            return (OccupiedRoom) entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,roomId).getSingleResult();
+            return  entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,roomId).getResultList();
         }catch (Exception e) {
-            return new OccupiedRoom();
+            return new ArrayList<>();
         }
     }
 

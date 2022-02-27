@@ -94,7 +94,20 @@ export function useFixRoom() {
     }
     return { fixRoom }
 }
-
+export function useBookRoom() {
+    const dispatch = useDispatch();
+    const bookRoom = (room) => {
+        axios.get('api/admin/rooms/status', {params: {id: room.id, typeAction: 'book' } })
+            .then(res => {
+                dispatch({ type: 'BOOK_ROOM', payload: { code: 1, room } })
+                toast.success("Phòng đã được đặt")   
+            }).catch(err => {
+                toast.error(err)
+            })
+       
+    }
+    return { bookRoom }
+}
 export function useUpdateServices() {
 	const dispatch = useDispatch();
 	const updateServices = (data) => {
