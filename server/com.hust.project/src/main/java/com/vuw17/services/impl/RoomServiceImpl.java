@@ -13,6 +13,7 @@ import com.vuw17.dto.service.ServiceUsedDTOResponse;
 import com.vuw17.dto.typeprice.PriceDTO;
 import com.vuw17.dto.user.UserDTOResponse;
 import com.vuw17.entities.*;
+import com.vuw17.repositories.BillRepository;
 import com.vuw17.repositories.RoomRepository;
 import com.vuw17.services.CommonService;
 import com.vuw17.services.GenericService;
@@ -43,8 +44,10 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
     private static final String NOT_EXIST_TYPE_ROOM_ID = "Type Room ID does not exist";
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomServiceImpl.class.toString());
     private final RoomRepository roomRepository;
+    private final BillRepository billRepository;
+    private final BillDao billDAO;
 
-    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao, RoomPriceDao roomPriceDao, TypePriceDao typePriceDao, ServiceUsedDao serviceUsedDaoJPA, RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomDao roomDao, RoomDAO roomDAO, TypeRoomDao typeRoomDao, TableDiaryDAO tableDiaryDAO, TypeActionDAO typeActionDAO, TypeActionDao typeActionDao, TableDiaryDao tableDiaryDao, ServiceUsedDao serviceUsedDao, OccupiedRoomDao occupiedRoomDao, ServiceDao serviceDao, BaseServiceImpl baseService, GuestService guestService, HostedAtDao hostedAtDao, RoomPriceDao roomPriceDao, TypePriceDao typePriceDao, ServiceUsedDao serviceUsedDaoJPA, RoomRepository roomRepository, BillRepository billRepository, BillDao billDAO) {
         super(tableDiaryDAO,typeActionDAO,typeActionDao,tableDiaryDao, baseService);
         this.roomDao = roomDao;
         this.roomDAO = roomDAO;
@@ -59,6 +62,8 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
         this.typePriceDao = typePriceDao;
         this.serviceUsedDaoJPA = serviceUsedDaoJPA;
         this.roomRepository = roomRepository;
+        this.billRepository = billRepository;
+        this.billDAO = billDAO;
     }
 
     @Override
@@ -226,7 +231,9 @@ public class RoomServiceImpl extends CommonService implements RoomService, Gener
             //set list guests
             roomDTOResponse.setGuests(getGuests(occupiedRoom.getId()));
 
-
+            Bill bill = billDAO.findById(occupiedRoom.getBillId());
+            roomDTOResponse.setAdditionalFee(bill.getAdditionalFee());
+            roomDTOResponse.setReducedFee(bill.getReducedFee());
         }catch (NullPointerException e){
             LOGGER.error("Null",e.getMessage(),true);
         }
