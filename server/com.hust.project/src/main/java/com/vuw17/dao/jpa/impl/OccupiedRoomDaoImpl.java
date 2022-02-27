@@ -64,7 +64,7 @@ public class OccupiedRoomDaoImpl implements OccupiedRoomDao {
 
     @Override
     public List<OccupiedRoom> findOccupiedRoomsByBillId(int billId) {
-        String sql = "SELECT * FROM occupied_room WHERE bill_id = ? AND status = 2 ";
+        String sql = "SELECT * FROM occupied_room WHERE bill_id = ? ";
         try{
             return entityManager.createNativeQuery(sql, OccupiedRoom.class).setParameter(1,billId).getResultList();
         }catch (Exception e) {
