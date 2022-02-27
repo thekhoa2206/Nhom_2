@@ -15,7 +15,9 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import BookRoomModal from './bookRoomModal';
+import { useCleanRoom, useFixRoom } from "../../services/rooms/room.service";
 
 function ReadyRoom(props) {
     const { room } = props
@@ -23,7 +25,8 @@ function ReadyRoom(props) {
     const [openReservation, setOpenReservation] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-
+    const { cleanRoom } = useCleanRoom()
+    const { fixRoom } = useFixRoom()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -48,6 +51,12 @@ function ReadyRoom(props) {
     const handleCloseReservation = () => {
         setOpenReservation(false);
     };
+    const handleCleanRoom = () => {
+        cleanRoom(room)
+    }
+    const handleFixRoom = () => {
+        fixRoom(room)
+    }
     console.log("abc")
     return (
         <React.Fragment>
@@ -137,15 +146,16 @@ function ReadyRoom(props) {
                 <MenuItem disabled>
                     <ChangeCircleOutlinedIcon /> <Typography variant="h7">Đổi phòng</Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleCleanRoom}>
                     <CleaningServicesOutlinedIcon /><Typography variant="h7">Dọn phòng</Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleFixRoom}>
                     <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClickOpenReservation}>
-                    <ConstructionOutlinedIcon /><Typography variant="h7">Đặt phòng</Typography>
+                    <CalendarTodayIcon /><Typography variant="h7">Đặt phòng</Typography>
                 </MenuItem>
+
             </Menu>
 
         </React.Fragment >

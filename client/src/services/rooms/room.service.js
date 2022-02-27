@@ -21,11 +21,11 @@ export function useGetAllRooms() {
 }
 export function useCheckIn() {
     const dispatch = useDispatch();
-    const checkIn = async (room) => {
+    const checkIn = async (data, FEdata) => {
         await axios
-        .post("/api/admin/check-in", room)
+        .post("/api/admin/check-in", data)
         .then(res => {
-            // dispatch({ type: 'CHECK_IN', payload: { data: {...res.data, id: room.id, roomName: room.roomName, typeRoomName: room.typeRoomName, floor: room.floor} } })
+            dispatch({ type: 'CHECK_IN', payload: {FEdata, code: 2} })
             toast.success("Nhận phòng thành công")
         })
         .catch((err) => {
@@ -52,19 +52,44 @@ export function useCheckOut() {
     }
     return { checkOut }
 }
+export function useReadyRoom() {
+    const dispatch = useDispatch();
+    const readyRoom = (room) => {
+        axios.get('api/admin/rooms/status', {params: {id: room.id, typeAction: 'ready' } })
+            .then(res => {
+                dispatch({ type: 'READY_ROOM', payload: { code: 1, room } })
+                toast.success("Phòng đã sẵn sàng")   
+            }).catch(err => {
+                toast.error(err)
+            })
+       
+    }
+    return { readyRoom }
+}
 export function useCleanRoom() {
     const dispatch = useDispatch();
     const cleanRoom = (room) => {
-        dispatch({ type: 'CLEAN_ROOM', payload: { data: {...room, status: 1} } })
-        toast.success("Dọn thành công")   
+        axios.get('api/admin/rooms/status', {params: {id: room.id, typeAction: 'clean' } })
+            .then(res => {
+                dispatch({ type: 'CLEAN_ROOM', payload: { code: 3, room } })
+                toast.success("Phòng đang được dọn")   
+            }).catch(err => {
+                toast.error(err)
+            })
+       
     }
     return { cleanRoom }
 }
 export function useFixRoom() {
     const dispatch = useDispatch();
     const fixRoom = (room) => {
-        dispatch({ type: 'FIX_ROOM', payload: { data: {...room, status: 1} } })
-        toast.success("Đã sửa chữa thành công")   
+        axios.get('api/admin/rooms/status', {params: {id: room.id, typeAction: 'edit' } })
+            .then(res => {
+                dispatch({ type: 'FIX_ROOM', payload: { code: 4, room } })
+                toast.success("Phòng đang được sửa chữa")   
+            }).catch(err => {
+                toast.error(err)
+            })  
     }
     return { fixRoom }
 }

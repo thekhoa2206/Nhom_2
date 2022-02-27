@@ -19,6 +19,7 @@ import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 function OccupiedRoom(props) {
     const { room } = props
@@ -191,6 +192,9 @@ function OccupiedRoom(props) {
                 </MenuItem>
                 <MenuItem disabled>
                     <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
+                </MenuItem>
+                <MenuItem disabled>
+                    <CalendarTodayIcon /><Typography variant="h7">Đặt phòng</Typography>
                 </MenuItem>
             </Menu>
 

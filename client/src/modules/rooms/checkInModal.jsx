@@ -151,9 +151,13 @@ function CheckInModal(props) {
             roomId: room.id,
             servicesUsed: servicesData
         }
-        console.log("data", data)
-        checkIn(data)
-        getAllRooms()
+        let FEdata = {
+            ...room,
+            checkInTime: dayjs(checkInTime).valueOf(),
+            checkOutTime: dayjs(checkOutTime).valueOf(),
+        }
+        console.log("data", data, FEdata)
+        checkIn(data, FEdata)
 
     }
     const handleClick = (event, cellValues) => {

@@ -14,13 +14,14 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
-import { useFixRoom } from '../../services/rooms/room.service';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useReadyRoom } from '../../services/rooms/room.service';
 
 function OutOfServiceRoom(props) {
     const { room } = props
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-    const { fixRoom } = useFixRoom()
+    const { readyRoom } = useReadyRoom()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -28,7 +29,7 @@ function OutOfServiceRoom(props) {
         setAnchorEl(null);
     };
     const handleRepairRoom = () => {
-        fixRoom(room)
+        readyRoom(room)
     };
     return (
         <React.Fragment>
@@ -121,6 +122,9 @@ function OutOfServiceRoom(props) {
                 </MenuItem>
                 <MenuItem onClick={handleRepairRoom}>
                     <ConstructionOutlinedIcon /><Typography variant="h7"> Kết thúc sửa phòng</Typography>
+                </MenuItem>
+                <MenuItem disabled>
+                    <CalendarTodayIcon /><Typography variant="h7">Đặt phòng</Typography>
                 </MenuItem>
             </Menu>
 

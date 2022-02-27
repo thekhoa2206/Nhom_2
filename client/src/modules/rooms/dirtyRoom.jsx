@@ -15,12 +15,13 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
-import { useCleanRoom } from '../../services/rooms/room.service';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useReadyRoom } from '../../services/rooms/room.service';
 function DirtyRoom(props) {
     const { room } = props
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
-    const { cleanRoom } = useCleanRoom()
+    const { readyRoom } = useReadyRoom()
     const handleClickAnchor = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -28,7 +29,7 @@ function DirtyRoom(props) {
         setAnchorEl(null);
     };
     const handleCleanRoom = () => {
-        cleanRoom(room)
+        readyRoom(room)
     };
     return (
         <React.Fragment>
@@ -122,6 +123,9 @@ function DirtyRoom(props) {
                 </MenuItem>
                 <MenuItem disabled>
                     <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
+                </MenuItem>
+                <MenuItem disabled>
+                    <CalendarTodayIcon /><Typography variant="h7">Đặt phòng</Typography>
                 </MenuItem>
             </Menu>
 
