@@ -24,6 +24,18 @@ const roomReducer = (state = initState, action) => {
                 ...state,
                 roomList: updatedRooms0,
             };
+        case 'CHECK_OUT':
+            const roomUpdated = action.payload.data;
+            const roomsUpdated = state.roomList.map((room) => {
+                if (room.id === roomUpdated.id) {
+                    return roomUpdated;
+                }
+                return room;
+            });
+            return {
+                ...state,
+                roomList: roomsUpdated,
+            };
         case 'READY_ROOM':
             const updatedRoom = {...action.payload.room, status: action.payload.code};
             const updatedRooms = state.roomList.map((room) => {
