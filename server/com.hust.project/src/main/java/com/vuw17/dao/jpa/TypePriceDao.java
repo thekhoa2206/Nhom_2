@@ -1,5 +1,6 @@
 package com.vuw17.dao.jpa;
 
+import com.vuw17.entities.RoomPrice;
 import com.vuw17.entities.TypePrice;
 import com.vuw17.entities.TypeRoom;
 
@@ -8,5 +9,5 @@ public interface TypePriceDao {
     TypePrice findByName(String name);
     //Lay TypePrice theo id
     TypePrice findById(int id);
-    TypePrice findByIdRoom(int id);
+    RoomPrice findByIdRoom(int id);
 }
