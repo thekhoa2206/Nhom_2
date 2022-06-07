@@ -170,7 +170,7 @@ public class CheckInServiceImpl extends CommonService implements CheckInService 
                     if (serviceUsed != null) {
                         //neu trung occupied room id && service id && paid thi update
                         //ko thi insert moi
-                        serviceUsed.setQuantity(serviceUsed.getQuantity() + serviceUsedDTORequest.getQuantity());
+                        serviceUsed.setQuantity(serviceUsed.getQuantity());
 //                        boolean check = serviceUsedDao.update(serviceUsed);
 //                        if (check) {
 //                            //saveDiary(ConstantVariableCommon.TYPE_ACTION_UPDATE, serviceUsed.getId(), ConstantVariableCommon.table_service_used, userDTOResponse.getId());
