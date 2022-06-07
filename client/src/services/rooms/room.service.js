@@ -111,7 +111,7 @@ export function useBookRoom() {
 export function useUpdateServices() {
 	const dispatch = useDispatch();
 	const updateServices = (data) => {
-		axios.post('api/admin/services', data )
+		axios.post('api/admin/check-in/insert-services', data )
 			.then(res => {
 				dispatch({ type: 'UPDATE_SERVICES', payload: { data: res.data } })
 				toast.success("Cập nhật dịch vụ thành công")

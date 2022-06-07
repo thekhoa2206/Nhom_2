@@ -23,9 +23,10 @@ function RoomManagement(props) {
         displayReady: true,
         displayOccupied: true,
         displayDirty: true,
-        displayOos: true
+        displayOos: true,
+        displayBook: true
     });
-    const { displayDirty, displayOos, displayOccupied, displayReady } = checked
+    const { displayDirty, displayOos, displayOccupied, displayReady, displayBook } = checked
     const [zoom, setZoom] = useState({
         width: 230, height: 170
     })
@@ -105,6 +106,10 @@ function RoomManagement(props) {
             let a = roomList.filter(x => x.status === 4)
             newList = newList.concat(a)
         }
+        if (obj.displayBook) {
+            let a = roomList.filter(x => x.status === 5)
+            newList = newList.concat(a)
+        }
         newList.sort(function (a, b) {
             return a.id - b.id || a.roomName.localeCompare(b.roomName);
         });
@@ -124,7 +129,8 @@ function RoomManagement(props) {
             displayReady: event.target.checked,
             displayOccupied: displayOccupied,
             displayDirty: displayDirty,
-            displayOos: displayOos
+            displayOos: displayOos,
+            displayBook: displayBook
         })
     };
     const handleChangeOccupied = (event) => {
@@ -136,7 +142,8 @@ function RoomManagement(props) {
             displayReady: displayReady,
             displayOccupied: event.target.checked,
             displayDirty: displayDirty,
-            displayOos: displayOos
+            displayOos: displayOos,
+            displayBook: displayBook
         })
     };
     const handleChangeDirty = (event) => {
@@ -148,7 +155,8 @@ function RoomManagement(props) {
             displayReady: displayReady,
             displayOccupied: displayOccupied,
             displayDirty: event.target.checked,
-            displayOos: displayOos
+            displayOos: displayOos,
+            displayBook: displayBook
         })
     };
     const handleChangeOos = (event) => {
@@ -160,7 +168,21 @@ function RoomManagement(props) {
             displayReady: displayReady,
             displayOccupied: displayOccupied,
             displayDirty: displayDirty,
-            displayOos: event.target.checked
+            displayOos: event.target.checked,
+            displayBook: displayBook
+        })
+    };
+    const handleChangeBook = (event) => {
+        setChecked({
+            ...checked,
+            displayBook: event.target.checked
+        });
+        filterList({
+            displayReady: displayReady,
+            displayOccupied: displayOccupied,
+            displayDirty: displayDirty,
+            displayOos: displayOos,
+            displayBook: event.target.checked
         })
     };
     return (
@@ -171,8 +193,8 @@ function RoomManagement(props) {
         <React.Fragment>
             <Grid container style={{ position: 'fixed', zIndex: "100" }} rowSpacing={4} spacing={2}>
                 <Paper elevation={0} style={{ width: '100%', height: "90px" }} >
-                    <Grid ml={2} mt={2} container rowSpacing={4} spacing={2}>
-                        <Grid item xs={2}>
+                    <Grid pl={3} mt={2} container rowSpacing={4} spacing={2}>
+                        <Grid item>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -192,7 +214,7 @@ function RoomManagement(props) {
                             </div>
 
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -209,8 +231,9 @@ function RoomManagement(props) {
                                 <span style={{ color: "green" }}>Phòng trống</span>
                             </div>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item>
                             <div style={{
+
                                 display: 'flex',
                                 alignItems: 'center',
                                 flexWrap: 'wrap',
@@ -226,7 +249,7 @@ function RoomManagement(props) {
                                 <span style={{ color: "orange" }}>Phòng chưa dọn</span>
                             </div>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={2}>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -240,7 +263,24 @@ function RoomManagement(props) {
                                         color: "#1769aa",
                                     }}
                                 />
-                                <span style={{ color: "#1769aa" }}>Phòng đang sửa chữa</span>
+                                <span style={{ color: "#1769aa" }}>Phòng sửa chữa</span>
+                            </div>
+                        </Grid>
+                        <Grid item>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                            }}>
+                                <Checkbox
+                                    checked={displayBook}
+                                    onChange={handleChangeBook}
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                    style={{
+                                        color: "purple",
+                                    }}
+                                />
+                                <span style={{ color: "purple" }}>Phòng đặt trước</span>
                             </div>
                         </Grid>
                     </Grid>

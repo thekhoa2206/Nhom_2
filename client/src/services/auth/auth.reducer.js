@@ -1,6 +1,7 @@
 let initState = {
     roles: [],
     services: [],
+    bills:[],
     isLoading: false,
 }
 
@@ -16,6 +17,12 @@ const authReducer = (state = initState, action) => {
             return {
                 ...state,
                 services: action.payload.data,
+                isLoading: false
+            }
+        case 'GET_ALL_BILLS':
+            return {
+                ...state,
+                bills: action.payload.data,
                 isLoading: false
             }
         default:

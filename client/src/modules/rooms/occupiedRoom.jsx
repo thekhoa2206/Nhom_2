@@ -30,12 +30,22 @@ function OccupiedRoom(props) {
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [timer, setTimer] = useState(convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute")));
-
+    const [state, setState] = useState({
+        serviceTotal: calculateSum(room.servicesUsed),
+    })
     useEffect(() => {
         const timerId = setInterval(() => setTimer(convertMinsToHrsMins((dayjs()).diff(dayjs(room.checkInTime), "minute"))), 60000);
 
         return () => clearInterval(timerId);
     });
+    function calculateSum(data) {
+        let sum = 0;
+        if (data?.length) {
+            data.forEach((e) => { sum += e.quantity * e.price })
+        }
+        return sum
+    }
+    const { serviceTotal } = state
     const openAnchor = Boolean(anchorEl);
     const { updateServices } = useUpdateServices()
     const handleClickAnchor = (event) => {
@@ -60,7 +70,9 @@ function OccupiedRoom(props) {
         setOpen(false);
     };
     const handleSubmitModalUpdate = (data) => {
+        console.log("data111", data)
         updateServices(data)
+        setOpenModalUpdate(false);
     };
     function convertMinsToHrsMins(minutes) {
         var h = Math.floor(minutes / 60);
@@ -108,7 +120,7 @@ function OccupiedRoom(props) {
                                         Check-in:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        {dayjs(room.checkInTime).hour()}:{dayjs(room.checkInTime).minute()}
+                                        {dayjs(room.checkInTime).hour() < 10 ? '0' + dayjs(room.checkInTime).hour() : dayjs(room.checkInTime).hour()}:{dayjs(room.checkInTime).minute() < 10 ? '0' + dayjs(room.checkInTime).minute() : dayjs(room.checkInTime).minute()}
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
                                         {dayjs(room.checkInTime).format('DD/MM/YY')}
@@ -164,7 +176,7 @@ function OccupiedRoom(props) {
                                         Tổng tiền:
                                     </span>
                                     <span style={{ color: "white", fontSize: "15px", paddingRight: "5px", fontWeight: "bold" }} >
-                                        {numberWithCommas(room.sumOfPrices + room.additionalFee - room.deposit - room.reducedFee)}đ
+                                        {numberWithCommas(room.sumOfPrices + serviceTotal + room.additionalFee - room.deposit - room.reducedFee)}đ
                                     </span>
                                 </div>
                             </Grid>

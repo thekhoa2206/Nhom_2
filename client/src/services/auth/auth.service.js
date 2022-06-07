@@ -78,3 +78,16 @@ export function useGetAllServices() {
 	}
 	return { getAllServices }
 }
+export function useGetAllBills() {
+	const dispatch = useDispatch();
+	const getAllBills = () => {
+		axios.get('api/admin/bills')
+			.then(res => {
+				dispatch({ type: 'GET_ALL_BILLS', payload: { data: res.data } })
+			}).catch(err => {
+				toast.error("Lấy danh sách hóa đơn thất bại")
+			})
+	}
+	return { getAllBills }
+}
+

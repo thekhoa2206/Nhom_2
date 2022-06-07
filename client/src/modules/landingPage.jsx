@@ -74,7 +74,7 @@ function LandingPage() {
             <div className="App">
                 <nav className="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
                     <div className="container">
-                        <a className="navbar-brand js-scroll-trigger" href="#page-top">Nhom2 Hotel</a>
+                        <a className="navbar-brand js-scroll-trigger" href="#page-top">Nhom1 Hotel</a>
                         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                             Menu
                             <i className="fa fa-bars"></i>
@@ -191,7 +191,7 @@ function LandingPage() {
                                                 <h4 className="subheading"> Linh Dam</h4>
                                             </div>
                                             <div className="timeline-body">
-                                                <p className="text-muted">The Chairman Mr. Le Thanh Than, made a decision to turn the investment into Hanoi with the birth of Nhom2 Linh Dam, marking a new development of the Group, spreading the wings of Nhom2 to fly everywhere.</p>
+                                                <p className="text-muted">The Chairman Mr. Le Thanh Than, made a decision to turn the investment into Hanoi with the birth of Nhom1 Linh Dam, marking a new development of the Group, spreading the wings of Nhom2 to fly everywhere.</p>
                                             </div>
                                         </div>
                                     </li>

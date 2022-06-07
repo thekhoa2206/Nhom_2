@@ -109,11 +109,11 @@ function BookRoom(props) {
                 transformOrigin={{ horizontal: "right", vertical: "center" }}
             >
 
-                <MenuItem onClick={handleCheckInRoom}>
+                <MenuItem disabled>
                     <HailIcon /> <Typography variant="h7">Khách thuê phòng</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCancelRoom}>
-                    <LogoutIcon /><Typography variant="h7">Hủy đặt phòng</Typography>
+                <MenuItem disabled>
+                    <LogoutIcon /><Typography variant="h7">Trả phòng</Typography>
                 </MenuItem>
                 <MenuItem disabled>
                     <LocalCafeOutlinedIcon /> <Typography variant="h7">Cập nhật dịch vụ</Typography>
@@ -126,6 +126,9 @@ function BookRoom(props) {
                 </MenuItem>
                 <MenuItem disabled>
                     <ConstructionOutlinedIcon /><Typography variant="h7">Sửa phòng</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCancelRoom}>
+                    <LogoutIcon /><Typography variant="h7">Hủy đặt phòng</Typography>
                 </MenuItem>
             </Menu>
 

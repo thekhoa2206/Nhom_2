@@ -247,7 +247,7 @@ function EditInfoRoomModal(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined" color="primary" onClick={handleClose}>Đóng</Button>
-                    <Button variant="contained" color="primary" onClick={handleSubmit}>Thêm</Button>
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>Cập nhật</Button>
                 </DialogActions>
 
 

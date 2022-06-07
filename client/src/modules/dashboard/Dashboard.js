@@ -12,6 +12,8 @@ import Link from '@mui/material/Link';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import { useSelector } from "react-redux";
+import { useGetAllBills } from '../../services/auth/auth.service';
 
 function Copyright(props) {
   return (
@@ -76,7 +78,10 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
-
+  const { getAllBills } = useGetAllBills()
+    React.useEffect(() => {
+        getAllBills()
+    }, [])
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
